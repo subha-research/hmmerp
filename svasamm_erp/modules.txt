@@ -1,3 +1,9 @@
 SvasammERP
 CRM
 Accounts
+Buying
+Stock
+Assets
+Manufacturing
+Quality Management
+Selling
