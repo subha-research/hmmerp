@@ -2,9 +2,9 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import flt, nowdate
 
-from erpnext.accounts.utils import get_fiscal_year
-from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
-from erpnext.selling.report.sales_person_target_variance_based_on_item_group.sales_person_target_variance_based_on_item_group import (
+from svasamm_erp.accounts.utils import get_fiscal_year
+from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
+from svasamm_erp.selling.report.sales_person_target_variance_based_on_item_group.sales_person_target_variance_based_on_item_group import (
 	execute,
 )
 

@@ -32,7 +32,7 @@ frappe.query_reports["Incorrect Serial and Batch Bundle"] = {
 				frappe.throw(__("Please select a row to create a Reposting Entry"));
 			} else {
 				frappe.call({
-					method: "erpnext.stock.report.incorrect_serial_and_batch_bundle.incorrect_serial_and_batch_bundle.remove_sabb_entry",
+					method: "svasamm_erp.stock.report.incorrect_serial_and_batch_bundle.incorrect_serial_and_batch_bundle.remove_sabb_entry",
 					freeze: true,
 					args: {
 						selected_rows: selected_rows,

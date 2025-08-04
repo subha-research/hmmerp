@@ -3,9 +3,9 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.manufacturing.doctype.operation.test_operation import make_operation
-from erpnext.manufacturing.doctype.routing.test_routing import create_routing, setup_bom
-from erpnext.manufacturing.doctype.workstation.workstation import (
+from svasamm_erp.manufacturing.doctype.operation.test_operation import make_operation
+from svasamm_erp.manufacturing.doctype.routing.test_routing import create_routing, setup_bom
+from svasamm_erp.manufacturing.doctype.workstation.workstation import (
 	NotInWorkingHoursError,
 	WorkstationHolidayError,
 	check_if_within_operating_hours,

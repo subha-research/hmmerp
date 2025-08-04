@@ -20,12 +20,12 @@ from frappe.utils.data import (
 	nowdate,
 )
 
-from erpnext import get_default_company, get_default_cost_center
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+from svasamm_erp import get_default_company, get_default_cost_center
+from svasamm_erp.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 )
-from erpnext.accounts.doctype.subscription_plan.subscription_plan import get_plan_rate
-from erpnext.accounts.party import get_party_account_currency
+from svasamm_erp.accounts.doctype.subscription_plan.subscription_plan import get_plan_rate
+from svasamm_erp.accounts.party import get_party_account_currency
 
 
 class InvoiceCancelled(frappe.ValidationError):
@@ -48,7 +48,7 @@ class Subscription(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.subscription_plan_detail.subscription_plan_detail import (
+		from svasamm_erp.accounts.doctype.subscription_plan_detail.subscription_plan_detail import (
 			SubscriptionPlanDetail,
 		)
 

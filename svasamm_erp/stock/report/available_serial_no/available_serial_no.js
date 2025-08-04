@@ -44,7 +44,7 @@ frappe.query_reports["Available Serial No"] = {
 			options: "Item",
 			get_query: function () {
 				return {
-					query: "erpnext.controllers.queries.item_query",
+					query: "svasamm_erp.controllers.queries.item_query",
 					filters: {
 						has_serial_no: 1,
 					},
@@ -77,4 +77,4 @@ frappe.query_reports["Available Serial No"] = {
 	},
 };
 
-erpnext.utils.add_inventory_dimensions("Balance Serial No", 10);
+svasamm_erp.utils.add_inventory_dimensions("Balance Serial No", 10);

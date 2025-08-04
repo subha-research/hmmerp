@@ -8,7 +8,7 @@ from frappe import _, qb
 from frappe.model.document import Document
 from frappe.query_builder.custom import ConstantColumn
 
-from erpnext.accounts.utils import _delete_adv_pl_entries, _delete_pl_entries, create_payment_ledger_entry
+from svasamm_erp.accounts.utils import _delete_adv_pl_entries, _delete_pl_entries, create_payment_ledger_entry
 
 VOUCHER_TYPES = ["Sales Invoice", "Purchase Invoice", "Payment Entry", "Journal Entry"]
 
@@ -61,7 +61,7 @@ class RepostPaymentLedger(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.repost_payment_ledger_items.repost_payment_ledger_items import (
+		from svasamm_erp.accounts.doctype.repost_payment_ledger_items.repost_payment_ledger_items import (
 			RepostPaymentLedgerItems,
 		)
 
@@ -125,7 +125,7 @@ def execute_repost_payment_ledger(docname):
 	job_name = "payment_ledger_repost_" + docname
 
 	frappe.enqueue(
-		method="erpnext.accounts.doctype.repost_payment_ledger.repost_payment_ledger.start_payment_ledger_repost",
+		method="svasamm_erp.accounts.doctype.repost_payment_ledger.repost_payment_ledger.start_payment_ledger_repost",
 		docname=docname,
 		is_async=True,
 		job_name=job_name,

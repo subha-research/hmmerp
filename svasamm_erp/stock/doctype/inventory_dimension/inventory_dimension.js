@@ -30,7 +30,7 @@ frappe.ui.form.on("Inventory Dimension", {
 
 		frm.set_query("document_type", () => {
 			return {
-				query: "erpnext.stock.doctype.inventory_dimension.inventory_dimension.get_inventory_documents",
+				query: "svasamm_erp.stock.doctype.inventory_dimension.inventory_dimension.get_inventory_documents",
 			};
 		});
 	},
@@ -80,7 +80,7 @@ frappe.ui.form.on("Inventory Dimension", {
 			frm.set_df_property("fetch_from_parent", "options", options);
 		} else if (frm.doc.document_type && frm.doc.istable) {
 			frappe.call({
-				method: "erpnext.stock.doctype.inventory_dimension.inventory_dimension.get_parent_fields",
+				method: "svasamm_erp.stock.doctype.inventory_dimension.inventory_dimension.get_parent_fields",
 				args: {
 					child_doctype: frm.doc.document_type,
 					dimension_name: frm.doc.reference_document,
@@ -104,7 +104,7 @@ frappe.ui.form.on("Inventory Dimension", {
 
 		frappe.confirm(__(msg, [frm.doc.name.bold()]), () => {
 			frappe.call({
-				method: "erpnext.stock.doctype.inventory_dimension.inventory_dimension.delete_dimension",
+				method: "svasamm_erp.stock.doctype.inventory_dimension.inventory_dimension.delete_dimension",
 				args: {
 					dimension: frm.doc.name,
 				},

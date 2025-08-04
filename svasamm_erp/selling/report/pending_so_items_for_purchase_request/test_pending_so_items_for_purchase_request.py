@@ -5,9 +5,9 @@
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_months, nowdate
 
-from erpnext.selling.doctype.sales_order.sales_order import make_material_request
-from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
-from erpnext.selling.report.pending_so_items_for_purchase_request.pending_so_items_for_purchase_request import (
+from svasamm_erp.selling.doctype.sales_order.sales_order import make_material_request
+from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
+from svasamm_erp.selling.report.pending_so_items_for_purchase_request.pending_so_items_for_purchase_request import (
 	execute,
 )
 

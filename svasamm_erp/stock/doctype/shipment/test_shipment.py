@@ -6,7 +6,7 @@ from datetime import date, timedelta
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.stock.doctype.delivery_note.delivery_note import make_shipment
+from svasamm_erp.stock.doctype.delivery_note.delivery_note import make_shipment
 
 
 class TestShipment(IntegrationTestCase):

@@ -6,11 +6,11 @@ from frappe import qb
 from frappe.tests import IntegrationTestCase
 from frappe.utils import nowdate
 
-from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
-from erpnext.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
-from erpnext.stock.doctype.item.test_item import create_item
+from svasamm_erp.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
+from svasamm_erp.stock.doctype.item.test_item import create_item
 
 
 class TestPaymentLedgerEntry(IntegrationTestCase):

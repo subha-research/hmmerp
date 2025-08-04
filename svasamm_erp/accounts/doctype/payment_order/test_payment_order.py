@@ -6,15 +6,15 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import getdate
 
-from erpnext.accounts.doctype.bank_transaction.test_bank_transaction import (
+from svasamm_erp.accounts.doctype.bank_transaction.test_bank_transaction import (
 	create_bank_account,
 	create_gl_account,
 )
-from erpnext.accounts.doctype.payment_entry.payment_entry import (
+from svasamm_erp.accounts.doctype.payment_entry.payment_entry import (
 	get_payment_entry,
 	make_payment_order,
 )
-from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
+from svasamm_erp.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
 
 
 class TestPaymentOrder(IntegrationTestCase):

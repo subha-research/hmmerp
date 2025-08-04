@@ -5,10 +5,10 @@ from frappe.utils import (
 	flt,
 )
 
-import erpnext
-from erpnext.accounts.utils import get_fiscal_year
+import svasamm_erp
+from svasamm_erp.accounts.utils import get_fiscal_year
 
-# from erpnext.assets.doctype.asset_depreciation_schedule.deppreciation_schedule_controller import (
+# from svasamm_erp.assets.doctype.asset_depreciation_schedule.deppreciation_schedule_controller import (
 #     _get_total_days,
 # )
 
@@ -75,7 +75,7 @@ class StraightLineMethod(Document):
 
 
 class WDVMethod(Document):
-	@erpnext.allow_regional
+	@svasamm_erp.allow_regional
 	def get_wdv_or_dd_depr_amount(self, row_idx):
 		return WDVMethod.calculate_wdv_or_dd_based_depreciation_amount(self, row_idx)
 

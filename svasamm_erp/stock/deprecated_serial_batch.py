@@ -6,12 +6,12 @@ from frappe.query_builder.functions import CombineDatetime, Sum
 from frappe.utils import flt, nowtime
 from pypika import Order
 
-from erpnext.deprecation_dumpster import deprecated
+from svasamm_erp.deprecation_dumpster import deprecated
 
 
 class DeprecatedSerialNoValuation:
 	@deprecated(
-		"erpnext.stock.serial_batch_bundle.SerialNoValuation.calculate_stock_value_from_deprecarated_ledgers",
+		"svasamm_erp.stock.serial_batch_bundle.SerialNoValuation.calculate_stock_value_from_deprecarated_ledgers",
 		"unknown",
 		"v16",
 		"No known instructions.",
@@ -42,13 +42,13 @@ class DeprecatedSerialNoValuation:
 		return serial_nos
 
 	@deprecated(
-		"erpnext.stock.serial_batch_bundle.SerialNoValuation.get_incoming_value_for_serial_nos",
+		"svasamm_erp.stock.serial_batch_bundle.SerialNoValuation.get_incoming_value_for_serial_nos",
 		"unknown",
 		"v16",
 		"No known instructions.",
 	)
 	def get_incoming_value_for_serial_nos(self, serial_nos):
-		from erpnext.stock.utils import get_combine_datetime
+		from svasamm_erp.stock.utils import get_combine_datetime
 
 		# get rate from serial nos within same company
 		incoming_values = 0.0
@@ -105,7 +105,7 @@ def has_sle_for_serial_nos(item_code):
 
 class DeprecatedBatchNoValuation:
 	@deprecated(
-		"erpnext.stock.serial_batch_bundle.BatchNoValuation.calculate_avg_rate_from_deprecarated_ledgers",
+		"svasamm_erp.stock.serial_batch_bundle.BatchNoValuation.calculate_avg_rate_from_deprecarated_ledgers",
 		"unknown",
 		"v16",
 		"No known instructions.",
@@ -117,13 +117,13 @@ class DeprecatedBatchNoValuation:
 			self.available_qty[ledger.batch_no] += flt(ledger.batch_qty)
 
 	@deprecated(
-		"erpnext.stock.serial_batch_bundle.BatchNoValuation.get_sle_for_batches",
+		"svasamm_erp.stock.serial_batch_bundle.BatchNoValuation.get_sle_for_batches",
 		"unknown",
 		"v16",
 		"No known instructions.",
 	)
 	def get_sle_for_batches(self):
-		from erpnext.stock.utils import get_combine_datetime
+		from svasamm_erp.stock.utils import get_combine_datetime
 
 		if not self.batchwise_valuation_batches:
 			return []
@@ -173,7 +173,7 @@ class DeprecatedBatchNoValuation:
 		return query.run(as_dict=True)
 
 	@deprecated(
-		"erpnext.stock.serial_batch_bundle.BatchNoValuation.calculate_avg_rate_for_non_batchwise_valuation",
+		"svasamm_erp.stock.serial_batch_bundle.BatchNoValuation.calculate_avg_rate_for_non_batchwise_valuation",
 		"unknown",
 		"v16",
 		"No known instructions.",
@@ -219,7 +219,7 @@ class DeprecatedBatchNoValuation:
 			)
 
 	@deprecated(
-		"erpnext.stock.serial_batch_bundle.BatchNoValuation.set_balance_value_for_non_batchwise_valuation_batches",
+		"svasamm_erp.stock.serial_batch_bundle.BatchNoValuation.set_balance_value_for_non_batchwise_valuation_batches",
 		"unknown",
 		"v16",
 		"No known instructions.",
@@ -230,13 +230,13 @@ class DeprecatedBatchNoValuation:
 		self.set_balance_value_from_bundle()
 
 	@deprecated(
-		"erpnext.stock.serial_batch_bundle.BatchNoValuation.set_balance_value_from_sl_entries",
+		"svasamm_erp.stock.serial_batch_bundle.BatchNoValuation.set_balance_value_from_sl_entries",
 		"unknown",
 		"v16",
 		"No known instructions.",
 	)
 	def set_balance_value_from_sl_entries(self) -> None:
-		from erpnext.stock.utils import get_combine_datetime
+		from svasamm_erp.stock.utils import get_combine_datetime
 
 		sle = frappe.qb.DocType("Stock Ledger Entry")
 		batch = frappe.qb.DocType("Batch")
@@ -285,7 +285,7 @@ class DeprecatedBatchNoValuation:
 				self.non_batchwise_balance_qty[d.batch_no] += flt(self.last_sle.qty_after_transaction)
 
 	def get_last_sle_for_non_batch(self):
-		from erpnext.stock.utils import get_combine_datetime
+		from svasamm_erp.stock.utils import get_combine_datetime
 
 		sle = frappe.qb.DocType("Stock Ledger Entry")
 
@@ -332,7 +332,7 @@ class DeprecatedBatchNoValuation:
 		return data[0] if data else frappe._dict()
 
 	@deprecated(
-		"erpnext.stock.serial_batch_bundle.BatchNoValuation.set_balance_value_from_bundle",
+		"svasamm_erp.stock.serial_batch_bundle.BatchNoValuation.set_balance_value_from_bundle",
 		"unknown",
 		"v16",
 		"No known instructions.",

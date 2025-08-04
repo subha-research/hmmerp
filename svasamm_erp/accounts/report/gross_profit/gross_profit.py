@@ -8,14 +8,14 @@ from frappe import _, qb, scrub
 from frappe.query_builder import Order
 from frappe.utils import cint, flt, formatdate
 
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+from svasamm_erp.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 	get_dimension_with_children,
 )
-from erpnext.accounts.report.financial_statements import get_cost_centers_with_children
-from erpnext.controllers.queries import get_match_cond
-from erpnext.stock.report.stock_ledger.stock_ledger import get_item_group_condition
-from erpnext.stock.utils import get_incoming_rate
+from svasamm_erp.accounts.report.financial_statements import get_cost_centers_with_children
+from svasamm_erp.controllers.queries import get_match_cond
+from svasamm_erp.stock.report.stock_ledger.stock_ledger import get_item_group_condition
+from svasamm_erp.stock.utils import get_incoming_rate
 
 
 def execute(filters=None):

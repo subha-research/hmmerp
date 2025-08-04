@@ -10,8 +10,8 @@ from frappe.custom.doctype.property_setter.property_setter import make_property_
 from frappe.model.document import Document
 from frappe.utils import cint
 
-from erpnext.accounts.utils import sync_auto_reconcile_config
-from erpnext.stock.utils import check_pending_reposting
+from svasamm_erp.accounts.utils import sync_auto_reconcile_config
+from svasamm_erp.stock.utils import check_pending_reposting
 
 
 class AccountsSettings(Document):
@@ -158,7 +158,7 @@ class AccountsSettings(Document):
 
 	@frappe.whitelist()
 	def drop_ar_sql_procedures(self):
-		from erpnext.accounts.report.accounts_receivable.accounts_receivable import InitSQLProceduresForAR
+		from svasamm_erp.accounts.report.accounts_receivable.accounts_receivable import InitSQLProceduresForAR
 
 		frappe.db.sql(f"drop function if exists {InitSQLProceduresForAR.genkey_function_name}")
 		frappe.db.sql(f"drop procedure if exists {InitSQLProceduresForAR.init_procedure_name}")

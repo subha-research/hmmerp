@@ -16,7 +16,7 @@ frappe.query_reports["Trial Balance"] = {
 			label: __("Fiscal Year"),
 			fieldtype: "Link",
 			options: "Fiscal Year",
-			default: erpnext.utils.get_fiscal_year(frappe.datetime.get_today()),
+			default: svasamm_erp.utils.get_fiscal_year(frappe.datetime.get_today()),
 			reqd: 1,
 			on_change: function (query_report) {
 				var fiscal_year = query_report.get_values().fiscal_year;
@@ -36,13 +36,13 @@ frappe.query_reports["Trial Balance"] = {
 			fieldname: "from_date",
 			label: __("From Date"),
 			fieldtype: "Date",
-			default: erpnext.utils.get_fiscal_year(frappe.datetime.get_today(), true)[1],
+			default: svasamm_erp.utils.get_fiscal_year(frappe.datetime.get_today(), true)[1],
 		},
 		{
 			fieldname: "to_date",
 			label: __("To Date"),
 			fieldtype: "Date",
-			default: erpnext.utils.get_fiscal_year(frappe.datetime.get_today(), true)[2],
+			default: svasamm_erp.utils.get_fiscal_year(frappe.datetime.get_today(), true)[2],
 		},
 		{
 			fieldname: "cost_center",
@@ -75,7 +75,7 @@ frappe.query_reports["Trial Balance"] = {
 			fieldname: "presentation_currency",
 			label: __("Currency"),
 			fieldtype: "Select",
-			options: erpnext.get_presentation_currency_list(),
+			options: svasamm_erp.get_presentation_currency_list(),
 		},
 		{
 			fieldname: "with_period_closing_entry_for_opening",
@@ -118,7 +118,7 @@ frappe.query_reports["Trial Balance"] = {
 			default: 1,
 		},
 	],
-	formatter: erpnext.financial_statements.formatter,
+	formatter: svasamm_erp.financial_statements.formatter,
 	tree: true,
 	name_field: "account",
 	parent_field: "parent_account",
@@ -126,4 +126,4 @@ frappe.query_reports["Trial Balance"] = {
 	initial_depth: 3,
 };
 
-erpnext.utils.add_dimensions("Trial Balance", 6);
+svasamm_erp.utils.add_dimensions("Trial Balance", 6);

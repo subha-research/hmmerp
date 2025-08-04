@@ -39,7 +39,7 @@ frappe.ui.form.on("Pick List", {
 
 		frm.set_query("work_order", () => {
 			return {
-				query: "erpnext.stock.doctype.pick_list.pick_list.get_pending_work_orders",
+				query: "svasamm_erp.stock.doctype.pick_list.pick_list.get_pending_work_orders",
 				filters: {
 					company: frm.doc.company,
 				},
@@ -55,13 +55,13 @@ frappe.ui.form.on("Pick List", {
 		});
 
 		frm.set_query("item_code", "locations", () => {
-			return erpnext.queries.item({ is_stock_item: 1 });
+			return svasamm_erp.queries.item({ is_stock_item: 1 });
 		});
 
 		frm.set_query("batch_no", "locations", (frm, cdt, cdn) => {
 			const row = locals[cdt][cdn];
 			return {
-				query: "erpnext.controllers.queries.get_batch_no",
+				query: "svasamm_erp.controllers.queries.get_batch_no",
 				filters: {
 					item_code: row.item_code,
 					warehouse: row.warehouse,
@@ -182,7 +182,10 @@ frappe.ui.form.on("Pick List", {
 	},
 	work_order: (frm) => {
 		frappe.db
-			.get_value("Work Order", frm.doc.work_order, ["qty", "material_transferred_for_manufacturing"])
+			.get_value("Work Order", frm.doc.work_order, [
+				"qty",
+				"material_transferred_for_manufacturing",
+			])
 			.then((data) => {
 				let qty_data = data.message;
 				let max = qty_data.qty - qty_data.material_transferred_for_manufacturing;
@@ -201,8 +204,8 @@ frappe.ui.form.on("Pick List", {
 							return;
 						}
 						frm.clear_table("locations");
-						erpnext.utils.map_current_doc({
-							method: "erpnext.manufacturing.doctype.work_order.work_order.create_pick_list",
+						svasamm_erp.utils.map_current_doc({
+							method: "svasamm_erp.manufacturing.doctype.work_order.work_order.create_pick_list",
 							target: frm,
 							source_name: frm.doc.work_order,
 						});
@@ -213,8 +216,8 @@ frappe.ui.form.on("Pick List", {
 			});
 	},
 	material_request: (frm) => {
-		erpnext.utils.map_current_doc({
-			method: "erpnext.stock.doctype.material_request.material_request.create_pick_list",
+		svasamm_erp.utils.map_current_doc({
+			method: "svasamm_erp.stock.doctype.material_request.material_request.create_pick_list",
 			target: frm,
 			source_name: frm.doc.material_request,
 		});
@@ -225,13 +228,13 @@ frappe.ui.form.on("Pick List", {
 	},
 	create_delivery_note: (frm) => {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.stock.doctype.pick_list.pick_list.create_delivery_note",
+			method: "svasamm_erp.stock.doctype.pick_list.pick_list.create_delivery_note",
 			frm: frm,
 		});
 	},
 	create_stock_entry: (frm) => {
 		frappe
-			.xcall("erpnext.stock.doctype.pick_list.pick_list.create_stock_entry", {
+			.xcall("svasamm_erp.stock.doctype.pick_list.pick_list.create_stock_entry", {
 				pick_list: frm.doc,
 			})
 			.then((stock_entry) => {
@@ -252,8 +255,8 @@ frappe.ui.form.on("Pick List", {
 			customer: frm.doc.customer,
 		};
 		frm.get_items_btn = frm.add_custom_button(__("Get Items"), () => {
-			erpnext.utils.map_current_doc({
-				method: "erpnext.selling.doctype.sales_order.sales_order.create_pick_list",
+			svasamm_erp.utils.map_current_doc({
+				method: "svasamm_erp.selling.doctype.sales_order.sales_order.create_pick_list",
 				source_doctype: "Sales Order",
 				target: frm,
 				setters: {
@@ -275,7 +278,7 @@ frappe.ui.form.on("Pick List", {
 			prompt_qty: frm.doc.prompt_qty,
 			serial_no_field: "not_supported", // doesn't make sense for picklist without a separate field.
 		};
-		const barcode_scanner = new erpnext.utils.BarcodeScanner(opts);
+		const barcode_scanner = new svasamm_erp.utils.BarcodeScanner(opts);
 		barcode_scanner.process_scan();
 	},
 	create_stock_reservation_entries: (frm) => {
@@ -359,38 +362,47 @@ frappe.ui.form.on("Pick List Item", {
 
 	pick_serial_and_batch(frm, cdt, cdn) {
 		let item = locals[cdt][cdn];
-		let path = "assets/erpnext/js/utils/serial_no_batch_selector.js";
+		let path = "assets/svasamm_erp/js/utils/serial_no_batch_selector.js";
 
-		frappe.db.get_value("Item", item.item_code, ["has_batch_no", "has_serial_no"]).then((r) => {
-			if (r.message && (r.message.has_batch_no || r.message.has_serial_no)) {
-				item.has_serial_no = r.message.has_serial_no;
-				item.has_batch_no = r.message.has_batch_no;
-				item.type_of_transaction = item.qty > 0 ? "Outward" : "Inward";
+		frappe.db
+			.get_value("Item", item.item_code, ["has_batch_no", "has_serial_no"])
+			.then((r) => {
+				if (r.message && (r.message.has_batch_no || r.message.has_serial_no)) {
+					item.has_serial_no = r.message.has_serial_no;
+					item.has_batch_no = r.message.has_batch_no;
+					item.type_of_transaction = item.qty > 0 ? "Outward" : "Inward";
 
-				item.title = item.has_serial_no ? __("Select Serial No") : __("Select Batch No");
+					item.title = item.has_serial_no
+						? __("Select Serial No")
+						: __("Select Batch No");
 
-				if (item.has_serial_no && item.has_batch_no) {
-					item.title = __("Select Serial and Batch");
-				}
-
-				new erpnext.SerialBatchPackageSelector(frm, item, (r) => {
-					if (r) {
-						let qty = Math.abs(r.total_qty);
-						frappe.model.set_value(item.doctype, item.name, {
-							serial_and_batch_bundle: r.name,
-							use_serial_batch_fields: 0,
-							qty: qty / flt(item.conversion_factor || 1, precision("conversion_factor", item)),
-						});
+					if (item.has_serial_no && item.has_batch_no) {
+						item.title = __("Select Serial and Batch");
 					}
-				});
-			}
-		});
+
+					new svasamm_erp.SerialBatchPackageSelector(frm, item, (r) => {
+						if (r) {
+							let qty = Math.abs(r.total_qty);
+							frappe.model.set_value(item.doctype, item.name, {
+								serial_and_batch_bundle: r.name,
+								use_serial_batch_fields: 0,
+								qty:
+									qty /
+									flt(
+										item.conversion_factor || 1,
+										precision("conversion_factor", item)
+									),
+							});
+						}
+					});
+				}
+			});
 	},
 });
 
 function get_item_details(item_code, uom = null) {
 	if (item_code) {
-		return frappe.xcall("erpnext.stock.doctype.pick_list.pick_list.get_item_details", {
+		return frappe.xcall("svasamm_erp.stock.doctype.pick_list.pick_list.get_item_details", {
 			item_code,
 			uom,
 		});

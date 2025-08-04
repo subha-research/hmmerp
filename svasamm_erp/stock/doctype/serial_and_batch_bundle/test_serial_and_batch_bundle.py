@@ -7,13 +7,13 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import flt, nowtime, today
 
-from erpnext.stock.doctype.item.test_item import make_item
-from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
+from svasamm_erp.stock.doctype.item.test_item import make_item
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
 	add_serial_batch_ledgers,
 	make_batch_nos,
 	make_serial_nos,
 )
-from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
 
 
 class TestSerialandBatchBundle(IntegrationTestCase):
@@ -79,8 +79,8 @@ class TestSerialandBatchBundle(IntegrationTestCase):
 		self.assertFalse(bundle_doc.name.startswith("SABB-"))
 
 	def test_inward_outward_serial_valuation(self):
-		from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
-		from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+		from svasamm_erp.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
+		from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 		serial_item_code = "New Serial No Valuation 1"
 		make_item(
@@ -137,8 +137,8 @@ class TestSerialandBatchBundle(IntegrationTestCase):
 		self.assertEqual(flt(stock_value_difference, 2), -500)
 
 	def test_inward_outward_batch_valuation(self):
-		from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
-		from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+		from svasamm_erp.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
+		from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 		batch_item_code = "New Batch No Valuation 1"
 		make_item(
@@ -308,7 +308,7 @@ class TestSerialandBatchBundle(IntegrationTestCase):
 		frappe.flags.use_serial_and_batch_fields = False
 
 	def test_old_serial_no_valuation(self):
-		from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+		from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 		serial_no_item_code = "Old Serial No Item Valuation 1"
 		make_item(
@@ -391,7 +391,7 @@ class TestSerialandBatchBundle(IntegrationTestCase):
 		frappe.flags.use_serial_and_batch_fields = False
 
 	def test_batch_not_belong_to_serial_no(self):
-		from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+		from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 		serial_and_batch_code = "New Serial No Valuation 1"
 		make_item(
@@ -496,7 +496,7 @@ class TestSerialandBatchBundle(IntegrationTestCase):
 		self.assertFalse(frappe.db.exists("Serial and Batch Bundle", bundle_doc.name))
 
 	def test_serial_and_batch_bundle_company(self):
-		from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+		from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 		item = make_item(
 			"Test Serial and Batch Bundle Company Item",
@@ -591,7 +591,7 @@ class TestSerialandBatchBundle(IntegrationTestCase):
 		"Stock Settings", {"auto_create_serial_and_batch_bundle_for_outward": 1}
 	)
 	def test_duplicate_serial_and_batch_bundle(self):
-		from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+		from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 		item_code = make_item(properties={"is_stock_item": 1, "has_serial_no": 1}).name
 
@@ -894,7 +894,7 @@ class TestSerialandBatchBundle(IntegrationTestCase):
 
 
 def get_batch_from_bundle(bundle):
-	from erpnext.stock.serial_batch_bundle import get_batch_nos
+	from svasamm_erp.stock.serial_batch_bundle import get_batch_nos
 
 	batches = get_batch_nos(bundle)
 
@@ -902,14 +902,14 @@ def get_batch_from_bundle(bundle):
 
 
 def get_serial_nos_from_bundle(bundle):
-	from erpnext.stock.serial_batch_bundle import get_serial_nos
+	from svasamm_erp.stock.serial_batch_bundle import get_serial_nos
 
 	serial_nos = get_serial_nos(bundle)
 	return sorted(serial_nos) if serial_nos else []
 
 
 def make_serial_batch_bundle(kwargs):
-	from erpnext.stock.serial_batch_bundle import SerialBatchCreation
+	from svasamm_erp.stock.serial_batch_bundle import SerialBatchCreation
 
 	if isinstance(kwargs, dict):
 		kwargs = frappe._dict(kwargs)

@@ -14,7 +14,7 @@ class AssetMaintenanceTeam(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.assets.doctype.maintenance_team_member.maintenance_team_member import (
+		from svasamm_erp.assets.doctype.maintenance_team_member.maintenance_team_member import (
 			MaintenanceTeamMember,
 		)
 

@@ -4,27 +4,27 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_to_date, flt, getdate, now_datetime, nowdate
 
-from erpnext.controllers.item_variant import create_variant
-from erpnext.manufacturing.doctype.production_plan.production_plan import (
+from svasamm_erp.controllers.item_variant import create_variant
+from svasamm_erp.manufacturing.doctype.production_plan.production_plan import (
 	get_items_for_material_requests,
 	get_non_completed_production_plans,
 	get_sales_orders,
 	get_warehouse_list,
 )
-from erpnext.manufacturing.doctype.work_order.work_order import OverProductionError
-from erpnext.manufacturing.doctype.work_order.work_order import make_stock_entry as make_se_from_wo
-from erpnext.selling.doctype.sales_order.sales_order import make_delivery_note
-from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
-from erpnext.stock.doctype.item.test_item import create_item, make_item
-from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+from svasamm_erp.manufacturing.doctype.work_order.work_order import OverProductionError
+from svasamm_erp.manufacturing.doctype.work_order.work_order import make_stock_entry as make_se_from_wo
+from svasamm_erp.selling.doctype.sales_order.sales_order import make_delivery_note
+from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
+from svasamm_erp.stock.doctype.item.test_item import create_item, make_item
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 	get_batch_from_bundle,
 	get_serial_nos_from_bundle,
 )
-from erpnext.stock.doctype.stock_entry.test_stock_entry import make_stock_entry
-from erpnext.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
+from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_stock_entry
+from svasamm_erp.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
 	create_stock_reconciliation,
 )
-from erpnext.stock.doctype.stock_reservation_entry.stock_reservation_entry import StockReservation
+from svasamm_erp.stock.doctype.stock_reservation_entry.stock_reservation_entry import StockReservation
 
 
 class TestProductionPlan(IntegrationTestCase):
@@ -426,7 +426,7 @@ class TestProductionPlan(IntegrationTestCase):
 		pln.cancel()
 
 	def test_production_plan_subassembly_default_supplier(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
 
 		bom_tree_1 = {"Test Laptop": {"Test Motherboard": {"Test Motherboard Wires": {}}}}
 		create_nested_bom(bom_tree_1, prefix="")
@@ -451,20 +451,20 @@ class TestProductionPlan(IntegrationTestCase):
 		self.assertEqual(plan.sub_assembly_items[0].supplier, "_Test Supplier")
 
 	def test_production_plan_for_subcontracting_po(self):
-		from erpnext.controllers.status_updater import OverAllowanceError
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
-		from erpnext.subcontracting.doctype.subcontracting_bom.test_subcontracting_bom import (
+		from svasamm_erp.controllers.status_updater import OverAllowanceError
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.subcontracting.doctype.subcontracting_bom.test_subcontracting_bom import (
 			create_subcontracting_bom,
 		)
 
 		def make_purchase_receipt_from_po(po_doc):
-			from erpnext.buying.doctype.purchase_order.purchase_order import make_subcontracting_order
-			from erpnext.controllers.subcontracting_controller import make_rm_stock_entry
-			from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
-			from erpnext.subcontracting.doctype.subcontracting_order.subcontracting_order import (
+			from svasamm_erp.buying.doctype.purchase_order.purchase_order import make_subcontracting_order
+			from svasamm_erp.controllers.subcontracting_controller import make_rm_stock_entry
+			from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+			from svasamm_erp.subcontracting.doctype.subcontracting_order.subcontracting_order import (
 				make_subcontracting_receipt,
 			)
-			from erpnext.subcontracting.doctype.subcontracting_receipt.subcontracting_receipt import (
+			from svasamm_erp.subcontracting.doctype.subcontracting_receipt.subcontracting_receipt import (
 				make_purchase_receipt as scr_make_purchase_receipt,
 			)
 
@@ -559,7 +559,7 @@ class TestProductionPlan(IntegrationTestCase):
 		)  # 2 since we have already created and submitted 2 POs
 
 	def test_production_plan_for_mr_items(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
 
 		def setup_item(fg_item):
 			item_doc = frappe.get_doc("Item", fg_item)
@@ -635,7 +635,7 @@ class TestProductionPlan(IntegrationTestCase):
 		1) Red-Car -> Wheel (sub assembly) > BOM-WHEEL-001
 		2) Green-Car -> Wheel (sub assembly) > BOM-WHEEL-001
 		"""
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
 
 		bom_tree_1 = {"Red-Car": {"Wheel": {"Rubber": {}}}}
 		bom_tree_2 = {"Green-Car": {"Wheel": {"Rubber": {}}}}
@@ -885,7 +885,7 @@ class TestProductionPlan(IntegrationTestCase):
 		"""
 		Test Prod Plan impact via: SO -> Prod Plan -> WO -> SE -> SE (cancel)
 		"""
-		from erpnext.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
+		from svasamm_erp.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
 
 		make_stock_entry(item_code="_Test Item", target="_Test Warehouse - _TC", qty=2, basic_rate=100)
 		make_stock_entry(
@@ -934,7 +934,7 @@ class TestProductionPlan(IntegrationTestCase):
 
 	def test_production_plan_pending_qty_independent_items(self):
 		"Test Prod Plan impact if items are added independently (no from SO or MR)."
-		from erpnext.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
+		from svasamm_erp.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
 
 		make_stock_entry(
 			item_code="Raw Material Item 1", target="_Test Warehouse - _TC", qty=2, basic_rate=100
@@ -983,14 +983,14 @@ class TestProductionPlan(IntegrationTestCase):
 
 	def test_production_plan_planned_qty(self):
 		# Case 1: When Planned Qty is non-integer and UOM is integer.
-		from erpnext.utilities.transaction_base import UOMMustBeIntegerError
+		from svasamm_erp.utilities.transaction_base import UOMMustBeIntegerError
 
 		self.assertRaises(
 			UOMMustBeIntegerError, create_production_plan, item_code="_Test FG Item", planned_qty=0.55
 		)
 
 		# Case 2: When Planned Qty is non-integer and UOM is also non-integer.
-		from erpnext.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.item.test_item import make_item
 
 		fg_item = make_item(properties={"is_stock_item": 1, "stock_uom": "_Test UOM 1"}).name
 		bom_item = make_item().name
@@ -1082,7 +1082,7 @@ class TestProductionPlan(IntegrationTestCase):
 		self.assertEqual(pln.po_items[0].produced_qty, 5)
 
 	def test_material_request_item_for_purchase_uom(self):
-		from erpnext.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.item.test_item import make_item
 
 		fg_item = make_item(properties={"is_stock_item": 1, "stock_uom": "_Test UOM 1"}).name
 		bom_item = make_item(
@@ -1116,7 +1116,7 @@ class TestProductionPlan(IntegrationTestCase):
 			self.assertEqual(row.qty, 1)
 
 	def test_material_request_for_sub_assembly_items(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
 
 		bom_tree = {
 			"Fininshed Goods1 For MR": {
@@ -1144,7 +1144,7 @@ class TestProductionPlan(IntegrationTestCase):
 			self.assertTrue(item_code in validate_mr_items)
 
 	def test_resered_qty_for_production_plan_for_material_requests(self):
-		from erpnext.stock.utils import get_or_make_bin
+		from svasamm_erp.stock.utils import get_or_make_bin
 
 		bin_name = get_or_make_bin("Raw Material Item 1", "_Test Warehouse - _TC")
 		before_qty = flt(frappe.db.get_value("Bin", bin_name, "reserved_qty_for_production_plan"))
@@ -1166,7 +1166,7 @@ class TestProductionPlan(IntegrationTestCase):
 		self.assertEqual(after_qty, before_qty)
 
 	def test_resered_qty_for_production_plan_for_work_order(self):
-		from erpnext.stock.utils import get_or_make_bin
+		from svasamm_erp.stock.utils import get_or_make_bin
 
 		bin_name = get_or_make_bin("Raw Material Item 1", "_Test Warehouse - _TC")
 		before_qty = flt(frappe.db.get_value("Bin", bin_name, "reserved_qty_for_production_plan"))
@@ -1219,7 +1219,7 @@ class TestProductionPlan(IntegrationTestCase):
 			self.assertEqual(after_qty, before_qty)
 
 	def test_resered_qty_for_production_plan_for_less_rm_qty(self):
-		from erpnext.stock.utils import get_or_make_bin
+		from svasamm_erp.stock.utils import get_or_make_bin
 
 		bin_name = get_or_make_bin("Raw Material Item 1", "_Test Warehouse - _TC")
 		before_qty = flt(frappe.db.get_value("Bin", bin_name, "reserved_qty_for_production_plan"))
@@ -1262,7 +1262,7 @@ class TestProductionPlan(IntegrationTestCase):
 			self.assertFalse(plan in completed_plans)
 
 	def test_resered_qty_for_production_plan_for_material_requests_with_multi_UOM(self):
-		from erpnext.stock.utils import get_or_make_bin
+		from svasamm_erp.stock.utils import get_or_make_bin
 
 		fg_item = make_item(properties={"is_stock_item": 1, "stock_uom": "_Test UOM 1"}).name
 		bom_item = make_item(
@@ -1308,8 +1308,8 @@ class TestProductionPlan(IntegrationTestCase):
 		self.assertEqual(reserved_qty_after_mr, before_qty)
 
 	def test_from_warehouse_for_purchase_material_request(self):
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
-		from erpnext.stock.utils import get_or_make_bin
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.stock.utils import get_or_make_bin
 
 		create_item("RM-TEST-123 For Purchase", valuation_rate=100)
 		get_or_make_bin("RM-TEST-123 For Purchase", "_Test Warehouse - _TC")
@@ -1341,7 +1341,7 @@ class TestProductionPlan(IntegrationTestCase):
 			self.assertFalse(row.from_warehouse)
 
 	def test_skip_available_qty_for_sub_assembly_items(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
 
 		bom_tree = {
 			"Fininshed Goods1 For SUB Test": {
@@ -1386,7 +1386,7 @@ class TestProductionPlan(IntegrationTestCase):
 				self.assertEqual(row.quantity, 10)
 
 	def test_sub_assembly_and_their_raw_materials_exists(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
 
 		bom_tree = {
 			"FG1 For SUB Test": {
@@ -1419,8 +1419,8 @@ class TestProductionPlan(IntegrationTestCase):
 		self.assertFalse(items)
 
 	def test_transfer_and_purchase_mrp_for_purchase_uom(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		bom_tree = {
 			"Test FG Item INK PEN": {
@@ -1480,8 +1480,8 @@ class TestProductionPlan(IntegrationTestCase):
 				self.assertEqual(row.quantity, 12.0)
 
 	def test_mr_qty_for_complex_bom(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		def set_bom_qty(item_code, qtys):
 			# assumes qtys is in same order as children
@@ -1553,7 +1553,7 @@ class TestProductionPlan(IntegrationTestCase):
 			self.assertEqual(row["quantity"], test_qtys[row["item_code"]] * 3)
 
 	def test_mr_qty_for_same_rm_with_different_sub_assemblies(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
 
 		bom_tree = {
 			"Fininshed Goods2 For SUB Test": {
@@ -1581,8 +1581,8 @@ class TestProductionPlan(IntegrationTestCase):
 				self.assertEqual(row.quantity, 2)
 
 	def test_reserve_sub_assembly_items(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		bom_tree = {
 			"Fininshed Goods Bicycle": {
@@ -1668,8 +1668,8 @@ class TestProductionPlan(IntegrationTestCase):
 		self.assertEqual(after_qty, before_qty)
 
 	def test_material_request_qty_purchase_and_material_transfer(self):
-		from erpnext.stock.doctype.item.test_item import make_item
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		fg_item = make_item(properties={"is_stock_item": 1, "stock_uom": "_Test UOM 1"}).name
 		bom_item = make_item(
@@ -1717,8 +1717,8 @@ class TestProductionPlan(IntegrationTestCase):
 			self.assertEqual(row.get("conversion_factor"), 10.0)
 
 	def test_unreserve_qty_on_closing_of_pp(self):
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
-		from erpnext.stock.utils import get_or_make_bin
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.stock.utils import get_or_make_bin
 
 		fg_item = make_item(properties={"is_stock_item": 1, "stock_uom": "_Test UOM 1"}).name
 		rm_item = make_item(properties={"is_stock_item": 1, "stock_uom": "_Test UOM 1"}).name
@@ -1758,7 +1758,7 @@ class TestProductionPlan(IntegrationTestCase):
 		self.assertAlmostEqual(after_qty, before_qty)
 
 	def test_min_order_qty_in_pp(self):
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		fg_item = make_item(properties={"is_stock_item": 1}).name
 		rm_item = make_item(properties={"is_stock_item": 1, "min_order_qty": 1000}).name
@@ -1816,8 +1816,8 @@ class TestProductionPlan(IntegrationTestCase):
 			self.assertEqual(row.qty, wo_qty[row.name])
 
 	def test_parent_warehouse_for_sub_assembly_items(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		parent_warehouse = "_Test Warehouse Group - _TC"
 		sub_warehouse = create_warehouse("Sub Warehouse", company="_Test Company")
@@ -1865,7 +1865,7 @@ class TestProductionPlan(IntegrationTestCase):
 		make_bom(item="_Test FG Item", raw_materials=["Sub Assembly Item", "RM Item 1"])
 		make_bom(item="_Test FG Item 2", raw_materials=["Sub Assembly Item"])
 
-		from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+		from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
 
 		make_stock_entry(
 			item_code="Sub Assembly Item",
@@ -1907,7 +1907,7 @@ class TestProductionPlan(IntegrationTestCase):
 		self.assertEqual(plan.sub_assembly_items[0].qty, 20)
 		self.assertEqual(plan.sub_assembly_items[1].qty, 50)
 
-		from erpnext.manufacturing.doctype.production_plan.production_plan import (
+		from svasamm_erp.manufacturing.doctype.production_plan.production_plan import (
 			get_items_for_material_requests,
 		)
 
@@ -1917,10 +1917,10 @@ class TestProductionPlan(IntegrationTestCase):
 		self.assertEqual(mr_items[1].get("quantity"), 70)
 
 	def test_stock_reservation_against_production_plan(self):
-		from erpnext.buying.doctype.purchase_order.purchase_order import make_purchase_receipt
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
-		from erpnext.stock.doctype.material_request.material_request import make_purchase_order
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.buying.doctype.purchase_order.purchase_order import make_purchase_receipt
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.stock.doctype.material_request.material_request import make_purchase_order
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		frappe.db.set_single_value("Stock Settings", "enable_stock_reservation", 1)
 
@@ -2030,10 +2030,10 @@ class TestProductionPlan(IntegrationTestCase):
 		frappe.db.set_single_value("Stock Settings", "enable_stock_reservation", 0)
 
 	def test_stock_reservation_of_serial_nos_against_production_plan(self):
-		from erpnext.buying.doctype.purchase_order.purchase_order import make_purchase_receipt
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
-		from erpnext.stock.doctype.material_request.material_request import make_purchase_order
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.buying.doctype.purchase_order.purchase_order import make_purchase_receipt
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.stock.doctype.material_request.material_request import make_purchase_order
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		frappe.db.set_single_value("Stock Settings", "enable_stock_reservation", 1)
 
@@ -2178,10 +2178,10 @@ class TestProductionPlan(IntegrationTestCase):
 		frappe.db.set_single_value("Stock Settings", "enable_stock_reservation", 0)
 
 	def test_stock_reservation_of_batch_nos_against_production_plan(self):
-		from erpnext.buying.doctype.purchase_order.purchase_order import make_purchase_receipt
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
-		from erpnext.stock.doctype.material_request.material_request import make_purchase_order
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.buying.doctype.purchase_order.purchase_order import make_purchase_receipt
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.stock.doctype.material_request.material_request import make_purchase_order
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		frappe.db.set_single_value("Stock Settings", "enable_stock_reservation", 1)
 
@@ -2328,9 +2328,9 @@ class TestProductionPlan(IntegrationTestCase):
 		frappe.db.set_single_value("Stock Settings", "enable_stock_reservation", 0)
 
 	def test_production_plan_for_partial_sub_assembly_items(self):
-		from erpnext.controllers.status_updater import OverAllowanceError
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
-		from erpnext.subcontracting.doctype.subcontracting_bom.test_subcontracting_bom import (
+		from svasamm_erp.controllers.status_updater import OverAllowanceError
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.subcontracting.doctype.subcontracting_bom.test_subcontracting_bom import (
 			create_subcontracting_bom,
 		)
 

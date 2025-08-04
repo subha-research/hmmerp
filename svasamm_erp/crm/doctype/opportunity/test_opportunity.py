@@ -6,11 +6,11 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import now_datetime, random_string, today
 
-from erpnext.crm.doctype.lead.lead import make_customer
-from erpnext.crm.doctype.lead.test_lead import make_lead
-from erpnext.crm.doctype.opportunity.opportunity import make_quotation
-from erpnext.crm.utils import get_linked_communication_list
-from erpnext.tests.utils import ERPNextTestSuite
+from svasamm_erp.crm.doctype.lead.lead import make_customer
+from svasamm_erp.crm.doctype.lead.test_lead import make_lead
+from svasamm_erp.crm.doctype.opportunity.opportunity import make_quotation
+from svasamm_erp.crm.utils import get_linked_communication_list
+from svasamm_erp.tests.utils import ERPNextTestSuite
 
 
 class TestOpportunity(ERPNextTestSuite):

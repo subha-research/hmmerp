@@ -9,7 +9,7 @@ import frappe
 from frappe import _
 from frappe.utils import cint, date_diff, flt, get_datetime
 
-from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos
+from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos
 
 Filters = frappe._dict
 
@@ -244,7 +244,7 @@ class FIFOSlots:
 		}
 		"""
 
-		from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+		from svasamm_erp.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 			get_serial_nos_from_bundle,
 		)
 

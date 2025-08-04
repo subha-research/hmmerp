@@ -42,7 +42,7 @@ frappe.query_reports["Serial and Batch Summary"] = {
 			options: "DocType",
 			get_query: function () {
 				return {
-					query: "erpnext.stock.report.serial_and_batch_summary.serial_and_batch_summary.get_voucher_type",
+					query: "svasamm_erp.stock.report.serial_and_batch_summary.serial_and_batch_summary.get_voucher_type",
 				};
 			},
 		},
@@ -67,7 +67,7 @@ frappe.query_reports["Serial and Batch Summary"] = {
 			options: "Serial No",
 			get_query: function () {
 				return {
-					query: "erpnext.stock.report.serial_and_batch_summary.serial_and_batch_summary.get_serial_nos",
+					query: "svasamm_erp.stock.report.serial_and_batch_summary.serial_and_batch_summary.get_serial_nos",
 					filters: {
 						item_code: frappe.query_report.get_filter_value("item_code"),
 						voucher_type: frappe.query_report.get_filter_value("voucher_type"),
@@ -83,7 +83,7 @@ frappe.query_reports["Serial and Batch Summary"] = {
 			options: "Batch",
 			get_query: function () {
 				return {
-					query: "erpnext.stock.report.serial_and_batch_summary.serial_and_batch_summary.get_batch_nos",
+					query: "svasamm_erp.stock.report.serial_and_batch_summary.serial_and_batch_summary.get_batch_nos",
 					filters: {
 						item_code: frappe.query_report.get_filter_value("item_code"),
 						voucher_type: frappe.query_report.get_filter_value("voucher_type"),

@@ -61,7 +61,7 @@ frappe.listview_settings["Sales Order"] = {
 		}
 	},
 	onload: function (listview) {
-		var method = "erpnext.selling.doctype.sales_order.sales_order.close_or_unclose_sales_orders";
+		var method = "svasamm_erp.selling.doctype.sales_order.sales_order.close_or_unclose_sales_orders";
 
 		listview.page.add_menu_item(__("Close"), function () {
 			listview.call_for_selected_items(method, { status: "Closed" });
@@ -73,14 +73,14 @@ frappe.listview_settings["Sales Order"] = {
 
 		if (frappe.model.can_create("Sales Invoice")) {
 			listview.page.add_action_item(__("Sales Invoice"), () => {
-				erpnext.bulk_transaction_processing.create(listview, "Sales Order", "Sales Invoice");
+				svasamm_erp.bulk_transaction_processing.create(listview, "Sales Order", "Sales Invoice");
 			});
 		}
 
 		if (frappe.model.can_create("Delivery Note")) {
 			listview.page.add_action_item(__("Delivery Note"), () => {
 				frappe.call({
-					method: "erpnext.selling.doctype.sales_order.sales_order.is_enable_cutoff_date_on_bulk_delivery_note_creation",
+					method: "svasamm_erp.selling.doctype.sales_order.sales_order.is_enable_cutoff_date_on_bulk_delivery_note_creation",
 					callback: (r) => {
 						if (r.message) {
 							var dialog = new frappe.ui.Dialog({
@@ -95,7 +95,7 @@ frappe.listview_settings["Sales Order"] = {
 							});
 							dialog.set_primary_action(__("Select"), function (values) {
 								var until_delivery_date = values.delivery_date;
-								erpnext.bulk_transaction_processing.create(
+								svasamm_erp.bulk_transaction_processing.create(
 									listview,
 									"Sales Order",
 									"Delivery Note",
@@ -107,7 +107,7 @@ frappe.listview_settings["Sales Order"] = {
 							});
 							dialog.show();
 						} else {
-							erpnext.bulk_transaction_processing.create(
+							svasamm_erp.bulk_transaction_processing.create(
 								listview,
 								"Sales Order",
 								"Delivery Note"
@@ -120,7 +120,7 @@ frappe.listview_settings["Sales Order"] = {
 
 		if (frappe.model.can_create("Payment Entry")) {
 			listview.page.add_action_item(__("Advance Payment"), () => {
-				erpnext.bulk_transaction_processing.create(listview, "Sales Order", "Payment Entry");
+				svasamm_erp.bulk_transaction_processing.create(listview, "Sales Order", "Payment Entry");
 			});
 		}
 	},

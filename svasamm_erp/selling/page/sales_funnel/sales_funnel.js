@@ -8,12 +8,12 @@ frappe.pages["sales-funnel"].on_page_load = function (wrapper) {
 		single_column: true,
 	});
 
-	wrapper.sales_funnel = new erpnext.SalesFunnel(wrapper);
+	wrapper.sales_funnel = new svasamm_erp.SalesFunnel(wrapper);
 
 	frappe.breadcrumbs.add("Selling");
 };
 
-erpnext.SalesFunnel = class SalesFunnel {
+svasamm_erp.SalesFunnel = class SalesFunnel {
 	constructor(wrapper) {
 		var me = this;
 		// 0 setTimeout hack - this gives time for canvas to get width and height
@@ -112,11 +112,11 @@ erpnext.SalesFunnel = class SalesFunnel {
 		}
 
 		const method_map = {
-			sales_funnel: "erpnext.selling.page.sales_funnel.sales_funnel.get_funnel_data",
-			opp_by_utm_source: "erpnext.selling.page.sales_funnel.sales_funnel.get_opp_by_utm_source",
-			opp_by_utm_campaign: "erpnext.selling.page.sales_funnel.sales_funnel.get_opp_by_utm_campaign",
-			opp_by_utm_medium: "erpnext.selling.page.sales_funnel.sales_funnel.get_opp_by_utm_medium",
-			sales_pipeline: "erpnext.selling.page.sales_funnel.sales_funnel.get_pipeline_data",
+			sales_funnel: "svasamm_erp.selling.page.sales_funnel.sales_funnel.get_funnel_data",
+			opp_by_utm_source: "svasamm_erp.selling.page.sales_funnel.sales_funnel.get_opp_by_utm_source",
+			opp_by_utm_campaign: "svasamm_erp.selling.page.sales_funnel.sales_funnel.get_opp_by_utm_campaign",
+			opp_by_utm_medium: "svasamm_erp.selling.page.sales_funnel.sales_funnel.get_opp_by_utm_medium",
+			sales_pipeline: "svasamm_erp.selling.page.sales_funnel.sales_funnel.get_pipeline_data",
 		};
 		frappe.call({
 			method: method_map[this.options.chart],

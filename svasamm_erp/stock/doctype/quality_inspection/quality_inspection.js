@@ -65,7 +65,7 @@ frappe.ui.form.on("Quality Inspection", {
 				else filters["parent"] = doc.reference_name;
 
 				return {
-					query: "erpnext.stock.doctype.quality_inspection.quality_inspection.item_query",
+					query: "svasamm_erp.stock.doctype.quality_inspection.quality_inspection.item_query",
 					filters: filters,
 				};
 			}

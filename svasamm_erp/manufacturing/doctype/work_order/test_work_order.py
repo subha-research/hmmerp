@@ -6,10 +6,10 @@ import frappe
 from frappe.tests import IntegrationTestCase, timeout
 from frappe.utils import add_days, add_months, add_to_date, cint, flt, now, today
 
-from erpnext.manufacturing.doctype.job_card.job_card import JobCardCancelError
-from erpnext.manufacturing.doctype.job_card.job_card import make_stock_entry as make_stock_entry_from_jc
-from erpnext.manufacturing.doctype.production_plan.test_production_plan import make_bom
-from erpnext.manufacturing.doctype.work_order.work_order import (
+from svasamm_erp.manufacturing.doctype.job_card.job_card import JobCardCancelError
+from svasamm_erp.manufacturing.doctype.job_card.job_card import make_stock_entry as make_stock_entry_from_jc
+from svasamm_erp.manufacturing.doctype.production_plan.test_production_plan import make_bom
+from svasamm_erp.manufacturing.doctype.work_order.work_order import (
 	CapacityError,
 	ItemHasVariantError,
 	OverProductionError,
@@ -20,17 +20,17 @@ from erpnext.manufacturing.doctype.work_order.work_order import (
 	make_stock_return_entry,
 	stop_unstop,
 )
-from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
-from erpnext.stock.doctype.item.test_item import create_item, make_item
-from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
+from svasamm_erp.stock.doctype.item.test_item import create_item, make_item
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 	get_batch_from_bundle,
 	get_serial_nos_from_bundle,
 	make_serial_batch_bundle,
 )
-from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos
-from erpnext.stock.doctype.stock_entry import test_stock_entry
-from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
-from erpnext.stock.utils import get_bin
+from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos
+from svasamm_erp.stock.doctype.stock_entry import test_stock_entry
+from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
+from svasamm_erp.stock.utils import get_bin
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["BOM"]
 
@@ -911,7 +911,7 @@ class TestWorkOrder(IntegrationTestCase):
 		self.assertRaises(frappe.ValidationError, stock_entry.save)
 
 	def test_wo_completion_with_pl_bom(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import (
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import (
 			create_bom_with_process_loss_item,
 			create_process_loss_bom_items,
 		)
@@ -1209,7 +1209,7 @@ class TestWorkOrder(IntegrationTestCase):
 		"Manufacturing Settings", {"make_serial_no_batch_from_work_order": 1}
 	)
 	def test_auto_batch_creation(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
 
 		fg_item = frappe.generate_hash(length=20)
 		child_item = frappe.generate_hash(length=20)
@@ -1232,7 +1232,7 @@ class TestWorkOrder(IntegrationTestCase):
 		"Manufacturing Settings", {"make_serial_no_batch_from_work_order": 1}
 	)
 	def test_auto_serial_no_creation(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
 
 		fg_item = frappe.generate_hash(length=20)
 		child_item = frappe.generate_hash(length=20)
@@ -1267,7 +1267,7 @@ class TestWorkOrder(IntegrationTestCase):
 		"Manufacturing Settings", {"make_serial_no_batch_from_work_order": 1}
 	)
 	def test_auto_serial_no_batch_creation(self):
-		from erpnext.manufacturing.doctype.bom.test_bom import create_nested_bom
+		from svasamm_erp.manufacturing.doctype.bom.test_bom import create_nested_bom
 
 		fg_item = frappe.generate_hash(length=20)
 		child_item = frappe.generate_hash(length=20)
@@ -2135,7 +2135,7 @@ class TestWorkOrder(IntegrationTestCase):
 		"Manufacturing Settings", {"material_consumption": 1, "get_rm_cost_from_consumption_entry": 1}
 	)
 	def test_get_rm_cost_from_consumption_entry(self):
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import (
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import (
 			make_stock_entry as make_stock_entry_test_record,
 		)
 
@@ -2253,7 +2253,7 @@ class TestWorkOrder(IntegrationTestCase):
 		)
 
 	def test_partial_material_consumption_with_batch(self):
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import (
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import (
 			make_stock_entry as make_stock_entry_test_record,
 		)
 
@@ -2374,7 +2374,7 @@ class TestWorkOrder(IntegrationTestCase):
 		wo = make_wo_order_test_record(production_item=fg_item, qty=10, bom_no=bom.name, status="Not Started")
 
 		# create material receipt stock entry for raw material
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import (
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import (
 			make_stock_entry as make_stock_entry_test_record,
 		)
 
@@ -2698,7 +2698,7 @@ class TestWorkOrder(IntegrationTestCase):
 			self.assertEqual(status, "Consumed")
 
 	def test_stock_reservation_for_serialized_raw_material(self):
-		from erpnext.stock.doctype.stock_entry.stock_entry_utils import (
+		from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import (
 			make_stock_entry as make_stock_entry_test_record,
 		)
 
@@ -2749,7 +2749,7 @@ class TestWorkOrder(IntegrationTestCase):
 		self.assertRaises(frappe.ValidationError, transfer_entry.submit)
 
 	def test_stock_reservation_for_batched_raw_material(self):
-		from erpnext.stock.doctype.stock_entry.stock_entry_utils import (
+		from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import (
 			make_stock_entry as make_stock_entry_test_record,
 		)
 
@@ -2808,7 +2808,7 @@ class TestWorkOrder(IntegrationTestCase):
 		self.assertRaises(frappe.ValidationError, transfer_entry.submit)
 
 	def test_auto_stock_reservation_for_batched_raw_material(self):
-		from erpnext.stock.doctype.stock_entry.stock_entry_utils import (
+		from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import (
 			make_stock_entry as make_stock_entry_test_record,
 		)
 
@@ -2942,7 +2942,7 @@ class TestWorkOrder(IntegrationTestCase):
 		frappe.db.set_single_value("Stock Settings", "pick_serial_and_batch_based_on", original_based_on)
 
 	def test_operations_time_planning_calculation(self):
-		from erpnext.manufacturing.doctype.routing.test_routing import create_routing, setup_operations
+		from svasamm_erp.manufacturing.doctype.routing.test_routing import create_routing, setup_operations
 
 		operations = [
 			{"operation": "Test Operation A", "workstation": "Test Workstation A", "time_in_mins": 1},
@@ -3007,7 +3007,7 @@ class TestWorkOrder(IntegrationTestCase):
 
 
 def make_stock_in_entries_and_get_batches(rm_item, source_warehouse, wip_warehouse):
-	from erpnext.stock.doctype.stock_entry.test_stock_entry import (
+	from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import (
 		make_stock_entry as make_stock_entry_test_record,
 	)
 
@@ -3114,9 +3114,9 @@ def prepare_boms_for_sub_assembly_test():
 
 
 def prepare_data_for_workstation_type_check():
-	from erpnext.manufacturing.doctype.operation.test_operation import make_operation
-	from erpnext.manufacturing.doctype.workstation.test_workstation import make_workstation
-	from erpnext.manufacturing.doctype.workstation_type.test_workstation_type import (
+	from svasamm_erp.manufacturing.doctype.operation.test_operation import make_operation
+	from svasamm_erp.manufacturing.doctype.workstation.test_workstation import make_workstation
+	from svasamm_erp.manufacturing.doctype.workstation_type.test_workstation_type import (
 		create_workstation_type,
 	)
 

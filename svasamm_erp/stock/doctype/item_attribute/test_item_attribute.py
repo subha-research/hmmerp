@@ -5,7 +5,7 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.stock.doctype.item_attribute.item_attribute import ItemAttributeIncrementError
+from svasamm_erp.stock.doctype.item_attribute.item_attribute import ItemAttributeIncrementError
 
 
 class TestItemAttribute(IntegrationTestCase):

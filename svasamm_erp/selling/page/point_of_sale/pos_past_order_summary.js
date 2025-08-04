@@ -1,4 +1,4 @@
-erpnext.PointOfSale.PastOrderSummary = class {
+svasamm_erp.PointOfSale.PastOrderSummary = class {
 	constructor({ wrapper, settings, events }) {
 		this.wrapper = wrapper;
 		this.events = events;
@@ -122,7 +122,7 @@ erpnext.PointOfSale.PastOrderSummary = class {
 
 		async function get_returned_qty() {
 			const r = await frappe.call({
-				method: "erpnext.controllers.sales_and_purchase_return.get_invoice_item_returned_qty",
+				method: "svasamm_erp.controllers.sales_and_purchase_return.get_invoice_item_returned_qty",
 				args: {
 					doctype: doc.doctype,
 					invoice: doc.name,
@@ -475,7 +475,7 @@ erpnext.PointOfSale.PastOrderSummary = class {
 
 	async is_invoice_returnable(doctype, invoice) {
 		const r = await frappe.call({
-			method: "erpnext.controllers.sales_and_purchase_return.is_invoice_returnable",
+			method: "svasamm_erp.controllers.sales_and_purchase_return.is_invoice_returnable",
 			args: {
 				doctype: doctype,
 				invoice: invoice,

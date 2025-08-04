@@ -5,13 +5,13 @@ import frappe
 from frappe import _
 from frappe.utils import cint, flt
 
-from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos, get_serial_nos_from_sle_list
-from erpnext.stock.report.stock_ledger.stock_ledger import (
+from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos, get_serial_nos_from_sle_list
+from svasamm_erp.stock.report.stock_ledger.stock_ledger import (
 	get_item_details,
 	get_opening_balance,
 	get_stock_ledger_entries,
 )
-from erpnext.stock.utils import is_reposting_item_valuation_in_progress
+from svasamm_erp.stock.utils import is_reposting_item_valuation_in_progress
 
 
 def execute(filters=None):

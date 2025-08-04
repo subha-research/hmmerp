@@ -1,7 +1,7 @@
 # Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 # License: GNU General Public License v3. See license.txt
 
-# ERPNext - web based ERP (http://erpnext.com)
+# ERPNext - web based ERP (http://svasamm_erp.com)
 # For license information, please see license.txt
 
 
@@ -10,16 +10,16 @@ import frappe.model
 from frappe.tests import IntegrationTestCase
 from frappe.utils import flt, today
 
-from erpnext.controllers.accounts_controller import InvalidQtyError
-from erpnext.stock.doctype.item.test_item import create_item
-from erpnext.stock.doctype.material_request.material_request import (
+from svasamm_erp.controllers.accounts_controller import InvalidQtyError
+from svasamm_erp.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.material_request.material_request import (
 	make_in_transit_stock_entry,
 	make_purchase_order,
 	make_stock_entry,
 	make_supplier_quotation,
 	raise_work_orders,
 )
-from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 
 class TestMaterialRequest(IntegrationTestCase):
@@ -47,9 +47,9 @@ class TestMaterialRequest(IntegrationTestCase):
 		self.assertEqual(len(po.get("items")), len(mr.get("items")))
 
 	def test_make_subcontracted_purchase_order(self):
-		from erpnext.manufacturing.doctype.production_plan.test_production_plan import make_bom
-		from erpnext.stock.doctype.item.test_item import create_item, make_item
-		from erpnext.subcontracting.doctype.subcontracting_bom.test_subcontracting_bom import (
+		from svasamm_erp.manufacturing.doctype.production_plan.test_production_plan import make_bom
+		from svasamm_erp.stock.doctype.item.test_item import create_item, make_item
+		from svasamm_erp.subcontracting.doctype.subcontracting_bom.test_subcontracting_bom import (
 			create_subcontracting_bom,
 		)
 
@@ -123,7 +123,7 @@ class TestMaterialRequest(IntegrationTestCase):
 		self.assertEqual(len(se.get("items")), len(mr.get("items")))
 
 	def test_partial_make_stock_entry(self):
-		from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry as _make_stock_entry
+		from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry as _make_stock_entry
 
 		mr = frappe.copy_doc(self.globalTestRecords["Material Request"][0]).insert()
 
@@ -672,7 +672,7 @@ class TestMaterialRequest(IntegrationTestCase):
 		self.assertEqual(se_doc.get("items")[0].s_warehouse, "_Test Warehouse - _TC")
 
 	def test_warehouse_company_validation(self):
-		from erpnext.stock.utils import InvalidWarehouseCompany
+		from svasamm_erp.stock.utils import InvalidWarehouseCompany
 
 		mr = frappe.copy_doc(self.globalTestRecords["Material Request"][0])
 		mr.company = "_Test Company 1"
@@ -861,7 +861,7 @@ class TestMaterialRequest(IntegrationTestCase):
 		self.assertEqual(existing_requested_qty, current_requested_qty)
 
 	def test_auto_email_users_with_company_user_permissions(self):
-		from erpnext.stock.reorder_item import get_email_list
+		from svasamm_erp.stock.reorder_item import get_email_list
 
 		comapnywise_users = {
 			"_Test Company": "test_auto_email_@example.com",

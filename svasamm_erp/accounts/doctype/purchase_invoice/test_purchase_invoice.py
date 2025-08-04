@@ -6,37 +6,37 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, cint, flt, getdate, nowdate, today
 
-import erpnext
-from erpnext.accounts.doctype.account.test_account import create_account, get_inventory_account
-from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
-from erpnext.buying.doctype.purchase_order.purchase_order import get_mapped_purchase_invoice
-from erpnext.buying.doctype.purchase_order.purchase_order import make_purchase_invoice as make_pi_from_po
-from erpnext.buying.doctype.purchase_order.test_purchase_order import (
+import svasamm_erp
+from svasamm_erp.accounts.doctype.account.test_account import create_account, get_inventory_account
+from svasamm_erp.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+from svasamm_erp.buying.doctype.purchase_order.purchase_order import get_mapped_purchase_invoice
+from svasamm_erp.buying.doctype.purchase_order.purchase_order import make_purchase_invoice as make_pi_from_po
+from svasamm_erp.buying.doctype.purchase_order.test_purchase_order import (
 	create_pr_against_po,
 	create_purchase_order,
 )
-from erpnext.buying.doctype.supplier.test_supplier import create_supplier
-from erpnext.controllers.accounts_controller import InvalidQtyError, get_payment_terms
-from erpnext.controllers.buying_controller import QtyMismatchError
-from erpnext.exceptions import InvalidCurrency
-from erpnext.projects.doctype.project.test_project import make_project
-from erpnext.stock.doctype.item.test_item import create_item
-from erpnext.stock.doctype.material_request.material_request import make_purchase_order
-from erpnext.stock.doctype.material_request.test_material_request import make_material_request
-from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
+from svasamm_erp.buying.doctype.supplier.test_supplier import create_supplier
+from svasamm_erp.controllers.accounts_controller import InvalidQtyError, get_payment_terms
+from svasamm_erp.controllers.buying_controller import QtyMismatchError
+from svasamm_erp.exceptions import InvalidCurrency
+from svasamm_erp.projects.doctype.project.test_project import make_project
+from svasamm_erp.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.material_request.material_request import make_purchase_order
+from svasamm_erp.stock.doctype.material_request.test_material_request import make_material_request
+from svasamm_erp.stock.doctype.purchase_receipt.purchase_receipt import (
 	make_purchase_invoice as create_purchase_invoice_from_receipt,
 )
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import (
+from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import (
 	get_taxes,
 	make_purchase_receipt,
 )
-from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 	get_batch_from_bundle,
 	get_serial_nos_from_bundle,
 	make_serial_batch_bundle,
 )
-from erpnext.stock.doctype.stock_entry.test_stock_entry import get_qty_after_transaction
-from erpnext.stock.tests.test_utils import StockTestMixin
+from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import get_qty_after_transaction
+from svasamm_erp.stock.tests.test_utils import StockTestMixin
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["Item", "Cost Center", "Payment Term", "Payment Terms Template"]
 IGNORE_TEST_RECORD_DEPENDENCIES = ["Serial No"]
@@ -90,7 +90,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		pi.delete()
 
 	def test_update_received_qty_in_material_request(self):
-		from erpnext.buying.doctype.purchase_order.purchase_order import make_purchase_invoice
+		from svasamm_erp.buying.doctype.purchase_order.purchase_order import make_purchase_invoice
 
 		"""
 		Test if the received_qty in Material Request is updated correctly when
@@ -117,7 +117,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 	def test_gl_entries_without_perpetual_inventory(self):
 		frappe.db.set_value("Company", "_Test Company", "round_off_account", "Round Off - _TC")
 		pi = frappe.copy_doc(self.globalTestRecords["Purchase Invoice"][0])
-		self.assertTrue(not cint(erpnext.is_perpetual_inventory_enabled(pi.company)))
+		self.assertTrue(not cint(svasamm_erp.is_perpetual_inventory_enabled(pi.company)))
 		pi.insert()
 		pi.submit()
 
@@ -152,7 +152,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 			qty=10,
 		)
 
-		self.assertTrue(cint(erpnext.is_perpetual_inventory_enabled(pi.company)), 1)
+		self.assertTrue(cint(svasamm_erp.is_perpetual_inventory_enabled(pi.company)), 1)
 
 		self.check_gle_for_pi(pi.name)
 
@@ -163,7 +163,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertEqual(pi.payment_schedule[0].due_date, pi.due_date)
 
 	def test_payment_entry_unlink_against_purchase_invoice(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
 
 		unlink_payment_on_cancel_of_invoice(0)
 
@@ -353,7 +353,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 			self.assertEqual(expected_values[gle.account][2], gle.credit)
 
 	def test_purchase_invoice_with_exchange_rate_difference(self):
-		from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
+		from svasamm_erp.stock.doctype.purchase_receipt.purchase_receipt import (
 			make_purchase_invoice as create_purchase_invoice,
 		)
 
@@ -384,7 +384,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertEqual(discrepancy_caused_by_exchange_rate_diff, amount)
 
 	def test_purchase_invoice_with_exchange_rate_difference_for_non_stock_item(self):
-		from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
+		from svasamm_erp.stock.doctype.purchase_receipt.purchase_receipt import (
 			make_purchase_invoice as create_purchase_invoice,
 		)
 
@@ -699,7 +699,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 			self.assertEqual(expected_values[gle.account][1], gle.credit)
 
 	def test_standalone_return_using_pi(self):
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_stock_entry
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_stock_entry
 
 		item = self.make_item().name
 		company = "_Test Company with perpetual inventory"
@@ -726,8 +726,8 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		)
 
 	def test_return_with_lcv(self):
-		from erpnext.controllers.sales_and_purchase_return import make_return_doc
-		from erpnext.stock.doctype.landed_cost_voucher.test_landed_cost_voucher import (
+		from svasamm_erp.controllers.sales_and_purchase_return import make_return_doc
+		from svasamm_erp.stock.doctype.landed_cost_voucher.test_landed_cost_voucher import (
 			create_landed_cost_voucher,
 		)
 
@@ -1070,7 +1070,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertEqual(flt(pi.outstanding_amount), flt(pi.rounded_total + pi.total_advance))
 
 	def test_purchase_invoice_with_shipping_rule(self):
-		from erpnext.accounts.doctype.shipping_rule.test_shipping_rule import create_shipping_rule
+		from svasamm_erp.accounts.doctype.shipping_rule.test_shipping_rule import create_shipping_rule
 
 		shipping_rule = create_shipping_rule(
 			shipping_rule_type="Buying", shipping_rule_name="Shipping Rule - Purchase Invoice Test"
@@ -1104,8 +1104,8 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertRaises(frappe.ValidationError, pi.insert)
 
 	def test_debit_note(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
-		from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import get_outstanding_amount
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import get_outstanding_amount
 
 		pi = make_purchase_invoice(item_code="_Test Item", qty=(5 * -1), rate=500, is_return=1)
 		pi.load_from_db()
@@ -1132,7 +1132,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertEqual(pi_doc.outstanding_amount, 0)
 
 	def test_purchase_invoice_with_cost_center(self):
-		from erpnext.accounts.doctype.cost_center.test_cost_center import create_cost_center
+		from svasamm_erp.accounts.doctype.cost_center.test_cost_center import create_cost_center
 
 		cost_center = "_Test Cost Center for BS Account - _TC"
 		create_cost_center(cost_center_name="_Test Cost Center for BS Account", company="_Test Company")
@@ -1498,7 +1498,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		"Accounts Settings", {"unlink_payment_on_cancellation_of_invoice": 1}
 	)
 	def test_purchase_invoice_advance_taxes(self):
-		from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.payment_entry import get_payment_entry
 
 		company = "_Test Company"
 
@@ -2040,7 +2040,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertEqual(pi.items[0].conversion_factor, 1000)
 
 	def test_batch_expiry_for_purchase_invoice(self):
-		from erpnext.controllers.sales_and_purchase_return import make_return_doc
+		from svasamm_erp.controllers.sales_and_purchase_return import make_return_doc
 
 		item = self.make_item(
 			"_Test Batch Item For Return Check",
@@ -2071,7 +2071,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertTrue(return_pi.docstatus == 1)
 
 	def test_advance_entries_as_asset(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
 
 		account = create_account(
 			parent_account="Current Assets - _TC",
@@ -2128,7 +2128,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		set_advance_flag(company="_Test Company", flag=0, default_account="")
 
 	def test_gl_entries_for_standalone_debit_note(self):
-		from erpnext.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.item.test_item import make_item
 
 		item_code = make_item(properties={"is_stock_item": 1}).name
 		make_purchase_invoice(item_code=item_code, qty=5, rate=500, update_stock=True)
@@ -2148,14 +2148,14 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertAlmostEqual(rate, 500)
 
 	def test_payment_allocation_for_payment_terms(self):
-		from erpnext.buying.doctype.purchase_order.test_purchase_order import (
+		from svasamm_erp.buying.doctype.purchase_order.test_purchase_order import (
 			create_pr_against_po,
 			create_purchase_order,
 		)
-		from erpnext.selling.doctype.sales_order.test_sales_order import (
+		from svasamm_erp.selling.doctype.sales_order.test_sales_order import (
 			automatically_fetch_payment_terms,
 		)
-		from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
+		from svasamm_erp.stock.doctype.purchase_receipt.purchase_receipt import (
 			make_purchase_invoice as make_pi_from_pr,
 		)
 
@@ -2194,8 +2194,8 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		)
 
 	def test_offsetting_entries_for_accounting_dimensions(self):
-		from erpnext.accounts.doctype.account.test_account import create_account
-		from erpnext.accounts.report.trial_balance.test_trial_balance import (
+		from svasamm_erp.accounts.doctype.account.test_account import create_account
+		from svasamm_erp.accounts.report.trial_balance.test_trial_balance import (
 			clear_dimension_defaults,
 			create_accounting_dimension,
 			disable_dimension,
@@ -2313,7 +2313,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertEqual(pi.docstatus, 1)
 
 	def test_default_cost_center_for_purchase(self):
-		from erpnext.accounts.doctype.cost_center.test_cost_center import create_cost_center
+		from svasamm_erp.accounts.doctype.cost_center.test_cost_center import create_cost_center
 
 		for c_center in ["_Test Cost Center Selling", "_Test Cost Center Buying"]:
 			create_cost_center(cost_center_name=c_center)
@@ -2372,8 +2372,8 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertEqual(return_pi.docstatus, 1)
 
 	def test_purchase_invoice_with_use_serial_batch_field_for_rejected_qty(self):
-		from erpnext.stock.doctype.item.test_item import make_item
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		batch_item = make_item(
 			"_Test Purchase Invoice Batch Item For Rejected Qty",
@@ -2458,7 +2458,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 				self.assertEqual(row.rejected_serial_no, serial_nos[2])
 
 	def test_make_pr_and_pi_from_po(self):
-		from erpnext.assets.doctype.asset.test_asset import create_asset_category
+		from svasamm_erp.assets.doctype.asset.test_asset import create_asset_category
 
 		if not frappe.db.exists("Asset Category", "Computers"):
 			create_asset_category()
@@ -2508,7 +2508,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 			self.assertEqual(pi_expected_values[i][2], gle.credit)
 
 	def test_adjust_incoming_rate_from_pi_with_multi_currency(self):
-		from erpnext.stock.doctype.landed_cost_voucher.test_landed_cost_voucher import (
+		from svasamm_erp.stock.doctype.landed_cost_voucher.test_landed_cost_voucher import (
 			make_landed_cost_voucher,
 		)
 
@@ -2711,11 +2711,11 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertEqual(item.last_purchase_rate, 0)
 
 	def test_invoice_against_returned_pr(self):
-		from erpnext.stock.doctype.item.test_item import make_item
-		from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
+		from svasamm_erp.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.purchase_receipt.purchase_receipt import (
 			make_purchase_invoice as make_purchase_invoice_from_pr,
 		)
-		from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
+		from svasamm_erp.stock.doctype.purchase_receipt.purchase_receipt import (
 			make_purchase_return_against_rejected_warehouse,
 		)
 
@@ -2769,7 +2769,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertEqual(actual, expected)
 
 	def test_prevents_fully_returned_invoice_with_zero_quantity(self):
-		from erpnext.controllers.sales_and_purchase_return import StockOverReturnError, make_return_doc
+		from svasamm_erp.controllers.sales_and_purchase_return import StockOverReturnError, make_return_doc
 
 		invoice = make_purchase_invoice(qty=10)
 
@@ -2856,7 +2856,7 @@ class TestPurchaseInvoice(IntegrationTestCase, StockTestMixin):
 		self.assertEqual(invoice.grand_total, 300)
 
 	def test_pr_pi_over_billing(self):
-		from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
+		from svasamm_erp.stock.doctype.purchase_receipt.purchase_receipt import (
 			make_purchase_invoice as make_purchase_invoice_from_pr,
 		)
 
@@ -2956,7 +2956,7 @@ def check_gl_entries(
 
 
 def create_tax_witholding_category(category_name, company, account):
-	from erpnext.accounts.utils import get_fiscal_year
+	from svasamm_erp.accounts.utils import get_fiscal_year
 
 	fiscal_year = get_fiscal_year(date=nowdate())
 

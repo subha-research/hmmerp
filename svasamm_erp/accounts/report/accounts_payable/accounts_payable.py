@@ -2,7 +2,7 @@
 # License: GNU General Public License v3. See license.txt
 
 
-from erpnext.accounts.report.accounts_receivable.accounts_receivable import ReceivablePayableReport
+from svasamm_erp.accounts.report.accounts_receivable.accounts_receivable import ReceivablePayableReport
 
 
 def execute(filters=None):

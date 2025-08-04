@@ -3,11 +3,11 @@ from frappe import qb
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days
 
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.accounts.report.general_and_payment_ledger_comparison.general_and_payment_ledger_comparison import (
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.accounts.report.general_and_payment_ledger_comparison.general_and_payment_ledger_comparison import (
 	execute,
 )
-from erpnext.accounts.test.accounts_mixin import AccountsTestMixin
+from svasamm_erp.accounts.test.accounts_mixin import AccountsTestMixin
 
 
 class TestGeneralAndPaymentLedger(IntegrationTestCase, AccountsTestMixin):

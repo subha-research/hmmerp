@@ -171,7 +171,7 @@ frappe.query_reports["Accounts Payable"] = {
 	},
 };
 
-erpnext.utils.add_dimensions("Accounts Payable", 10);
+svasamm_erp.utils.add_dimensions("Accounts Payable", 10);
 
 function get_party_type_options() {
 	let options = [];

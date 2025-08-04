@@ -7,15 +7,15 @@ from frappe.model import mapper
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, nowdate, today
 
-from erpnext import get_default_cost_center
-from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
-from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import (
+from svasamm_erp import get_default_cost_center
+from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+from svasamm_erp.accounts.doctype.purchase_invoice.test_purchase_invoice import (
 	unlink_payment_on_cancel_of_invoice,
 )
-from erpnext.accounts.doctype.sales_invoice.sales_invoice import (
+from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import (
 	create_dunning as create_dunning_from_sales_invoice,
 )
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import (
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import (
 	create_sales_invoice_against_cost_center,
 )
 
@@ -90,7 +90,7 @@ class TestDunning(IntegrationTestCase):
 		dunning = create_dunning_from_sales_invoice(si1.name)
 		dunning.overdue_payments = []
 
-		method = "erpnext.accounts.doctype.sales_invoice.sales_invoice.create_dunning"
+		method = "svasamm_erp.accounts.doctype.sales_invoice.sales_invoice.create_dunning"
 		updated_dunning = mapper.map_docs(method, json.dumps([si1.name, si2.name]), dunning)
 
 		self.assertEqual(len(updated_dunning.overdue_payments), 2)
@@ -197,7 +197,7 @@ def get_income_account(company):
 
 
 def create_payment_terms_template_for_dunning():
-	from erpnext.accounts.doctype.payment_entry.test_payment_entry import create_payment_term
+	from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import create_payment_term
 
 	create_payment_term("_Test Payment Term 1 for Dunning")
 	create_payment_term("_Test Payment Term 2 for Dunning")

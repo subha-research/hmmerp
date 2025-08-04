@@ -1,8 +1,8 @@
 // Copyright (c) 2016, Frappe Technologies Pvt. Ltd. and contributors
 // For license information, please see license.txt
 
-frappe.provide("erpnext.asset");
-frappe.provide("erpnext.accounts.dimensions");
+frappe.provide("svasamm_erp.asset");
+frappe.provide("svasamm_erp.accounts.dimensions");
 
 frappe.ui.form.on("Asset", {
 	onload: function (frm) {
@@ -32,11 +32,11 @@ frappe.ui.form.on("Asset", {
 			};
 		});
 
-		erpnext.accounts.dimensions.setup_dimension_filters(frm, frm.doctype);
+		svasamm_erp.accounts.dimensions.setup_dimension_filters(frm, frm.doctype);
 	},
 
 	company: function (frm) {
-		erpnext.accounts.dimensions.update_dimension(frm, frm.doctype);
+		svasamm_erp.accounts.dimensions.update_dimension(frm, frm.doctype);
 	},
 
 	setup: function (frm) {
@@ -45,7 +45,7 @@ frappe.ui.form.on("Asset", {
 		frm.make_methods = {
 			"Asset Movement": () => {
 				frappe.call({
-					method: "erpnext.assets.doctype.asset.asset.make_asset_movement",
+					method: "svasamm_erp.assets.doctype.asset.asset.make_asset_movement",
 					freeze: true,
 					args: {
 						assets: [{ name: frm.doc.name }],
@@ -62,13 +62,13 @@ frappe.ui.form.on("Asset", {
 
 		frm.set_query("purchase_receipt", (doc) => {
 			return {
-				query: "erpnext.controllers.queries.get_purchase_receipts",
+				query: "svasamm_erp.controllers.queries.get_purchase_receipts",
 				filters: { item_code: doc.item_code },
 			};
 		});
 		frm.set_query("purchase_invoice", (doc) => {
 			return {
-				query: "erpnext.controllers.queries.get_purchase_invoices",
+				query: "svasamm_erp.controllers.queries.get_purchase_invoices",
 				filters: { item_code: doc.item_code },
 			};
 		});
@@ -89,7 +89,7 @@ frappe.ui.form.on("Asset", {
 				frm.add_custom_button(
 					__("Transfer Asset"),
 					function () {
-						erpnext.asset.transfer_asset(frm);
+						svasamm_erp.asset.transfer_asset(frm);
 					},
 					__("Manage")
 				);
@@ -97,7 +97,7 @@ frappe.ui.form.on("Asset", {
 				frm.add_custom_button(
 					__("Scrap Asset"),
 					function () {
-						erpnext.asset.scrap_asset(frm);
+						svasamm_erp.asset.scrap_asset(frm);
 					},
 					__("Manage")
 				);
@@ -127,7 +127,7 @@ frappe.ui.form.on("Asset", {
 				);
 			} else if (frm.doc.status == "Scrapped") {
 				frm.add_custom_button(__("Restore Asset"), function () {
-					erpnext.asset.restore_asset(frm);
+					svasamm_erp.asset.restore_asset(frm);
 				}).addClass("btn-primary");
 			}
 
@@ -191,7 +191,7 @@ frappe.ui.form.on("Asset", {
 
 			if (frm.doc.is_composite_asset) {
 				frappe.call({
-					method: "erpnext.assets.doctype.asset.asset.has_active_capitalization",
+					method: "svasamm_erp.assets.doctype.asset.asset.has_active_capitalization",
 					args: {
 						asset: frm.doc.name,
 					},
@@ -248,7 +248,7 @@ frappe.ui.form.on("Asset", {
 
 	make_journal_entry: function (frm) {
 		frappe.call({
-			method: "erpnext.assets.doctype.asset.asset.make_journal_entry",
+			method: "svasamm_erp.assets.doctype.asset.asset.make_journal_entry",
 			args: {
 				asset_name: frm.doc.name,
 			},
@@ -359,7 +359,7 @@ frappe.ui.form.on("Asset", {
 
 			let asset_depr_schedule_doc = (
 				await frappe.call(
-					"erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule.get_asset_depr_schedule_doc",
+					"svasamm_erp.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule.get_asset_depr_schedule_doc",
 					{
 						asset_name: frm.doc.name,
 						status: "Active",
@@ -443,7 +443,7 @@ frappe.ui.form.on("Asset", {
 
 	set_finance_book: function (frm) {
 		frappe.call({
-			method: "erpnext.assets.doctype.asset.asset.get_item_details",
+			method: "svasamm_erp.assets.doctype.asset.asset.get_item_details",
 			args: {
 				item_code: frm.doc.item_code,
 				asset_category: frm.doc.asset_category,
@@ -480,7 +480,7 @@ frappe.ui.form.on("Asset", {
 				company: frm.doc.company,
 				serial_no: frm.doc.serial_no,
 			},
-			method: "erpnext.assets.doctype.asset.asset.make_sales_invoice",
+			method: "svasamm_erp.assets.doctype.asset.asset.make_sales_invoice",
 			callback: function (r) {
 				var doclist = frappe.model.sync(r.message);
 				frappe.set_route("Form", doclist[0].doctype, doclist[0].name);
@@ -497,7 +497,7 @@ frappe.ui.form.on("Asset", {
 				asset_category: frm.doc.asset_category,
 				company: frm.doc.company,
 			},
-			method: "erpnext.assets.doctype.asset.asset.create_asset_maintenance",
+			method: "svasamm_erp.assets.doctype.asset.asset.create_asset_maintenance",
 			callback: function (r) {
 				var doclist = frappe.model.sync(r.message);
 				frappe.set_route("Form", doclist[0].doctype, doclist[0].name);
@@ -512,7 +512,7 @@ frappe.ui.form.on("Asset", {
 				asset: frm.doc.name,
 				asset_name: frm.doc.asset_name,
 			},
-			method: "erpnext.assets.doctype.asset.asset.create_asset_repair",
+			method: "svasamm_erp.assets.doctype.asset.asset.create_asset_repair",
 			callback: function (r) {
 				var doclist = frappe.model.sync(r.message);
 				frappe.set_route("Form", doclist[0].doctype, doclist[0].name);
@@ -528,7 +528,7 @@ frappe.ui.form.on("Asset", {
 				asset_name: frm.doc.asset_name,
 				item_code: frm.doc.item_code,
 			},
-			method: "erpnext.assets.doctype.asset.asset.create_asset_capitalization",
+			method: "svasamm_erp.assets.doctype.asset.asset.create_asset_capitalization",
 			callback: function (r) {
 				var doclist = frappe.model.sync(r.message);
 				frappe.set_route("Form", doclist[0].doctype, doclist[0].name);
@@ -561,7 +561,7 @@ frappe.ui.form.on("Asset", {
 					asset_name: frm.doc.name,
 					split_qty: cint(dialog_data.split_qty),
 				},
-				method: "erpnext.assets.doctype.asset.asset.split_asset",
+				method: "svasamm_erp.assets.doctype.asset.asset.split_asset",
 				callback: function (r) {
 					let doclist = frappe.model.sync(r.message);
 					frappe.set_route("Form", doclist[0].doctype, doclist[0].name);
@@ -581,7 +581,7 @@ frappe.ui.form.on("Asset", {
 				asset_category: frm.doc.asset_category,
 				company: frm.doc.company,
 			},
-			method: "erpnext.assets.doctype.asset.asset.create_asset_value_adjustment",
+			method: "svasamm_erp.assets.doctype.asset.asset.create_asset_value_adjustment",
 			freeze: 1,
 			callback: function (r) {
 				var doclist = frappe.model.sync(r.message);
@@ -639,7 +639,7 @@ frappe.ui.form.on("Asset", {
 
 	set_values_from_purchase_doc: (frm, doctype) => {
 		frappe.call({
-			method: "erpnext.assets.doctype.asset.asset.get_values_from_purchase_doc",
+			method: "svasamm_erp.assets.doctype.asset.asset.get_values_from_purchase_doc",
 			args: {
 				purchase_doc_name: frm.doc.purchase_receipt || frm.doc.purchase_invoice,
 				item_code: frm.doc.item_code,
@@ -788,7 +788,7 @@ frappe.ui.form.on("Asset Finance Book", {
 	},
 });
 
-erpnext.asset.scrap_asset = function (frm) {
+svasamm_erp.asset.scrap_asset = function (frm) {
 	var scrap_dialog = new frappe.ui.Dialog({
 		title: __("Enter date to scrap asset"),
 		fields: [
@@ -807,7 +807,7 @@ erpnext.asset.scrap_asset = function (frm) {
 					asset_name: frm.doc.name,
 					scrap_date: values.scrap_date,
 				},
-				method: "erpnext.assets.doctype.asset.depreciation.scrap_asset",
+				method: "svasamm_erp.assets.doctype.asset.depreciation.scrap_asset",
 				callback: function (r) {
 					frm.reload_doc();
 					scrap_dialog.hide();
@@ -818,21 +818,21 @@ erpnext.asset.scrap_asset = function (frm) {
 	scrap_dialog.show();
 };
 
-erpnext.asset.restore_asset = function (frm) {
+svasamm_erp.asset.restore_asset = function (frm) {
 	frappe.confirm(__("Do you really want to restore this scrapped asset?"), function () {
 		frappe.call({
 			args: {
 				asset_name: frm.doc.name,
 			},
-			method: "erpnext.assets.doctype.asset.depreciation.restore_asset",
+			method: "svasamm_erp.assets.doctype.asset.depreciation.restore_asset",
 			callback: (r) => frm.reload_doc(),
 		});
 	});
 };
 
-erpnext.asset.transfer_asset = function (frm) {
+svasamm_erp.asset.transfer_asset = function (frm) {
 	frappe.call({
-		method: "erpnext.assets.doctype.asset.asset.make_asset_movement",
+		method: "svasamm_erp.assets.doctype.asset.asset.make_asset_movement",
 		freeze: true,
 		args: {
 			assets: [{ name: frm.doc.name }],

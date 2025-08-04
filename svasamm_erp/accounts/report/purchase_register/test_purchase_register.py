@@ -5,7 +5,7 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_months, today
 
-from erpnext.accounts.report.purchase_register.purchase_register import execute
+from svasamm_erp.accounts.report.purchase_register.purchase_register import execute
 
 
 class TestPurchaseRegister(IntegrationTestCase):
@@ -52,9 +52,9 @@ class TestPurchaseRegister(IntegrationTestCase):
 
 
 def make_purchase_invoice():
-	from erpnext.accounts.doctype.account.test_account import create_account
-	from erpnext.accounts.doctype.cost_center.test_cost_center import create_cost_center
-	from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+	from svasamm_erp.accounts.doctype.account.test_account import create_account
+	from svasamm_erp.accounts.doctype.cost_center.test_cost_center import create_cost_center
+	from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 	create_account(
 		account_name="GST",
@@ -111,7 +111,7 @@ def create_purchase_invoice_with_taxes():
 
 def make_payment_entry():
 	frappe.set_user("Administrator")
-	from erpnext.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
+	from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
 
 	return create_payment_entry(
 		company="_Test Company 6",

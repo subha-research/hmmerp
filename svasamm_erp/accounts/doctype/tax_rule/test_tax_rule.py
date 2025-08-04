@@ -5,9 +5,9 @@ import unittest
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.tax_rule.tax_rule import ConflictingTaxRule, get_tax_template
-from erpnext.crm.doctype.opportunity.opportunity import make_quotation
-from erpnext.crm.doctype.opportunity.test_opportunity import make_opportunity
+from svasamm_erp.accounts.doctype.tax_rule.tax_rule import ConflictingTaxRule, get_tax_template
+from svasamm_erp.crm.doctype.opportunity.opportunity import make_quotation
+from svasamm_erp.crm.doctype.opportunity.test_opportunity import make_opportunity
 
 
 class TestTaxRule(IntegrationTestCase):

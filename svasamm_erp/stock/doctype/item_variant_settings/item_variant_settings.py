@@ -16,7 +16,7 @@ class ItemVariantSettings(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.stock.doctype.variant_field.variant_field import VariantField
+		from svasamm_erp.stock.doctype.variant_field.variant_field import VariantField
 
 		allow_different_uom: DF.Check
 		allow_rename_attribute_value: DF.Check

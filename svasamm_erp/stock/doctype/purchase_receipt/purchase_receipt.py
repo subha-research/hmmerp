@@ -10,14 +10,14 @@ from frappe.query_builder.functions import CombineDatetime
 from frappe.utils import cint, flt, get_datetime, getdate, nowdate
 from pypika import functions as fn
 
-import erpnext
-from erpnext.accounts.utils import get_account_currency
-from erpnext.assets.doctype.asset.asset import get_asset_account, is_cwip_accounting_enabled
-from erpnext.buying.utils import check_on_hold_or_closed_status
-from erpnext.controllers.accounts_controller import merge_taxes
-from erpnext.controllers.buying_controller import BuyingController
-from erpnext.stock.doctype.delivery_note.delivery_note import make_inter_company_transaction
-from erpnext.stock.doctype.stock_reservation_entry.stock_reservation_entry import StockReservation
+import svasamm_erp
+from svasamm_erp.accounts.utils import get_account_currency
+from svasamm_erp.assets.doctype.asset.asset import get_asset_account, is_cwip_accounting_enabled
+from svasamm_erp.buying.utils import check_on_hold_or_closed_status
+from svasamm_erp.controllers.accounts_controller import merge_taxes
+from svasamm_erp.controllers.buying_controller import BuyingController
+from svasamm_erp.stock.doctype.delivery_note.delivery_note import make_inter_company_transaction
+from svasamm_erp.stock.doctype.stock_reservation_entry.stock_reservation_entry import StockReservation
 
 form_grid_templates = {"items": "templates/form_grid/item_grid.html"}
 
@@ -31,14 +31,14 @@ class PurchaseReceipt(BuyingController):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.pricing_rule_detail.pricing_rule_detail import PricingRuleDetail
-		from erpnext.accounts.doctype.purchase_taxes_and_charges.purchase_taxes_and_charges import (
+		from svasamm_erp.accounts.doctype.pricing_rule_detail.pricing_rule_detail import PricingRuleDetail
+		from svasamm_erp.accounts.doctype.purchase_taxes_and_charges.purchase_taxes_and_charges import (
 			PurchaseTaxesandCharges,
 		)
-		from erpnext.buying.doctype.purchase_receipt_item_supplied.purchase_receipt_item_supplied import (
+		from svasamm_erp.buying.doctype.purchase_receipt_item_supplied.purchase_receipt_item_supplied import (
 			PurchaseReceiptItemSupplied,
 		)
-		from erpnext.stock.doctype.purchase_receipt_item.purchase_receipt_item import PurchaseReceiptItem
+		from svasamm_erp.stock.doctype.purchase_receipt_item.purchase_receipt_item import PurchaseReceiptItem
 
 		additional_discount_percentage: DF.Float
 		address_display: DF.TextEditor | None
@@ -228,7 +228,7 @@ class PurchaseReceipt(BuyingController):
 			)
 
 	def before_validate(self):
-		from erpnext.stock.doctype.putaway_rule.putaway_rule import apply_putaway_rule
+		from svasamm_erp.stock.doctype.putaway_rule.putaway_rule import apply_putaway_rule
 
 		if self.get("items") and self.apply_putaway_rule and not self.get("is_return"):
 			apply_putaway_rule(self.doctype, self.get("items"), self.company)
@@ -471,7 +471,7 @@ class PurchaseReceipt(BuyingController):
 			item.amount_difference_with_purchase_invoice = 0
 
 	def get_gl_entries(self, warehouse_account=None, via_landed_cost_voucher=False):
-		from erpnext.accounts.general_ledger import process_gl_map
+		from svasamm_erp.accounts.general_ledger import process_gl_map
 
 		gl_entries = []
 
@@ -482,7 +482,7 @@ class PurchaseReceipt(BuyingController):
 		return process_gl_map(gl_entries)
 
 	def make_item_gl_entries(self, gl_entries, warehouse_account=None):
-		from erpnext.accounts.doctype.purchase_invoice.purchase_invoice import (
+		from svasamm_erp.accounts.doctype.purchase_invoice.purchase_invoice import (
 			get_purchase_document_details,
 		)
 
@@ -729,7 +729,7 @@ class PurchaseReceipt(BuyingController):
 				)
 			elif flt(d.qty) and (flt(d.valuation_rate) or self.is_return):
 				if not (
-					(erpnext.is_perpetual_inventory_enabled(self.company) and d.item_code in stock_items)
+					(svasamm_erp.is_perpetual_inventory_enabled(self.company) and d.item_code in stock_items)
 					or (d.is_fixed_asset and not d.purchase_invoice)
 				):
 					continue
@@ -1324,7 +1324,7 @@ def get_item_wise_returned_qty(pr_doc):
 
 @frappe.whitelist()
 def make_purchase_invoice(source_name, target_doc=None, args=None):
-	from erpnext.accounts.party import get_payment_terms_template
+	from svasamm_erp.accounts.party import get_payment_terms_template
 
 	doc = frappe.get_doc("Purchase Receipt", source_name)
 	returned_qty_map = get_returned_qty_map(source_name)
@@ -1460,14 +1460,14 @@ def get_returned_qty_map(purchase_receipt):
 
 @frappe.whitelist()
 def make_purchase_return_against_rejected_warehouse(source_name):
-	from erpnext.controllers.sales_and_purchase_return import make_return_doc
+	from svasamm_erp.controllers.sales_and_purchase_return import make_return_doc
 
 	return make_return_doc("Purchase Receipt", source_name, return_against_rejected_qty=True)
 
 
 @frappe.whitelist()
 def make_purchase_return(source_name, target_doc=None):
-	from erpnext.controllers.sales_and_purchase_return import make_return_doc
+	from svasamm_erp.controllers.sales_and_purchase_return import make_return_doc
 
 	return make_return_doc("Purchase Receipt", source_name, target_doc)
 
@@ -1513,7 +1513,7 @@ def make_inter_company_delivery_note(source_name, target_doc=None):
 	return make_inter_company_transaction("Purchase Receipt", source_name, target_doc)
 
 
-@erpnext.allow_regional
+@svasamm_erp.allow_regional
 def update_regional_gl_entries(gl_list, doc):
 	return
 

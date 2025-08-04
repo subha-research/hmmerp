@@ -3,11 +3,11 @@
 
 from frappe.tests import IntegrationTestCase
 
-from erpnext.manufacturing.doctype.production_plan.test_production_plan import make_bom
-from erpnext.manufacturing.report.bom_stock_calculated.bom_stock_calculated import (
+from svasamm_erp.manufacturing.doctype.production_plan.test_production_plan import make_bom
+from svasamm_erp.manufacturing.report.bom_stock_calculated.bom_stock_calculated import (
 	execute as bom_stock_calculated_report,
 )
-from erpnext.stock.doctype.item.test_item import make_item
+from svasamm_erp.stock.doctype.item.test_item import make_item
 
 
 class TestBOMStockCalculated(IntegrationTestCase):

@@ -6,8 +6,8 @@ import frappe
 from frappe.tests import IntegrationTestCase, change_settings
 from frappe.utils import add_days, today
 
-from erpnext.buying.doctype.supplier_quotation.supplier_quotation import make_purchase_order
-from erpnext.controllers.accounts_controller import InvalidQtyError
+from svasamm_erp.buying.doctype.supplier_quotation.supplier_quotation import make_purchase_order
+from svasamm_erp.controllers.accounts_controller import InvalidQtyError
 
 
 class TestPurchaseOrder(IntegrationTestCase):

@@ -23,11 +23,11 @@ from frappe.utils import (
 	nowdate,
 )
 
-import erpnext
-from erpnext import get_company_currency
-from erpnext.accounts.utils import get_fiscal_year
-from erpnext.exceptions import InvalidAccountCurrency, PartyDisabled, PartyFrozen
-from erpnext.utilities.regional import temporary_flag
+import svasamm_erp
+from svasamm_erp import get_company_currency
+from svasamm_erp.accounts.utils import get_fiscal_year
+from svasamm_erp.exceptions import InvalidAccountCurrency, PartyDisabled, PartyFrozen
+from svasamm_erp.utilities.regional import temporary_flag
 
 try:
 	from frappe.contacts.doctype.address.address import render_address as _render_address
@@ -293,7 +293,7 @@ def set_address_details(
 	return party_billing, party_shipping
 
 
-@erpnext.allow_regional
+@svasamm_erp.allow_regional
 def get_regional_address_details(party_details, doctype, company):
 	pass
 
@@ -578,7 +578,7 @@ def validate_party_gle_currency(party_type, party, company, party_account_curren
 
 
 def validate_party_accounts(doc):
-	from erpnext.controllers.accounts_controller import validate_account_head
+	from svasamm_erp.controllers.accounts_controller import validate_account_head
 
 	companies = []
 
@@ -731,7 +731,7 @@ def set_taxes(
 	shipping_address=None,
 	use_for_shopping_cart=None,
 ):
-	from erpnext.accounts.doctype.tax_rule.tax_rule import get_party_details, get_tax_template
+	from svasamm_erp.accounts.doctype.tax_rule.tax_rule import get_party_details, get_tax_template
 
 	args = {frappe.scrub(party_type): party, "company": company}
 

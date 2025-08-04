@@ -11,7 +11,7 @@ from frappe.model.document import Document
 from frappe.utils import add_days, get_date_str, get_link_to_form, nowtime, parse_json
 from frappe.utils.background_jobs import enqueue
 
-from erpnext.stock.doctype.inventory_dimension.inventory_dimension import get_inventory_dimensions
+from svasamm_erp.stock.doctype.inventory_dimension.inventory_dimension import get_inventory_dimensions
 
 
 class StockClosingEntry(Document):
@@ -106,7 +106,7 @@ class StockClosingEntry(Document):
 		self.enqueue_job()
 
 	def create_stock_closing_balance_entries(self):
-		from erpnext.stock.utils import get_combine_datetime
+		from svasamm_erp.stock.utils import get_combine_datetime
 
 		stk_cl_obj = StockClosing(self.company, self.from_date, self.to_date)
 

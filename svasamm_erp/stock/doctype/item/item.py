@@ -24,16 +24,16 @@ from frappe.utils import (
 from frappe.utils.html_utils import clean_html
 from pypika import Order
 
-import erpnext
-from erpnext.controllers.item_variant import (
+import svasamm_erp
+from svasamm_erp.controllers.item_variant import (
 	ItemVariantExistsError,
 	copy_attributes_to_variant,
 	get_variant,
 	make_variant_item_code,
 	validate_item_variant_attributes,
 )
-from erpnext.stock.doctype.item_default.item_default import ItemDefault
-from erpnext.stock.utils import get_valuation_method
+from svasamm_erp.stock.doctype.item_default.item_default import ItemDefault
+from svasamm_erp.stock.utils import get_valuation_method
 
 
 class DuplicateReorderRows(frappe.ValidationError):
@@ -61,14 +61,14 @@ class Item(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.stock.doctype.item_barcode.item_barcode import ItemBarcode
-		from erpnext.stock.doctype.item_customer_detail.item_customer_detail import ItemCustomerDetail
-		from erpnext.stock.doctype.item_default.item_default import ItemDefault
-		from erpnext.stock.doctype.item_reorder.item_reorder import ItemReorder
-		from erpnext.stock.doctype.item_supplier.item_supplier import ItemSupplier
-		from erpnext.stock.doctype.item_tax.item_tax import ItemTax
-		from erpnext.stock.doctype.item_variant_attribute.item_variant_attribute import ItemVariantAttribute
-		from erpnext.stock.doctype.uom_conversion_detail.uom_conversion_detail import UOMConversionDetail
+		from svasamm_erp.stock.doctype.item_barcode.item_barcode import ItemBarcode
+		from svasamm_erp.stock.doctype.item_customer_detail.item_customer_detail import ItemCustomerDetail
+		from svasamm_erp.stock.doctype.item_default.item_default import ItemDefault
+		from svasamm_erp.stock.doctype.item_reorder.item_reorder import ItemReorder
+		from svasamm_erp.stock.doctype.item_supplier.item_supplier import ItemSupplier
+		from svasamm_erp.stock.doctype.item_tax.item_tax import ItemTax
+		from svasamm_erp.stock.doctype.item_variant_attribute.item_variant_attribute import ItemVariantAttribute
+		from svasamm_erp.stock.doctype.uom_conversion_detail.uom_conversion_detail import UOMConversionDetail
 
 		allow_alternative_item: DF.Check
 		allow_negative_stock: DF.Check
@@ -254,7 +254,7 @@ class Item(Document):
 					"item_code": self.name,
 					"uom": self.stock_uom,
 					"brand": self.brand,
-					"currency": erpnext.get_default_currency(),
+					"currency": svasamm_erp.get_default_currency(),
 					"price_list_rate": self.standard_rate,
 				}
 			)
@@ -268,7 +268,7 @@ class Item(Document):
 		if not self.valuation_rate and not self.standard_rate and not self.is_customer_provided_item:
 			frappe.throw(_("Valuation Rate is mandatory if Opening Stock entered"))
 
-		from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+		from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
 
 		# default warehouse, or Stores
 		for default in self.item_defaults or [
@@ -464,7 +464,7 @@ class Item(Document):
 						"" if item_barcode.barcode_type not in options else item_barcode.barcode_type
 					)
 					if item_barcode.barcode_type:
-						barcode_type = convert_erpnext_to_barcodenumber(
+						barcode_type = convert_svasamm_erp_to_barcodenumber(
 							item_barcode.barcode_type.upper(), item_barcode.barcode
 						)
 						if barcode_type in barcodenumber.barcodes():
@@ -660,7 +660,7 @@ class Item(Document):
 		frappe.db.set_value("Item", new_name, "last_purchase_rate", last_purchase_rate)
 
 	def recalculate_bin_qty(self, new_name):
-		from erpnext.stock.stock_balance import repost_stock
+		from svasamm_erp.stock.stock_balance import repost_stock
 
 		existing_allow_negative_stock = frappe.get_single_value("Stock Settings", "allow_negative_stock")
 		frappe.db.set_single_value("Stock Settings", "allow_negative_stock", 1)
@@ -770,7 +770,7 @@ class Item(Document):
 					frappe.msgprint(_("Item Variants updated"))
 				else:
 					frappe.enqueue(
-						"erpnext.stock.doctype.item.item.update_variants",
+						"svasamm_erp.stock.doctype.item.item.update_variants",
 						variants=variants,
 						template=self,
 						now=frappe.in_test,
@@ -1058,8 +1058,8 @@ class Item(Document):
 				)
 
 
-def convert_erpnext_to_barcodenumber(erpnext_number, barcode):
-	if erpnext_number == "EAN":
+def convert_svasamm_erp_to_barcodenumber(svasamm_erp_number, barcode):
+	if svasamm_erp_number == "EAN":
 		ean_type = {
 			8: "EAN8",
 			13: "EAN13",
@@ -1068,7 +1068,7 @@ def convert_erpnext_to_barcodenumber(erpnext_number, barcode):
 		if barcode_length in ean_type:
 			return ean_type[barcode_length]
 
-		return erpnext_number
+		return svasamm_erp_number
 
 	convert = {
 		"UPC-A": "UPCA",
@@ -1077,10 +1077,10 @@ def convert_erpnext_to_barcodenumber(erpnext_number, barcode):
 		"ISBN-13": "ISBN13",
 	}
 
-	if erpnext_number in convert:
-		return convert[erpnext_number]
+	if svasamm_erp_number in convert:
+		return convert[svasamm_erp_number]
 
-	return erpnext_number
+	return svasamm_erp_number
 
 
 def make_item_price(item, price_list_name, item_price):
@@ -1405,13 +1405,13 @@ def validate_item_default_company_links(item_defaults: list[ItemDefault]) -> Non
 
 @frappe.whitelist()
 def get_asset_naming_series():
-	from erpnext.assets.doctype.asset.asset import get_asset_naming_series
+	from svasamm_erp.assets.doctype.asset.asset import get_asset_naming_series
 
 	return get_asset_naming_series()
 
 
 @frappe.request_cache
 def get_child_warehouses(warehouse):
-	from erpnext.stock.doctype.warehouse.warehouse import get_child_warehouses
+	from svasamm_erp.stock.doctype.warehouse.warehouse import get_child_warehouses
 
 	return get_child_warehouses(warehouse)

@@ -8,20 +8,20 @@ import frappe
 from frappe import _, msgprint, scrub
 from frappe.utils import comma_and, cstr, flt, fmt_money, formatdate, get_link_to_form, nowdate
 
-import erpnext
-from erpnext.accounts.deferred_revenue import get_deferred_booking_accounts
-from erpnext.accounts.doctype.invoice_discounting.invoice_discounting import (
+import svasamm_erp
+from svasamm_erp.accounts.deferred_revenue import get_deferred_booking_accounts
+from svasamm_erp.accounts.doctype.invoice_discounting.invoice_discounting import (
 	get_party_account_based_on_invoice_discounting,
 )
-from erpnext.accounts.doctype.repost_accounting_ledger.repost_accounting_ledger import (
+from svasamm_erp.accounts.doctype.repost_accounting_ledger.repost_accounting_ledger import (
 	validate_docs_for_deferred_accounting,
 	validate_docs_for_voucher_types,
 )
-from erpnext.accounts.doctype.tax_withholding_category.tax_withholding_category import (
+from svasamm_erp.accounts.doctype.tax_withholding_category.tax_withholding_category import (
 	get_party_tax_withholding_details,
 )
-from erpnext.accounts.party import get_party_account
-from erpnext.accounts.utils import (
+from svasamm_erp.accounts.party import get_party_account
+from svasamm_erp.accounts.utils import (
 	cancel_exchange_gain_loss_journal,
 	get_account_currency,
 	get_advance_payment_doctypes,
@@ -29,10 +29,10 @@ from erpnext.accounts.utils import (
 	get_stock_accounts,
 	get_stock_and_account_balance,
 )
-from erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
+from svasamm_erp.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
 	get_depr_schedule,
 )
-from erpnext.controllers.accounts_controller import AccountsController
+from svasamm_erp.controllers.accounts_controller import AccountsController
 
 
 class StockAccountInvalidTransaction(frappe.ValidationError):
@@ -48,7 +48,7 @@ class JournalEntry(AccountsController):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.journal_entry_account.journal_entry_account import JournalEntryAccount
+		from svasamm_erp.accounts.doctype.journal_entry_account.journal_entry_account import JournalEntryAccount
 
 		accounts: DF.Table[JournalEntryAccount]
 		amended_from: DF.Link | None
@@ -238,7 +238,7 @@ class JournalEntry(AccountsController):
 			)
 
 	def validate_company_for_periodic_accounting(self):
-		if erpnext.is_perpetual_inventory_enabled(self.company):
+		if svasamm_erp.is_perpetual_inventory_enabled(self.company):
 			frappe.throw(
 				_(
 					"Periodic Accounting Entry is not allowed for company {0} with perpetual inventory enabled"
@@ -352,7 +352,7 @@ class JournalEntry(AccountsController):
 				)
 
 	def apply_tax_withholding(self):
-		from erpnext.accounts.report.general_ledger.general_ledger import get_account_type_map
+		from svasamm_erp.accounts.report.general_ledger.general_ledger import get_account_type_map
 
 		if not self.apply_tds or self.voucher_type not in ("Debit Note", "Credit Note"):
 			return
@@ -670,7 +670,7 @@ class JournalEntry(AccountsController):
 			)
 		)
 		if customers:
-			from erpnext.selling.doctype.customer.customer import check_credit_limit
+			from svasamm_erp.selling.doctype.customer.customer import check_credit_limit
 
 			customer_details = frappe._dict(
 				frappe.db.get_all(
@@ -1168,7 +1168,7 @@ class JournalEntry(AccountsController):
 	def build_gl_map(self):
 		gl_map = []
 
-		company_currency = erpnext.get_company_currency(self.company)
+		company_currency = svasamm_erp.get_company_currency(self.company)
 		self.transaction_currency = company_currency
 		self.transaction_exchange_rate = 1
 		if self.multi_currency:
@@ -1244,7 +1244,7 @@ class JournalEntry(AccountsController):
 		return gl_map
 
 	def make_gl_entries(self, cancel=0, adv_adj=0):
-		from erpnext.accounts.general_ledger import make_gl_entries
+		from svasamm_erp.accounts.general_ledger import make_gl_entries
 
 		merge_entries = frappe.get_single_value("Accounts Settings", "merge_similar_account_heads")
 
@@ -1285,7 +1285,7 @@ class JournalEntry(AccountsController):
 						"accounts",
 						{
 							"account": difference_account,
-							"cost_center": erpnext.get_default_cost_center(self.company),
+							"cost_center": svasamm_erp.get_default_cost_center(self.company),
 						},
 					)
 
@@ -1374,7 +1374,7 @@ class JournalEntry(AccountsController):
 def get_default_bank_cash_account(
 	company, account_type=None, mode_of_payment=None, account=None, *, fetch_balance=True
 ):
-	from erpnext.accounts.doctype.sales_invoice.sales_invoice import get_bank_cash_account
+	from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import get_bank_cash_account
 
 	if mode_of_payment:
 		account = get_bank_cash_account(mode_of_payment, company).get("account")
@@ -1617,7 +1617,7 @@ def get_outstanding(args):
 	if isinstance(args, str):
 		args = json.loads(args)
 
-	company_currency = erpnext.get_company_currency(args.get("company"))
+	company_currency = svasamm_erp.get_company_currency(args.get("company"))
 	due_date = None
 
 	if args.get("doctype") == "Journal Entry":
@@ -1688,7 +1688,7 @@ def get_account_details_and_party_type(account, date, company, debit=None, credi
 	if not frappe.has_permission("Account"):
 		frappe.msgprint(_("No Permission"), raise_exception=1)
 
-	company_currency = erpnext.get_company_currency(company)
+	company_currency = svasamm_erp.get_company_currency(company)
 	account_details = frappe.get_cached_value(
 		"Account", account, ["account_type", "account_currency"], as_dict=1
 	)
@@ -1739,7 +1739,7 @@ def get_exchange_rate(
 	credit=None,
 	exchange_rate=None,
 ):
-	from erpnext.setup.utils import get_exchange_rate
+	from svasamm_erp.setup.utils import get_exchange_rate
 
 	account_details = frappe.get_cached_value(
 		"Account", account, ["account_type", "root_type", "account_currency", "company"], as_dict=1
@@ -1754,7 +1754,7 @@ def get_exchange_rate(
 	if not account_currency:
 		account_currency = account_details.account_currency
 
-	company_currency = erpnext.get_company_currency(company)
+	company_currency = svasamm_erp.get_company_currency(company)
 
 	if account_currency != company_currency:
 		if reference_type in ("Sales Invoice", "Purchase Invoice") and reference_name:

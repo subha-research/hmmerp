@@ -1,6 +1,6 @@
 // Copyright (c) 2023, Frappe Technologies Pvt. Ltd. and contributors
 // For license information, please see license.txt
-frappe.provide("erpnext.bom");
+frappe.provide("svasamm_erp.bom");
 
 frappe.ui.form.on("BOM Creator", {
 	setup(frm) {
@@ -105,7 +105,7 @@ frappe.ui.form.on("BOM Creator", {
 			},
 		});
 
-		dialog.fields_dict.item_code.get_query = "erpnext.controllers.queries.item_query";
+		dialog.fields_dict.item_code.get_query = "svasamm_erp.controllers.queries.item_query";
 		dialog.show();
 	},
 
@@ -120,12 +120,12 @@ frappe.ui.form.on("BOM Creator", {
 		});
 		frm.set_query("item_code", "items", function () {
 			return {
-				query: "erpnext.controllers.queries.item_query",
+				query: "svasamm_erp.controllers.queries.item_query",
 			};
 		});
 		frm.set_query("fg_item", "items", function () {
 			return {
-				query: "erpnext.controllers.queries.item_query",
+				query: "svasamm_erp.controllers.queries.item_query",
 			};
 		});
 
@@ -203,12 +203,12 @@ frappe.ui.form.on("BOM Creator Item", {
 	},
 });
 
-erpnext.bom.BomConfigurator = class BomConfigurator extends erpnext.TransactionController {
+svasamm_erp.bom.BomConfigurator = class BomConfigurator extends svasamm_erp.TransactionController {
 	conversion_rate(doc) {
 		if (this.frm.doc.currency === this.get_company_currency()) {
 			this.frm.set_value("conversion_rate", 1.0);
 		} else {
-			erpnext.bom.update_cost(doc);
+			svasamm_erp.bom.update_cost(doc);
 		}
 	}
 
@@ -233,4 +233,4 @@ erpnext.bom.BomConfigurator = class BomConfigurator extends erpnext.TransactionC
 	}
 };
 
-extend_cscript(cur_frm.cscript, new erpnext.bom.BomConfigurator({ frm: cur_frm }));
+extend_cscript(cur_frm.cscript, new svasamm_erp.bom.BomConfigurator({ frm: cur_frm }));

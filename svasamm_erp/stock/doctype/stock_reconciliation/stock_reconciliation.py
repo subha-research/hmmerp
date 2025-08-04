@@ -7,16 +7,16 @@ from frappe import _, bold, json, msgprint
 from frappe.query_builder.functions import CombineDatetime, Sum
 from frappe.utils import add_to_date, cint, cstr, flt, get_datetime
 
-import erpnext
-from erpnext.accounts.utils import get_company_default
-from erpnext.controllers.stock_controller import StockController, create_repost_item_valuation_entry
-from erpnext.stock.doctype.batch.batch import get_available_batches, get_batch_qty
-from erpnext.stock.doctype.inventory_dimension.inventory_dimension import get_inventory_dimensions
-from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
+import svasamm_erp
+from svasamm_erp.accounts.utils import get_company_default
+from svasamm_erp.controllers.stock_controller import StockController, create_repost_item_valuation_entry
+from svasamm_erp.stock.doctype.batch.batch import get_available_batches, get_batch_qty
+from svasamm_erp.stock.doctype.inventory_dimension.inventory_dimension import get_inventory_dimensions
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
 	get_available_serial_nos,
 )
-from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos
-from erpnext.stock.utils import get_incoming_rate, get_stock_balance
+from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos
+from svasamm_erp.stock.utils import get_incoming_rate, get_stock_balance
 
 
 class OpeningEntryAccountError(frappe.ValidationError):
@@ -36,7 +36,7 @@ class StockReconciliation(StockController):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.stock.doctype.stock_reconciliation_item.stock_reconciliation_item import (
+		from svasamm_erp.stock.doctype.stock_reconciliation_item.stock_reconciliation_item import (
 			StockReconciliationItem,
 		)
 
@@ -121,7 +121,7 @@ class StockReconciliation(StockController):
 		self.delete_auto_created_batches()
 
 	def make_bundle_for_current_qty(self):
-		from erpnext.stock.serial_batch_bundle import SerialBatchCreation
+		from svasamm_erp.stock.serial_batch_bundle import SerialBatchCreation
 
 		for row in self.items:
 			if not row.use_serial_batch_fields:
@@ -336,7 +336,7 @@ class StockReconciliation(StockController):
 				)
 
 	def get_bundle_for_specific_serial_batch(self, row) -> str:
-		from erpnext.stock.serial_batch_bundle import SerialBatchCreation
+		from svasamm_erp.stock.serial_batch_bundle import SerialBatchCreation
 
 		if row.current_serial_and_batch_bundle and not self.has_change_in_serial_batch(row):
 			return frappe._dict(
@@ -479,7 +479,7 @@ class StockReconciliation(StockController):
 			frappe.db.set_value("Serial and Batch Entry", batch.name, update_values)
 
 	def remove_items_with_no_change(self):
-		from erpnext.stock.stock_ledger import get_stock_value_difference
+		from svasamm_erp.stock.stock_ledger import get_stock_value_difference
 
 		"""Remove items if qty or rate is not changed"""
 		self.difference_amount = 0.0
@@ -653,7 +653,7 @@ class StockReconciliation(StockController):
 			raise frappe.ValidationError(self.validation_messages)
 
 	def validate_item(self, item_code, row):
-		from erpnext.stock.doctype.item.item import (
+		from svasamm_erp.stock.doctype.item.item import (
 			validate_cancelled_item,
 			validate_end_of_life,
 			validate_is_stock_item,
@@ -677,7 +677,7 @@ class StockReconciliation(StockController):
 	def validate_reserved_stock(self) -> None:
 		"""Raises an exception if there is any reserved stock for the items in the Stock Reconciliation."""
 
-		from erpnext.stock.doctype.stock_reservation_entry.stock_reservation_entry import (
+		from svasamm_erp.stock.doctype.stock_reservation_entry.stock_reservation_entry import (
 			get_sre_reserved_qty_for_items_and_warehouses as get_sre_reserved_qty_details,
 		)
 
@@ -717,7 +717,7 @@ class StockReconciliation(StockController):
 	def update_stock_ledger(self, allow_negative_stock=False):
 		"""find difference between current and expected entries
 		and create stock ledger entries based on the difference"""
-		from erpnext.stock.stock_ledger import get_previous_sle
+		from svasamm_erp.stock.stock_ledger import get_previous_sle
 
 		sl_entries = []
 		for row in self.items:
@@ -784,7 +784,7 @@ class StockReconciliation(StockController):
 			)
 
 	def make_adjustment_entry(self, row, sl_entries):
-		from erpnext.stock.stock_ledger import get_stock_value_difference
+		from svasamm_erp.stock.stock_ledger import get_stock_value_difference
 
 		difference_amount = get_stock_value_difference(
 			row.item_code, row.warehouse, self.posting_date, self.posting_time, self.name
@@ -949,7 +949,7 @@ class StockReconciliation(StockController):
 		return super().get_gl_entries(warehouse_account, self.expense_account, self.cost_center)
 
 	def validate_expense_account(self):
-		if not cint(erpnext.is_perpetual_inventory_enabled(self.company)):
+		if not cint(svasamm_erp.is_perpetual_inventory_enabled(self.company)):
 			return
 
 		if not self.expense_account:
@@ -1377,7 +1377,7 @@ def get_item_data(row, qty, valuation_rate, serial_no=None):
 
 
 def get_itemwise_batch(warehouse, posting_date, company, item_code=None):
-	from erpnext.stock.report.batch_wise_balance_history.batch_wise_balance_history import execute
+	from svasamm_erp.stock.report.batch_wise_balance_history.batch_wise_balance_history import execute
 
 	itemwise_batch_data = {}
 

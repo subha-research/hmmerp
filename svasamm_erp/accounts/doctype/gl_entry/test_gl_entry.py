@@ -6,8 +6,8 @@ import frappe
 from frappe.model.naming import parse_naming_series
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.gl_entry.gl_entry import rename_gle_sle_docs
-from erpnext.accounts.doctype.journal_entry.test_journal_entry import make_journal_entry
+from svasamm_erp.accounts.doctype.gl_entry.gl_entry import rename_gle_sle_docs
+from svasamm_erp.accounts.doctype.journal_entry.test_journal_entry import make_journal_entry
 
 
 class TestGLEntry(IntegrationTestCase):

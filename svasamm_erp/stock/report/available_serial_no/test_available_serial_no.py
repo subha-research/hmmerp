@@ -5,9 +5,9 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, today
 
-from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
-from erpnext.stock.doctype.item.test_item import create_item
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+from svasamm_erp.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
+from svasamm_erp.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 
 class TestStockLedgerReeport(IntegrationTestCase):

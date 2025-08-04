@@ -12,7 +12,7 @@ from frappe.utils.caching import request_cache
 from frappe.utils.nestedset import NestedSet
 from pypika.terms import ExistsCriterion
 
-from erpnext.stock import get_warehouse_account
+from svasamm_erp.stock import get_warehouse_account
 
 
 class Warehouse(NestedSet):

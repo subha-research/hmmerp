@@ -1,7 +1,7 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.stock.get_item_details import get_item_details
+from svasamm_erp.stock.get_item_details import get_item_details
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["Customer", "Supplier", "Item", "Price List", "Item Price"]
 
@@ -64,7 +64,7 @@ class TestGetItemDetail(IntegrationTestCase):
 		).insert()
 
 		# create purchase receipt to have some stock for delivery
-		from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+		from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 		make_purchase_receipt(
 			item_code=item.item_code,
@@ -75,11 +75,11 @@ class TestGetItemDetail(IntegrationTestCase):
 		)
 
 		# creating sales order just to create delivery note from it
-		from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
+		from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
 
 		so = make_sales_order(item_code=item.item_code, qty=2, rate=75)
 
-		from erpnext.selling.doctype.sales_order.sales_order import make_delivery_note
+		from svasamm_erp.selling.doctype.sales_order.sales_order import make_delivery_note
 
 		dn = make_delivery_note(so.name)
 

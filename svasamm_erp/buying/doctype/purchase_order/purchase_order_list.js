@@ -49,7 +49,7 @@ frappe.listview_settings["Purchase Order"] = {
 		}
 	},
 	onload: function (listview) {
-		var method = "erpnext.buying.doctype.purchase_order.purchase_order.close_or_unclose_purchase_orders";
+		var method = "svasamm_erp.buying.doctype.purchase_order.purchase_order.close_or_unclose_purchase_orders";
 
 		listview.page.add_menu_item(__("Close"), function () {
 			listview.call_for_selected_items(method, { status: "Closed" });
@@ -61,19 +61,19 @@ frappe.listview_settings["Purchase Order"] = {
 
 		if (frappe.model.can_create("Purchase Invoice")) {
 			listview.page.add_action_item(__("Purchase Invoice"), () => {
-				erpnext.bulk_transaction_processing.create(listview, "Purchase Order", "Purchase Invoice");
+				svasamm_erp.bulk_transaction_processing.create(listview, "Purchase Order", "Purchase Invoice");
 			});
 		}
 
 		if (frappe.model.can_create("Purchase Receipt")) {
 			listview.page.add_action_item(__("Purchase Receipt"), () => {
-				erpnext.bulk_transaction_processing.create(listview, "Purchase Order", "Purchase Receipt");
+				svasamm_erp.bulk_transaction_processing.create(listview, "Purchase Order", "Purchase Receipt");
 			});
 		}
 
 		if (frappe.model.can_create("Payment Entry")) {
 			listview.page.add_action_item(__("Advance Payment"), () => {
-				erpnext.bulk_transaction_processing.create(listview, "Purchase Order", "Payment Entry");
+				svasamm_erp.bulk_transaction_processing.create(listview, "Purchase Order", "Payment Entry");
 			});
 		}
 	},

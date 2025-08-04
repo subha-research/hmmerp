@@ -7,13 +7,13 @@ from frappe import _
 from frappe.model.document import Document
 from frappe.utils import cstr, flt, formatdate, get_link_to_form, getdate
 
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+from svasamm_erp.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_checks_for_pl_and_bs_accounts,
 )
-from erpnext.assets.doctype.asset.asset import get_asset_value_after_depreciation
-from erpnext.assets.doctype.asset.depreciation import get_depreciation_accounts
-from erpnext.assets.doctype.asset_activity.asset_activity import add_asset_activity
-from erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
+from svasamm_erp.assets.doctype.asset.asset import get_asset_value_after_depreciation
+from svasamm_erp.assets.doctype.asset.depreciation import get_depreciation_accounts
+from svasamm_erp.assets.doctype.asset_activity.asset_activity import add_asset_activity
+from svasamm_erp.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
 	reschedule_depreciation,
 )
 

@@ -62,7 +62,7 @@ class SellingSettings(Document):
 		]:
 			frappe.db.set_default(key, self.get(key, ""))
 
-		from erpnext.utilities.naming import set_by_naming_series
+		from svasamm_erp.utilities.naming import set_by_naming_series
 
 		set_by_naming_series(
 			"Customer",

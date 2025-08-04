@@ -45,7 +45,7 @@ frappe.query_reports["Stock Ledger"] = {
 			options: "Item",
 			get_data: async function (txt) {
 				let { message: data } = await frappe.call({
-					method: "erpnext.controllers.queries.item_query",
+					method: "svasamm_erp.controllers.queries.item_query",
 					args: {
 						doctype: "Item",
 						txt: txt,
@@ -137,4 +137,4 @@ frappe.query_reports["Stock Ledger"] = {
 	},
 };
 
-erpnext.utils.add_inventory_dimensions("Stock Ledger", 10);
+svasamm_erp.utils.add_inventory_dimensions("Stock Ledger", 10);

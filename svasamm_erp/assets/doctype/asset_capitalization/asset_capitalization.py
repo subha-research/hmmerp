@@ -5,13 +5,13 @@ import json
 
 import frappe
 
-# import erpnext
+# import svasamm_erp
 from frappe import _
 from frappe.utils import cint, flt, get_link_to_form
 
-import erpnext
-from erpnext.assets.doctype.asset.asset import get_asset_value_after_depreciation
-from erpnext.assets.doctype.asset.depreciation import (
+import svasamm_erp
+from svasamm_erp.assets.doctype.asset.asset import get_asset_value_after_depreciation
+from svasamm_erp.assets.doctype.asset.depreciation import (
 	depreciate_asset,
 	get_disposal_account_and_cost_center,
 	get_gl_entries_on_asset_disposal,
@@ -19,21 +19,21 @@ from erpnext.assets.doctype.asset.depreciation import (
 	reset_depreciation_schedule,
 	reverse_depreciation_entry_made_on_disposal,
 )
-from erpnext.assets.doctype.asset_activity.asset_activity import add_asset_activity
-from erpnext.assets.doctype.asset_category.asset_category import get_asset_category_account
-from erpnext.controllers.stock_controller import StockController
-from erpnext.setup.doctype.brand.brand import get_brand_defaults
-from erpnext.setup.doctype.item_group.item_group import get_item_group_defaults
-from erpnext.stock import get_warehouse_account_map
-from erpnext.stock.doctype.item.item import get_item_defaults
-from erpnext.stock.get_item_details import (
+from svasamm_erp.assets.doctype.asset_activity.asset_activity import add_asset_activity
+from svasamm_erp.assets.doctype.asset_category.asset_category import get_asset_category_account
+from svasamm_erp.controllers.stock_controller import StockController
+from svasamm_erp.setup.doctype.brand.brand import get_brand_defaults
+from svasamm_erp.setup.doctype.item_group.item_group import get_item_group_defaults
+from svasamm_erp.stock import get_warehouse_account_map
+from svasamm_erp.stock.doctype.item.item import get_item_defaults
+from svasamm_erp.stock.get_item_details import (
 	ItemDetailsCtx,
 	get_default_cost_center,
 	get_default_expense_account,
 	get_item_warehouse_,
 )
-from erpnext.stock.stock_ledger import get_previous_sle
-from erpnext.stock.utils import get_incoming_rate
+from svasamm_erp.stock.stock_ledger import get_previous_sle
+from svasamm_erp.stock.utils import get_incoming_rate
 
 force_fields = [
 	"target_item_name",
@@ -58,13 +58,13 @@ class AssetCapitalization(StockController):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.assets.doctype.asset_capitalization_asset_item.asset_capitalization_asset_item import (
+		from svasamm_erp.assets.doctype.asset_capitalization_asset_item.asset_capitalization_asset_item import (
 			AssetCapitalizationAssetItem,
 		)
-		from erpnext.assets.doctype.asset_capitalization_service_item.asset_capitalization_service_item import (
+		from svasamm_erp.assets.doctype.asset_capitalization_service_item.asset_capitalization_service_item import (
 			AssetCapitalizationServiceItem,
 		)
-		from erpnext.assets.doctype.asset_capitalization_stock_item.asset_capitalization_stock_item import (
+		from svasamm_erp.assets.doctype.asset_capitalization_stock_item.asset_capitalization_stock_item import (
 			AssetCapitalizationStockItem,
 		)
 
@@ -307,7 +307,7 @@ class AssetCapitalization(StockController):
 			)
 
 	def validate_item(self, item):
-		from erpnext.stock.doctype.item.item import validate_end_of_life
+		from svasamm_erp.stock.doctype.item.item import validate_end_of_life
 
 		validate_end_of_life(item.name, item.end_of_life, item.disabled)
 
@@ -401,7 +401,7 @@ class AssetCapitalization(StockController):
 			self.make_sl_entries(sl_entries)
 
 	def make_gl_entries(self, gl_entries=None, from_repost=False):
-		from erpnext.accounts.general_ledger import make_gl_entries, make_reverse_gl_entries
+		from svasamm_erp.accounts.general_ledger import make_gl_entries, make_reverse_gl_entries
 
 		if self.docstatus == 1:
 			if not gl_entries:
@@ -439,7 +439,7 @@ class AssetCapitalization(StockController):
 		return gl_entries
 
 	def get_target_account(self):
-		from erpnext.assets.doctype.asset.asset import is_cwip_accounting_enabled
+		from svasamm_erp.assets.doctype.asset.asset import is_cwip_accounting_enabled
 
 		asset_category = frappe.get_cached_value("Asset", self.target_asset, "asset_category")
 		if is_cwip_accounting_enabled(asset_category):
@@ -460,7 +460,7 @@ class AssetCapitalization(StockController):
 				for sle in sle_list:
 					stock_value_difference = flt(sle.stock_value_difference, precision)
 
-					if erpnext.is_perpetual_inventory_enabled(self.company):
+					if svasamm_erp.is_perpetual_inventory_enabled(self.company):
 						account = self.warehouse_account[sle.warehouse]["account"]
 					else:
 						account = self.get_company_default("default_expense_account")
@@ -685,7 +685,7 @@ def get_target_asset_details(asset=None, company=None):
 
 
 @frappe.whitelist()
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def get_consumed_stock_item_details(ctx: ItemDetailsCtx):
 	out = frappe._dict()
 
@@ -748,7 +748,7 @@ def get_warehouse_details(args):
 
 
 @frappe.whitelist()
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def get_consumed_asset_details(ctx):
 	out = frappe._dict()
 
@@ -794,7 +794,7 @@ def get_consumed_asset_details(ctx):
 
 
 @frappe.whitelist()
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def get_service_item_details(ctx):
 	out = frappe._dict()
 

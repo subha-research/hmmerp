@@ -134,7 +134,7 @@ frappe.ui.form.on("Bank Statement Import", {
 		if (frm.doc.status == "Pending") return;
 
 		frappe.call({
-			method: "erpnext.accounts.doctype.bank_statement_import.bank_statement_import.get_import_status",
+			method: "svasamm_erp.accounts.doctype.bank_statement_import.bank_statement_import.get_import_status",
 			args: {
 				docname: frm.doc.name,
 			},
@@ -383,7 +383,7 @@ frappe.ui.form.on("Bank Statement Import", {
 
 	export_errored_rows(frm) {
 		open_url_post(
-			"/api/method/erpnext.accounts.doctype.bank_statement_import.bank_statement_import.download_errored_template",
+			"/api/method/svasamm_erp.accounts.doctype.bank_statement_import.bank_statement_import.download_errored_template",
 			{
 				data_import_name: frm.doc.name,
 			},
@@ -393,7 +393,7 @@ frappe.ui.form.on("Bank Statement Import", {
 
 	export_import_log(frm) {
 		open_url_post(
-			"/api/method/erpnext.accounts.doctype.bank_statement_import.bank_statement_import.download_import_log",
+			"/api/method/svasamm_erp.accounts.doctype.bank_statement_import.bank_statement_import.download_import_log",
 			{
 				data_import_name: frm.doc.name,
 			}
@@ -477,7 +477,7 @@ frappe.ui.form.on("Bank Statement Import", {
 
 	render_import_log(frm) {
 		frappe.call({
-			method: "erpnext.accounts.doctype.bank_statement_import.bank_statement_import.get_import_logs",
+			method: "svasamm_erp.accounts.doctype.bank_statement_import.bank_statement_import.get_import_logs",
 			args: {
 				docname: frm.doc.name,
 			},

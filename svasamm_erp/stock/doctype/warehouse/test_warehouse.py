@@ -4,11 +4,11 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-import erpnext
-from erpnext.accounts.doctype.account.test_account import create_account
-from erpnext.stock.doctype.item.test_item import create_item
-from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
-from erpnext.stock.doctype.warehouse.warehouse import convert_to_group_or_ledger, get_children
+import svasamm_erp
+from svasamm_erp.accounts.doctype.account.test_account import create_account
+from svasamm_erp.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+from svasamm_erp.stock.doctype.warehouse.warehouse import convert_to_group_or_ledger, get_children
 
 
 class TestWarehouse(IntegrationTestCase):
@@ -100,7 +100,7 @@ def create_warehouse(warehouse_name, properties=None, company=None):
 	if not company:
 		company = "_Test Company"
 
-	warehouse_id = erpnext.encode_company_abbr(warehouse_name, company)
+	warehouse_id = svasamm_erp.encode_company_abbr(warehouse_name, company)
 	if not frappe.db.exists("Warehouse", warehouse_id):
 		w = frappe.new_doc("Warehouse")
 		w.warehouse_name = warehouse_name

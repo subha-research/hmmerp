@@ -7,9 +7,9 @@ from frappe import _
 from frappe.utils import add_to_date, cint, flt, get_datetime, get_table_name, getdate
 from pypika import functions as fn
 
-from erpnext.deprecation_dumpster import deprecated
-from erpnext.stock.doctype.stock_closing_entry.stock_closing_entry import StockClosing
-from erpnext.stock.doctype.warehouse.warehouse import apply_warehouse_filter
+from svasamm_erp.deprecation_dumpster import deprecated
+from svasamm_erp.stock.doctype.stock_closing_entry.stock_closing_entry import StockClosing
+from svasamm_erp.stock.doctype.warehouse.warehouse import apply_warehouse_filter
 
 SLE_COUNT_LIMIT = 100_000
 

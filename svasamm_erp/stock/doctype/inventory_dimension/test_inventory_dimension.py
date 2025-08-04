@@ -6,19 +6,19 @@ from frappe.custom.doctype.custom_field.custom_field import create_custom_field
 from frappe.tests import IntegrationTestCase
 from frappe.utils import nowdate, nowtime
 
-from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
-from erpnext.stock.doctype.inventory_dimension.inventory_dimension import (
+from svasamm_erp.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
+from svasamm_erp.stock.doctype.inventory_dimension.inventory_dimension import (
 	CanNotBeChildDoc,
 	CanNotBeDefaultDimension,
 	DoNotChangeError,
 	delete_dimension,
 	get_inventory_dimensions,
 )
-from erpnext.stock.doctype.item.test_item import create_item
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
-from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
-from erpnext.stock.doctype.stock_ledger_entry.stock_ledger_entry import InventoryDimensionNegativeStockError
-from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+from svasamm_erp.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+from svasamm_erp.stock.doctype.stock_ledger_entry.stock_ledger_entry import InventoryDimensionNegativeStockError
+from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 
 class TestInventoryDimension(IntegrationTestCase):
@@ -253,7 +253,7 @@ class TestInventoryDimension(IntegrationTestCase):
 		)
 
 	def test_for_purchase_sales_and_stock_transaction(self):
-		from erpnext.controllers.sales_and_purchase_return import make_return_doc
+		from svasamm_erp.controllers.sales_and_purchase_return import make_return_doc
 
 		create_inventory_dimension(
 			reference_document="Store",
@@ -368,8 +368,8 @@ class TestInventoryDimension(IntegrationTestCase):
 		self.assertEqual(entries[0].actual_qty, -10.0)
 
 	def test_inter_transfer_return_against_inventory_dimension(self):
-		from erpnext.controllers.sales_and_purchase_return import make_return_doc
-		from erpnext.stock.doctype.delivery_note.delivery_note import make_inter_company_purchase_receipt
+		from svasamm_erp.controllers.sales_and_purchase_return import make_return_doc
+		from svasamm_erp.stock.doctype.delivery_note.delivery_note import make_inter_company_purchase_receipt
 
 		data = prepare_data_for_internal_transfer()
 
@@ -659,10 +659,10 @@ def create_inventory_dimension(**args):
 
 
 def prepare_data_for_internal_transfer():
-	from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_internal_supplier
-	from erpnext.selling.doctype.customer.test_customer import create_internal_customer
-	from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
-	from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+	from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_internal_supplier
+	from svasamm_erp.selling.doctype.customer.test_customer import create_internal_customer
+	from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+	from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 	company = "_Test Company with perpetual inventory"
 

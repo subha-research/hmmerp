@@ -5,7 +5,7 @@ frappe.ui.form.on("Job Card", {
 	setup: function (frm) {
 		frm.set_query("operation", function () {
 			return {
-				query: "erpnext.manufacturing.doctype.job_card.job_card.get_operations",
+				query: "svasamm_erp.manufacturing.doctype.job_card.job_card.get_operations",
 				filters: {
 					work_order: frm.doc.work_order,
 				},
@@ -159,7 +159,7 @@ frappe.ui.form.on("Job Card", {
 
 		frm.set_query("quality_inspection", function () {
 			return {
-				query: "erpnext.stock.doctype.quality_inspection.quality_inspection.quality_inspection_query",
+				query: "svasamm_erp.stock.doctype.quality_inspection.quality_inspection.quality_inspection_query",
 				filters: {
 					item_code: frm.doc.production_item,
 					reference_name: frm.doc.name,
@@ -344,7 +344,7 @@ frappe.ui.form.on("Job Card", {
 		if (frm.doc.docstatus === 1 && frm.doc.for_quantity > frm.doc.manufactured_qty) {
 			frm.add_custom_button(__("Make Subcontracting PO"), () => {
 				frappe.model.open_mapped_doc({
-					method: "erpnext.manufacturing.doctype.job_card.job_card.make_subcontracting_po",
+					method: "svasamm_erp.manufacturing.doctype.job_card.job_card.make_subcontracting_po",
 					frm: frm,
 				});
 			}).addClass("btn-primary");
@@ -474,7 +474,7 @@ frappe.ui.form.on("Job Card", {
 
 	make_corrective_job_card: function (frm, operation, for_operation) {
 		frappe.call({
-			method: "erpnext.manufacturing.doctype.job_card.job_card.make_corrective_job_card",
+			method: "svasamm_erp.manufacturing.doctype.job_card.job_card.make_corrective_job_card",
 			args: {
 				source_name: frm.doc.name,
 				operation: operation,
@@ -494,7 +494,7 @@ frappe.ui.form.on("Job Card", {
 
 		if (frm.doc.operation && frm.doc.work_order) {
 			frappe.call({
-				method: "erpnext.manufacturing.doctype.job_card.job_card.get_operation_details",
+				method: "svasamm_erp.manufacturing.doctype.job_card.job_card.get_operation_details",
 				args: {
 					work_order: frm.doc.work_order,
 					operation: frm.doc.operation,
@@ -541,7 +541,7 @@ frappe.ui.form.on("Job Card", {
 		frm.events.update_sub_operation(frm, args);
 
 		frappe.call({
-			method: "erpnext.manufacturing.doctype.job_card.job_card.make_time_log",
+			method: "svasamm_erp.manufacturing.doctype.job_card.job_card.make_time_log",
 			args: {
 				args: args,
 			},
@@ -660,7 +660,7 @@ frappe.ui.form.on("Job Card", {
 
 	make_material_request: function (frm) {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.manufacturing.doctype.job_card.job_card.make_material_request",
+			method: "svasamm_erp.manufacturing.doctype.job_card.job_card.make_material_request",
 			frm: frm,
 			run_link_triggers: true,
 		});
@@ -668,7 +668,7 @@ frappe.ui.form.on("Job Card", {
 
 	make_stock_entry: function (frm) {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.manufacturing.doctype.job_card.job_card.make_stock_entry",
+			method: "svasamm_erp.manufacturing.doctype.job_card.job_card.make_stock_entry",
 			frm: frm,
 			run_link_triggers: true,
 		});

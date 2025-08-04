@@ -6,8 +6,8 @@ from frappe import qb
 from frappe.tests import IntegrationTestCase
 from frappe.utils import nowdate
 
-from erpnext.accounts.test.accounts_mixin import AccountsTestMixin
-from erpnext.accounts.utils import run_ledger_health_checks
+from svasamm_erp.accounts.test.accounts_mixin import AccountsTestMixin
+from svasamm_erp.accounts.utils import run_ledger_health_checks
 
 
 class TestLedgerHealth(AccountsTestMixin, IntegrationTestCase):

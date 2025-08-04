@@ -33,7 +33,7 @@ frappe.ui.form.on("Asset Repair", {
 
 		frm.set_query("purchase_invoice", "invoices", function () {
 			return {
-				query: "erpnext.assets.doctype.asset_repair.asset_repair.get_purchase_invoice",
+				query: "svasamm_erp.assets.doctype.asset_repair.asset_repair.get_purchase_invoice",
 				filters: {
 					company: frm.doc.company,
 				},
@@ -43,7 +43,7 @@ frappe.ui.form.on("Asset Repair", {
 		frm.set_query("expense_account", "invoices", function (doc, cdt, cdn) {
 			let row = locals[cdt][cdn];
 			return {
-				query: "erpnext.assets.doctype.asset_repair.asset_repair.get_expense_accounts",
+				query: "svasamm_erp.assets.doctype.asset_repair.asset_repair.get_expense_accounts",
 				filters: {
 					purchase_invoice: row.purchase_invoice,
 				},
@@ -96,7 +96,7 @@ frappe.ui.form.on("Asset Repair", {
 	repair_status: (frm) => {
 		if (frm.doc.completion_date && frm.doc.repair_status == "Completed") {
 			frappe.call({
-				method: "erpnext.assets.doctype.asset_repair.asset_repair.get_downtime",
+				method: "svasamm_erp.assets.doctype.asset_repair.asset_repair.get_downtime",
 				args: {
 					failure_date: frm.doc.failure_date,
 					completion_date: frm.doc.completion_date,
@@ -115,7 +115,7 @@ frappe.ui.form.on("Asset Repair", {
 	},
 
 	stock_items_on_form_rendered() {
-		erpnext.setup_serial_or_batch_no();
+		svasamm_erp.setup_serial_or_batch_no();
 	},
 
 	stock_consumption: function (frm) {
@@ -165,7 +165,7 @@ frappe.ui.form.on("Asset Repair Consumed Item", {
 		};
 
 		frappe.call({
-			method: "erpnext.stock.utils.get_incoming_rate",
+			method: "svasamm_erp.stock.utils.get_incoming_rate",
 			args: {
 				args: item_args,
 			},
@@ -199,7 +199,7 @@ frappe.ui.form.on("Asset Repair Consumed Item", {
 				frm.doc.posting_date = frappe.datetime.get_today();
 				frm.doc.posting_time = frappe.datetime.now_time();
 
-				new erpnext.SerialBatchPackageSelector(frm, item, (r) => {
+				new svasamm_erp.SerialBatchPackageSelector(frm, item, (r) => {
 					if (r) {
 						frappe.model.set_value(item.doctype, item.name, {
 							serial_and_batch_bundle: r.name,

@@ -5,7 +5,7 @@
 import frappe
 from frappe import _
 
-from erpnext import get_default_currency
+from svasamm_erp import get_default_currency
 
 
 def execute(filters=None):

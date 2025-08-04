@@ -5,7 +5,7 @@ import unittest
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.journal_entry.test_journal_entry import make_journal_entry
+from svasamm_erp.accounts.doctype.journal_entry.test_journal_entry import make_journal_entry
 
 
 class TestFinanceBook(IntegrationTestCase):

@@ -157,7 +157,7 @@ class Batch(Document):
 			frappe.throw(_("The selected item cannot have Batch"))
 
 	def set_batchwise_valuation(self):
-		from erpnext.stock.utils import get_valuation_method
+		from svasamm_erp.stock.utils import get_valuation_method
 
 		if self.is_new():
 			if get_valuation_method(self.item) == "Moving Average" and frappe.get_single_value(
@@ -235,7 +235,7 @@ def get_batch_qty(
 	:param item_code: Optional - give qty for this item
 	:param for_stock_levels: True consider expired batches"""
 
-	from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
+	from svasamm_erp.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
 		get_auto_batch_nos,
 	)
 
@@ -335,7 +335,7 @@ def make_batch_bundle(
 ):
 	from frappe.utils import nowtime, today
 
-	from erpnext.stock.serial_batch_bundle import SerialBatchCreation
+	from svasamm_erp.stock.serial_batch_bundle import SerialBatchCreation
 
 	return (
 		SerialBatchCreation(
@@ -358,7 +358,7 @@ def make_batch_bundle(
 
 
 def get_batches(item_code, warehouse, qty=1, throw=False, serial_no=None):
-	from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos
+	from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos
 
 	batch = frappe.qb.DocType("Batch")
 	sle = frappe.qb.DocType("Stock Ledger Entry")
@@ -453,7 +453,7 @@ def get_pos_reserved_batch_qty(filters):
 
 
 def get_available_batches(kwargs):
-	from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
+	from svasamm_erp.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
 		get_auto_batch_nos,
 	)
 
@@ -474,7 +474,7 @@ def get_available_batches(kwargs):
 
 
 def get_batch_no(bundle_id):
-	from erpnext.stock.serial_batch_bundle import get_batch_nos
+	from svasamm_erp.stock.serial_batch_bundle import get_batch_nos
 
 	batches = defaultdict(float)
 

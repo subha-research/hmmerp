@@ -3,13 +3,13 @@ from frappe import qb
 from frappe.tests import IntegrationTestCase
 from frappe.utils import flt, nowdate
 
-from erpnext.accounts.doctype.sales_invoice.sales_invoice import make_delivery_note
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.accounts.report.gross_profit.gross_profit import execute
-from erpnext.stock.doctype.delivery_note.delivery_note import make_sales_invoice
-from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
-from erpnext.stock.doctype.item.test_item import create_item
-from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import make_delivery_note
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.accounts.report.gross_profit.gross_profit import execute
+from svasamm_erp.stock.doctype.delivery_note.delivery_note import make_sales_invoice
+from svasamm_erp.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
+from svasamm_erp.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
 
 
 class TestGrossProfit(IntegrationTestCase):
@@ -58,7 +58,7 @@ class TestGrossProfit(IntegrationTestCase):
 		self.item = item if isinstance(item, str) else item.item_code
 
 	def create_bundle(self):
-		from erpnext.selling.doctype.product_bundle.test_product_bundle import make_product_bundle
+		from svasamm_erp.selling.doctype.product_bundle.test_product_bundle import make_product_bundle
 
 		item2 = create_item(
 			item_code="_Test GP Item 2", is_stock_item=1, company=self.company, warehouse=self.warehouse
@@ -312,7 +312,7 @@ class TestGrossProfit(IntegrationTestCase):
 		self.assertGreater(len(data), 0)
 
 	def test_order_connected_dn_and_inv(self):
-		from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
+		from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
 
 		"""
 			Test gp calculation when invoice and delivery note aren't directly connected.
@@ -357,7 +357,7 @@ class TestGrossProfit(IntegrationTestCase):
 			do_not_submit=False,
 		)
 
-		from erpnext.selling.doctype.sales_order.sales_order import (
+		from svasamm_erp.selling.doctype.sales_order.sales_order import (
 			make_delivery_note,
 			make_sales_invoice,
 		)
@@ -395,7 +395,7 @@ class TestGrossProfit(IntegrationTestCase):
 		"""
 		Item Qty for Sales Invoices with multiple instances of same item go in the -ve. Ideally, the credit noteshould cancel out the invoice items.
 		"""
-		from erpnext.accounts.doctype.sales_invoice.sales_invoice import make_sales_return
+		from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import make_sales_return
 
 		# Invoice with an item added twice
 		sinv = self.create_sales_invoice(qty=1, rate=100, posting_date=nowdate(), do_not_submit=True)
@@ -474,7 +474,7 @@ class TestGrossProfit(IntegrationTestCase):
 		self.assertEqual(report_output, expected_entry)
 
 	def test_different_rates_in_si_and_dn(self):
-		from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
+		from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
 
 		"""
 			Test gp calculation when invoice and delivery note differ in qty and aren't connected
@@ -520,7 +520,7 @@ class TestGrossProfit(IntegrationTestCase):
 			do_not_submit=False,
 		)
 
-		from erpnext.selling.doctype.sales_order.sales_order import (
+		from svasamm_erp.selling.doctype.sales_order.sales_order import (
 			make_delivery_note,
 			make_sales_invoice,
 		)

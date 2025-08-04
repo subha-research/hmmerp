@@ -5,8 +5,8 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
-from erpnext.selling.report.sales_analytics.sales_analytics import execute
+from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
+from svasamm_erp.selling.report.sales_analytics.sales_analytics import execute
 
 
 class TestAnalytics(IntegrationTestCase):

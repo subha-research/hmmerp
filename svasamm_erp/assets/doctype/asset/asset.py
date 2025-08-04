@@ -18,23 +18,23 @@ from frappe.utils import (
 	today,
 )
 
-import erpnext
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import get_dimensions
-from erpnext.accounts.general_ledger import make_reverse_gl_entries
-from erpnext.assets.doctype.asset.depreciation import (
+import svasamm_erp
+from svasamm_erp.accounts.doctype.accounting_dimension.accounting_dimension import get_dimensions
+from svasamm_erp.accounts.general_ledger import make_reverse_gl_entries
+from svasamm_erp.assets.doctype.asset.depreciation import (
 	get_comma_separated_links,
 	get_depreciation_accounts,
 	get_disposal_account_and_cost_center,
 )
-from erpnext.assets.doctype.asset_activity.asset_activity import add_asset_activity
-from erpnext.assets.doctype.asset_category.asset_category import get_asset_category_account
-from erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
+from svasamm_erp.assets.doctype.asset_activity.asset_activity import add_asset_activity
+from svasamm_erp.assets.doctype.asset_category.asset_category import get_asset_category_account
+from svasamm_erp.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
 	cancel_asset_depr_schedules,
 	convert_draft_asset_depr_schedules_into_active,
 	get_asset_depr_schedule_doc,
 	get_depr_schedule,
 )
-from erpnext.controllers.accounts_controller import AccountsController
+from svasamm_erp.controllers.accounts_controller import AccountsController
 
 
 class Asset(AccountsController):
@@ -46,7 +46,7 @@ class Asset(AccountsController):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.assets.doctype.asset_finance_book.asset_finance_book import AssetFinanceBook
+		from svasamm_erp.assets.doctype.asset_finance_book.asset_finance_book import AssetFinanceBook
 
 		additional_asset_cost: DF.Currency
 		amended_from: DF.Link | None
@@ -670,7 +670,7 @@ class Asset(AccountsController):
 
 	def get_default_finance_book_idx(self):
 		if not self.get("default_finance_book") and self.company:
-			self.default_finance_book = erpnext.get_default_finance_book(self.company)
+			self.default_finance_book = svasamm_erp.get_default_finance_book(self.company)
 
 		if self.get("default_finance_book"):
 			for d in self.get("finance_books"):
@@ -812,7 +812,7 @@ class Asset(AccountsController):
 			)
 
 		if gl_entries:
-			from erpnext.accounts.general_ledger import make_gl_entries
+			from svasamm_erp.accounts.general_ledger import make_gl_entries
 
 			make_gl_entries(gl_entries)
 			self.db_set("booked_fixed_asset", 1)

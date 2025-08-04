@@ -5,12 +5,12 @@ import unittest
 
 import frappe
 
-from erpnext.accounts.doctype.accounting_dimension.test_accounting_dimension import (
+from svasamm_erp.accounts.doctype.accounting_dimension.test_accounting_dimension import (
 	create_dimension,
 	disable_dimension,
 )
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.exceptions import InvalidAccountDimensionError, MandatoryAccountDimensionError
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.exceptions import InvalidAccountDimensionError, MandatoryAccountDimensionError
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["Location", "Cost Center", "Department"]
 

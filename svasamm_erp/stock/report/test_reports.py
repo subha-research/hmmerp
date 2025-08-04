@@ -4,7 +4,7 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils.make_random import get_random
 
-from erpnext.tests.utils import ReportFilters, ReportName, execute_script_report
+from svasamm_erp.tests.utils import ReportFilters, ReportName, execute_script_report
 
 DEFAULT_FILTERS = {
 	"company": "_Test Company",

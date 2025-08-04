@@ -1,9 +1,15 @@
-SvasammERP
 CRM
 Accounts
 Buying
 Stock
+Support
 Assets
+Projects
 Manufacturing
 Quality Management
 Selling
+Controllers
+Setup
+Regional
+Utilities
+Subcontracting

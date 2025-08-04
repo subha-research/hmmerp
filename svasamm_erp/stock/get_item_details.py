@@ -15,18 +15,18 @@ from frappe.model.utils import get_fetch_values
 from frappe.query_builder.functions import IfNull, Sum
 from frappe.utils import add_days, add_months, cint, cstr, flt, getdate, parse_json
 
-import erpnext
-from erpnext import get_company_currency
-from erpnext.accounts.doctype.pricing_rule.pricing_rule import (
+import svasamm_erp
+from svasamm_erp import get_company_currency
+from svasamm_erp.accounts.doctype.pricing_rule.pricing_rule import (
 	get_pricing_rule_for_item,
 	set_transaction_type,
 )
-from erpnext.setup.doctype.brand.brand import get_brand_defaults
-from erpnext.setup.doctype.item_group.item_group import get_item_group_defaults
-from erpnext.setup.utils import get_exchange_rate
-from erpnext.stock.doctype.item.item import get_item_defaults, get_uom_conv_factor
-from erpnext.stock.doctype.item_manufacturer.item_manufacturer import get_item_manufacturer_part_no
-from erpnext.stock.doctype.price_list.price_list import get_price_list_details
+from svasamm_erp.setup.doctype.brand.brand import get_brand_defaults
+from svasamm_erp.setup.doctype.item_group.item_group import get_item_group_defaults
+from svasamm_erp.setup.utils import get_exchange_rate
+from svasamm_erp.stock.doctype.item.item import get_item_defaults, get_uom_conv_factor
+from svasamm_erp.stock.doctype.item_manufacturer.item_manufacturer import get_item_manufacturer_part_no
+from svasamm_erp.stock.doctype.price_list.price_list import get_price_list_details
 
 ItemDetails = frappe._dict
 ItemDetailsCtx = frappe._dict
@@ -55,7 +55,7 @@ def _preprocess_ctx(ctx):
 
 
 @frappe.whitelist()
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def get_item_details(
 	ctx: ItemDetailsCtx, doc=None, for_validate=False, overwrite_warehouse=True
 ) -> ItemDetails:
@@ -183,8 +183,8 @@ def set_valuation_rate(out: ItemDetails | dict, ctx: ItemDetailsCtx):
 
 
 def update_stock(ctx, out, doc=None):
-	from erpnext.stock.doctype.batch.batch import get_available_batches
-	from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos_for_outward
+	from svasamm_erp.stock.doctype.batch.batch import get_available_batches
+	from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos_for_outward
 
 	if (
 		(
@@ -253,7 +253,7 @@ def update_stock(ctx, out, doc=None):
 
 
 def has_incorrect_serial_nos(ctx, out):
-	from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos
+	from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos
 
 	if not ctx.get("serial_no"):
 		return True
@@ -274,7 +274,7 @@ def filter_batches(batches, doc):
 
 
 def get_filtered_serial_nos(serial_nos, doc):
-	from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos
+	from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos
 
 	for row in doc.get("items"):
 		if row.get("serial_no"):
@@ -315,7 +315,7 @@ def validate_item_details(ctx: ItemDetailsCtx, item):
 	if not ctx.company:
 		throw(_("Please specify Company"))
 
-	from erpnext.stock.doctype.item.item import validate_end_of_life
+	from svasamm_erp.stock.doctype.item.item import validate_end_of_life
 
 	validate_end_of_life(item.name, item.end_of_life, item.disabled)
 
@@ -400,7 +400,7 @@ def get_basic_details(ctx: ItemDetailsCtx, item, overwrite_warehouse=True) -> It
 	expense_account = None
 
 	if item.is_fixed_asset:
-		from erpnext.assets.doctype.asset.asset import get_asset_account, is_cwip_accounting_enabled
+		from svasamm_erp.assets.doctype.asset.asset import get_asset_account, is_cwip_accounting_enabled
 
 		if is_cwip_accounting_enabled(item.asset_category):
 			expense_account = get_asset_account(
@@ -414,7 +414,7 @@ def get_basic_details(ctx: ItemDetailsCtx, item, overwrite_warehouse=True) -> It
 			"Purchase Order",
 			"Material Request",
 		):
-			from erpnext.assets.doctype.asset_category.asset_category import get_asset_category_account
+			from svasamm_erp.assets.doctype.asset_category.asset_category import get_asset_category_account
 
 			expense_account = get_asset_category_account(
 				fieldname="fixed_asset_account", item=ctx.item_code, company=ctx.company
@@ -512,7 +512,7 @@ def get_basic_details(ctx: ItemDetailsCtx, item, overwrite_warehouse=True) -> It
 	if ctx.doctype in purchase_doctypes and not frappe.db.get_single_value(
 		"Buying Settings", "disable_last_purchase_rate"
 	):
-		from erpnext.buying.doctype.purchase_order.purchase_order import item_last_purchase_rate
+		from svasamm_erp.buying.doctype.purchase_order.purchase_order import item_last_purchase_rate
 
 		out.last_purchase_rate = item_last_purchase_rate(
 			ctx.name, ctx.conversion_rate, item.name, out.conversion_factor
@@ -562,10 +562,10 @@ def get_basic_details(ctx: ItemDetailsCtx, item, overwrite_warehouse=True) -> It
 	return out
 
 
-from erpnext.deprecation_dumpster import get_item_warehouse
+from svasamm_erp.deprecation_dumpster import get_item_warehouse
 
 
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def get_item_warehouse_(ctx: ItemDetailsCtx, item, overwrite_warehouse, defaults=None):
 	if not defaults:
 		defaults = frappe._dict(
@@ -679,7 +679,7 @@ def get_item_tax_info(doc, tax_category, item_codes, item_rates=None, item_tax_t
 
 
 @frappe.whitelist()
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def get_item_tax_template(ctx: ItemDetailsCtx, item=None, out: ItemDetails | None = None):
 	"""
 	Determines item_tax template from item or parent item groups.
@@ -721,7 +721,7 @@ def get_item_tax_template(ctx: ItemDetailsCtx, item=None, out: ItemDetails | Non
 	return item_tax_template
 
 
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def _get_item_tax_template(
 	ctx: ItemDetailsCtx, taxes, out: ItemDetails | None = None, for_validate=False
 ) -> None | str | list[str]:
@@ -790,7 +790,7 @@ def _get_item_tax_template(
 	return None
 
 
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def is_within_valid_range(ctx: ItemDetailsCtx, tax) -> bool:
 	"""
 	Accesses:
@@ -825,7 +825,7 @@ def get_item_tax_map(*, doc: str | dict | Document, tax_template: str | None = N
 
 
 @frappe.whitelist()
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def calculate_service_end_date(ctx: ItemDetailsCtx, item=None):
 	_preprocess_ctx(ctx)
 	if not item:
@@ -901,7 +901,7 @@ def get_default_deferred_account(ctx: ItemDetailsCtx, item, fieldname=None):
 		return None
 
 
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def get_default_cost_center(ctx: ItemDetailsCtx, item=None, item_group=None, brand=None, company=None):
 	cost_center = None
 
@@ -927,7 +927,7 @@ def get_default_cost_center(ctx: ItemDetailsCtx, item=None, item_group=None, bra
 
 	elif not cost_center and ctx.get("item_code") and company:
 		for method in ["get_item_defaults", "get_item_group_defaults", "get_brand_defaults"]:
-			path = f"erpnext.stock.get_item_details.{method}"
+			path = f"svasamm_erp.stock.get_item_details.{method}"
 			data = frappe.get_attr(path)(ctx.get("item_code"), company)
 
 			if data and (data.selling_cost_center or data.buying_cost_center):
@@ -992,7 +992,7 @@ def get_price_list_rate(ctx: ItemDetailsCtx, item_doc, out: ItemDetails = None):
 			return out
 
 		if not ctx.is_internal_supplier and not out.price_list_rate and ctx.transaction_type == "buying":
-			from erpnext.stock.doctype.item.item import get_last_purchase_details
+			from svasamm_erp.stock.doctype.item.item import get_last_purchase_details
 
 			out.update(get_last_purchase_details(item_doc.name, ctx.name, ctx.conversion_rate))
 
@@ -1134,7 +1134,7 @@ def get_batch_based_item_price(pctx: ItemPriceCtx | dict | str, item_code) -> fl
 	return 0.0
 
 
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def get_price_list_rate_for(ctx: ItemDetailsCtx, item_code):
 	"""
 	:param customer: link to Customer DocType
@@ -1204,7 +1204,7 @@ def check_packing_list(price_list_rate_name, desired_qty, item_code):
 
 
 def validate_conversion_rate(ctx: ItemDetailsCtx, meta):
-	from erpnext.controllers.accounts_controller import validate_conversion_rate
+	from svasamm_erp.controllers.accounts_controller import validate_conversion_rate
 
 	company_currency = frappe.get_cached_value("Company", ctx.company, "default_currency")
 	if not ctx.conversion_rate and ctx.currency == company_currency:
@@ -1271,10 +1271,10 @@ def get_party_item_code(ctx: ItemDetailsCtx, item_doc, out: ItemDetails):
 		out.supplier_part_no = item_supplier[0].supplier_part_no if item_supplier else None
 
 
-from erpnext.deprecation_dumpster import get_pos_profile_item_details
+from svasamm_erp.deprecation_dumpster import get_pos_profile_item_details
 
 
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def get_pos_profile_item_details_(ctx: ItemDetailsCtx, company, pos_profile=None, update_data=False):
 	res = frappe._dict()
 
@@ -1366,7 +1366,7 @@ def get_bin_details(item_code, warehouse, company=None, include_child_warehouses
 	if warehouse:
 		from frappe.query_builder.functions import Coalesce, Sum
 
-		from erpnext.stock.doctype.warehouse.warehouse import get_child_warehouses
+		from svasamm_erp.stock.doctype.warehouse.warehouse import get_child_warehouses
 
 		warehouses = get_child_warehouses(warehouse) if include_child_warehouses else [warehouse]
 
@@ -1402,14 +1402,14 @@ def get_company_total_stock(item_code, company):
 
 @frappe.whitelist()
 def get_batch_qty(batch_no, warehouse, item_code):
-	from erpnext.stock.doctype.batch import batch
+	from svasamm_erp.stock.doctype.batch import batch
 
 	if batch_no:
 		return {"actual_batch_qty": batch.get_batch_qty(batch_no, warehouse)}
 
 
 @frappe.whitelist()
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def apply_price_list(ctx: ItemDetailsCtx, as_doc=False, doc=None):
 	"""Apply pricelist on a document-like dict object and return as
 	{'parent': dict, 'children': list}
@@ -1582,7 +1582,7 @@ def update_party_blanket_order(ctx: ItemDetailsCtx, out: ItemDetails | dict):
 
 
 @frappe.whitelist()
-@erpnext.normalize_ctx_input(ItemDetailsCtx)
+@svasamm_erp.normalize_ctx_input(ItemDetailsCtx)
 def get_blanket_order_details(ctx: ItemDetailsCtx):
 	blanket_order_details = None
 

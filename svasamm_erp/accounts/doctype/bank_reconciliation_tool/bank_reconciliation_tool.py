@@ -11,15 +11,15 @@ from frappe.query_builder.custom import ConstantColumn
 from frappe.query_builder.functions import Sum
 from frappe.utils import cint, flt
 
-from erpnext import get_default_cost_center
-from erpnext.accounts.doctype.bank_transaction.bank_transaction import get_total_allocated_amount
-from erpnext.accounts.party import get_party_account
-from erpnext.accounts.report.bank_reconciliation_statement.bank_reconciliation_statement import (
+from svasamm_erp import get_default_cost_center
+from svasamm_erp.accounts.doctype.bank_transaction.bank_transaction import get_total_allocated_amount
+from svasamm_erp.accounts.party import get_party_account
+from svasamm_erp.accounts.report.bank_reconciliation_statement.bank_reconciliation_statement import (
 	get_amounts_not_reflected_in_system,
 	get_entries,
 )
-from erpnext.accounts.utils import get_account_currency, get_balance_on
-from erpnext.setup.utils import get_exchange_rate
+from svasamm_erp.accounts.utils import get_account_currency, get_balance_on
+from svasamm_erp.setup.utils import get_exchange_rate
 
 
 class BankReconciliationTool(Document):
@@ -378,7 +378,7 @@ def auto_reconcile_vouchers(
 
 	if len(bank_transactions) > 10:
 		frappe.enqueue(
-			method="erpnext.accounts.doctype.bank_reconciliation_tool.bank_reconciliation_tool.start_auto_reconcile",
+			method="svasamm_erp.accounts.doctype.bank_reconciliation_tool.bank_reconciliation_tool.start_auto_reconcile",
 			queue="long",
 			bank_transactions=bank_transactions,
 			from_date=from_date,

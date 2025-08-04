@@ -5,15 +5,15 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import nowdate
 
-from erpnext.controllers.stock_controller import (
+from svasamm_erp.controllers.stock_controller import (
 	QualityInspectionNotSubmittedError,
 	QualityInspectionRejectedError,
 	QualityInspectionRequiredError,
 	make_quality_inspections,
 )
-from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
-from erpnext.stock.doctype.item.test_item import create_item
-from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+from svasamm_erp.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
+from svasamm_erp.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
 
 
 class TestQualityInspection(IntegrationTestCase):

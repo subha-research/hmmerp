@@ -8,8 +8,8 @@ from frappe.utils import flt, today
 from frappe.utils.nestedset import get_descendants_of
 from pypika.terms import ExistsCriterion
 
-from erpnext.accounts.doctype.pos_invoice.pos_invoice import get_pos_reserved_qty
-from erpnext.stock.utils import (
+from svasamm_erp.accounts.doctype.pos_invoice.pos_invoice import get_pos_reserved_qty
+from svasamm_erp.stock.utils import (
 	is_reposting_item_valuation_in_progress,
 	update_included_uom_in_report,
 )

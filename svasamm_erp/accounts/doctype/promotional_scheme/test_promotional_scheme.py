@@ -5,8 +5,8 @@ import unittest
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.promotional_scheme.promotional_scheme import TransactionExists
-from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
+from svasamm_erp.accounts.doctype.promotional_scheme.promotional_scheme import TransactionExists
+from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
 
 
 class TestPromotionalScheme(IntegrationTestCase):

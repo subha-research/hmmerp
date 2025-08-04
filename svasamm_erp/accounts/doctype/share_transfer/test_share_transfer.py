@@ -5,7 +5,7 @@ import unittest
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.share_transfer.share_transfer import ShareDontExists
+from svasamm_erp.accounts.doctype.share_transfer.share_transfer import ShareDontExists
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["Share Type", "Shareholder"]
 

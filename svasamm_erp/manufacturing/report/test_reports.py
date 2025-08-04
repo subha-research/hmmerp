@@ -3,7 +3,7 @@ import unittest
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.tests.utils import ReportFilters, ReportName, execute_script_report
+from svasamm_erp.tests.utils import ReportFilters, ReportName, execute_script_report
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["BOM", "Item Price", "Warehouse"]
 

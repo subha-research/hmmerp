@@ -10,8 +10,8 @@ from frappe.utils import (
 	getdate,
 )
 
-import erpnext
-from erpnext.assets.doctype.asset_depreciation_schedule.deppreciation_schedule_controller import (
+import svasamm_erp
+from svasamm_erp.assets.doctype.asset_depreciation_schedule.deppreciation_schedule_controller import (
 	DepreciationScheduleController,
 )
 
@@ -25,7 +25,7 @@ class AssetDepreciationSchedule(DepreciationScheduleController):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.assets.doctype.depreciation_schedule.depreciation_schedule import DepreciationSchedule
+		from svasamm_erp.assets.doctype.depreciation_schedule.depreciation_schedule import DepreciationSchedule
 
 		amended_from: DF.Link | None
 		asset: DF.Link

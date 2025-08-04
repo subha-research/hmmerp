@@ -14,20 +14,20 @@ from frappe.query_builder.functions import Coalesce, Locate, Replace, Sum
 from frappe.utils import ceil, cint, floor, flt, get_link_to_form
 from frappe.utils.nestedset import get_descendants_of
 
-from erpnext.selling.doctype.sales_order.sales_order import (
+from svasamm_erp.selling.doctype.sales_order.sales_order import (
 	make_delivery_note as create_delivery_note_from_sales_order,
 )
-from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
 	get_auto_batch_nos,
 	get_picked_serial_nos,
 )
-from erpnext.stock.get_item_details import get_conversion_factor
-from erpnext.stock.serial_batch_bundle import (
+from svasamm_erp.stock.get_item_details import get_conversion_factor
+from svasamm_erp.stock.serial_batch_bundle import (
 	SerialBatchCreation,
 	get_batches_from_bundle,
 	get_serial_nos_from_bundle,
 )
-from erpnext.utilities.transaction_base import TransactionBase
+from svasamm_erp.utilities.transaction_base import TransactionBase
 
 # TODO: Prioritize SO or WO group warehouse
 
@@ -41,7 +41,7 @@ class PickList(TransactionBase):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.stock.doctype.pick_list_item.pick_list_item import PickListItem
+		from svasamm_erp.stock.doctype.pick_list_item.pick_list_item import PickListItem
 
 		amended_from: DF.Link | None
 		company: DF.Link
@@ -90,7 +90,7 @@ class PickList(TransactionBase):
 			self.validate_sales_order_percentage()
 
 	def validate_stock_qty(self):
-		from erpnext.stock.doctype.batch.batch import get_batch_qty
+		from svasamm_erp.stock.doctype.batch.batch import get_batch_qty
 
 		for row in self.get("locations"):
 			if not row.picked_qty:
@@ -133,7 +133,7 @@ class PickList(TransactionBase):
 				)
 
 	def check_serial_no_status(self):
-		from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos
+		from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos
 
 		for row in self.get("locations"):
 			if not row.serial_no:
@@ -251,7 +251,7 @@ class PickList(TransactionBase):
 				)
 
 	def make_bundle_using_old_serial_batch_fields(self):
-		from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos
+		from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos
 
 		for row in self.locations:
 			if not row.serial_no and not row.batch_no:
@@ -448,7 +448,7 @@ class PickList(TransactionBase):
 	def cancel_stock_reservation_entries(self, notify=True) -> None:
 		"""Cancel Stock Reservation Entries for Sales Order Items created against Pick List."""
 
-		from erpnext.stock.doctype.stock_reservation_entry.stock_reservation_entry import (
+		from svasamm_erp.stock.doctype.stock_reservation_entry.stock_reservation_entry import (
 			cancel_stock_reservation_entries,
 		)
 

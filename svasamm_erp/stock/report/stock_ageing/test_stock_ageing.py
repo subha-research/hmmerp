@@ -4,7 +4,7 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.stock.report.stock_ageing.stock_ageing import FIFOSlots, format_report_data
+from svasamm_erp.stock.report.stock_ageing.stock_ageing import FIFOSlots, format_report_data
 
 
 class TestStockAgeing(IntegrationTestCase):

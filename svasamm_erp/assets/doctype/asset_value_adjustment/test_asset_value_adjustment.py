@@ -6,14 +6,14 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, cstr, get_last_day, getdate, nowdate
 
-from erpnext.assets.doctype.asset.asset import get_asset_value_after_depreciation
-from erpnext.assets.doctype.asset.depreciation import post_depreciation_entries
-from erpnext.assets.doctype.asset.test_asset import create_asset_data
-from erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
+from svasamm_erp.assets.doctype.asset.asset import get_asset_value_after_depreciation
+from svasamm_erp.assets.doctype.asset.depreciation import post_depreciation_entries
+from svasamm_erp.assets.doctype.asset.test_asset import create_asset_data
+from svasamm_erp.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
 	get_asset_depr_schedule_doc,
 )
-from erpnext.assets.doctype.asset_repair.test_asset_repair import create_asset_repair
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+from svasamm_erp.assets.doctype.asset_repair.test_asset_repair import create_asset_repair
+from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 
 class TestAssetValueAdjustment(IntegrationTestCase):

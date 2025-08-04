@@ -5,7 +5,7 @@
 from frappe import _
 from pypika import Order
 
-from erpnext.accounts.report.non_billed_report import get_ordered_to_be_billed_data
+from svasamm_erp.accounts.report.non_billed_report import get_ordered_to_be_billed_data
 
 
 def execute(filters=None):

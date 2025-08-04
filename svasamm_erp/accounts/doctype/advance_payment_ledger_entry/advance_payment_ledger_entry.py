@@ -4,7 +4,7 @@
 import frappe
 from frappe.model.document import Document
 
-from erpnext.accounts.utils import update_voucher_outstanding
+from svasamm_erp.accounts.utils import update_voucher_outstanding
 
 
 class AdvancePaymentLedgerEntry(Document):

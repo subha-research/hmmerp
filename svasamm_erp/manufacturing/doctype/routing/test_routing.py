@@ -3,9 +3,9 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.manufacturing.doctype.job_card.job_card import OperationSequenceError
-from erpnext.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
-from erpnext.stock.doctype.item.test_item import make_item
+from svasamm_erp.manufacturing.doctype.job_card.job_card import OperationSequenceError
+from svasamm_erp.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
+from svasamm_erp.stock.doctype.item.test_item import make_item
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["UOM"]
 
@@ -96,8 +96,8 @@ class TestRouting(IntegrationTestCase):
 
 
 def setup_operations(rows):
-	from erpnext.manufacturing.doctype.operation.test_operation import make_operation
-	from erpnext.manufacturing.doctype.workstation.test_workstation import make_workstation
+	from svasamm_erp.manufacturing.doctype.operation.test_operation import make_operation
+	from svasamm_erp.manufacturing.doctype.workstation.test_workstation import make_workstation
 
 	for row in rows:
 		make_workstation(row)
@@ -125,7 +125,7 @@ def create_routing(**args):
 
 
 def setup_bom(**args):
-	from erpnext.manufacturing.doctype.production_plan.test_production_plan import make_bom
+	from svasamm_erp.manufacturing.doctype.production_plan.test_production_plan import make_bom
 
 	args = frappe._dict(args)
 

@@ -37,8 +37,8 @@ class Bin(Document):
 
 	@frappe.whitelist()
 	def recalculate_qty(self):
-		from erpnext.manufacturing.doctype.work_order.work_order import get_reserved_qty_for_production
-		from erpnext.stock.stock_balance import (
+		from svasamm_erp.manufacturing.doctype.work_order.work_order import get_reserved_qty_for_production
+		from svasamm_erp.stock.stock_balance import (
 			get_indented_qty,
 			get_ordered_qty,
 			get_planned_qty,
@@ -77,7 +77,7 @@ class Bin(Document):
 	def update_reserved_qty_for_production_plan(self, skip_project_qty_update=False, update_qty=True):
 		"""Update qty reserved for production from Production Plan tables
 		in open production plan"""
-		from erpnext.manufacturing.doctype.production_plan.production_plan import (
+		from svasamm_erp.manufacturing.doctype.production_plan.production_plan import (
 			get_reserved_qty_for_production_plan,
 		)
 
@@ -102,7 +102,7 @@ class Bin(Document):
 			self.db_set("projected_qty", self.projected_qty, update_modified=True)
 
 	def update_reserved_qty_for_for_sub_assembly(self):
-		from erpnext.manufacturing.doctype.production_plan.production_plan import (
+		from svasamm_erp.manufacturing.doctype.production_plan.production_plan import (
 			get_reserved_qty_for_sub_assembly,
 		)
 
@@ -125,7 +125,7 @@ class Bin(Document):
 	def update_reserved_qty_for_production(self):
 		"""Update qty reserved for production from Production Item tables
 		in open work orders"""
-		from erpnext.manufacturing.doctype.work_order.work_order import get_reserved_qty_for_production
+		from svasamm_erp.manufacturing.doctype.work_order.work_order import get_reserved_qty_for_production
 
 		self.reserved_qty_for_production = get_reserved_qty_for_production(self.item_code, self.warehouse)
 
@@ -225,7 +225,7 @@ class Bin(Document):
 	def update_reserved_stock(self):
 		"""Update `Reserved Stock` on change in Reserved Qty of Stock Reservation Entry"""
 
-		from erpnext.stock.doctype.stock_reservation_entry.stock_reservation_entry import (
+		from svasamm_erp.stock.doctype.stock_reservation_entry.stock_reservation_entry import (
 			get_sre_reserved_qty_for_item_and_warehouse,
 		)
 
@@ -257,7 +257,7 @@ def get_bin_details(bin_name):
 
 
 def update_qty(bin_name, args):
-	from erpnext.controllers.stock_controller import future_sle_exists
+	from svasamm_erp.controllers.stock_controller import future_sle_exists
 
 	bin_details = get_bin_details(bin_name)
 	# actual qty is already updated by processing current voucher

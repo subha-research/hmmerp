@@ -2,9 +2,9 @@ import frappe
 from frappe import qb
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.accounts.report.payment_ledger.payment_ledger import execute
+from svasamm_erp.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.accounts.report.payment_ledger.payment_ledger import execute
 
 
 class TestPaymentLedger(IntegrationTestCase):

@@ -8,10 +8,10 @@ import frappe
 from frappe.utils import cint, get_datetime
 from frappe.utils.nestedset import get_root_of
 
-from erpnext.accounts.doctype.pos_invoice.pos_invoice import get_item_group, get_stock_availability
-from erpnext.accounts.doctype.pos_profile.pos_profile import get_child_nodes, get_item_groups
-from erpnext.stock.get_item_details import get_conversion_factor
-from erpnext.stock.utils import scan_barcode
+from svasamm_erp.accounts.doctype.pos_invoice.pos_invoice import get_item_group, get_stock_availability
+from svasamm_erp.accounts.doctype.pos_profile.pos_profile import get_child_nodes, get_item_groups
+from svasamm_erp.stock.get_item_details import get_conversion_factor
+from svasamm_erp.stock.utils import scan_barcode
 
 
 def search_by_term(search_term, warehouse, price_list):

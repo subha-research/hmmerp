@@ -8,11 +8,11 @@ from frappe.utils import add_days, cint, cstr, flt, get_link_to_form, now, nowti
 from pypika import Order
 from pypika.terms import ExistsCriterion
 
-from erpnext.stock.deprecated_serial_batch import (
+from svasamm_erp.stock.deprecated_serial_batch import (
 	DeprecatedBatchNoValuation,
 	DeprecatedSerialNoValuation,
 )
-from erpnext.stock.valuation import round_off_if_near_zero
+from svasamm_erp.stock.valuation import round_off_if_near_zero
 
 
 class SerialBatchBundle:
@@ -71,7 +71,7 @@ class SerialBatchBundle:
 			return True
 
 	def make_serial_batch_no_bundle_for_material_transfer(self):
-		from erpnext.controllers.stock_controller import make_bundle_for_material_transfer
+		from svasamm_erp.controllers.stock_controller import make_bundle_for_material_transfer
 
 		bundle = frappe.db.get_value(
 			"Stock Entry Detail", self.sle.voucher_detail_no, "serial_and_batch_bundle"
@@ -372,7 +372,7 @@ class SerialBatchBundle:
 		doc.submit()
 
 	def set_warehouse_and_status_in_serial_nos(self):
-		from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos as get_parsed_serial_nos
+		from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos as get_parsed_serial_nos
 
 		if self.sle.auto_created_serial_and_batch_bundle and self.sle.actual_qty > 0:
 			return
@@ -772,7 +772,7 @@ class BatchNoValuation(DeprecatedBatchNoValuation):
 		return query.run(as_dict=True)
 
 	def prepare_batches(self):
-		from erpnext.stock.utils import get_valuation_method
+		from svasamm_erp.stock.utils import get_valuation_method
 
 		self.batches = self.batch_nos
 		if isinstance(self.batch_nos, dict):
@@ -1078,8 +1078,8 @@ class SerialBatchCreation:
 				frappe.throw(msg, title=_("Insufficient Stock"))
 
 	def set_auto_serial_batch_entries_for_outward(self):
-		from erpnext.stock.doctype.batch.batch import get_available_batches
-		from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos_for_outward
+		from svasamm_erp.stock.doctype.batch.batch import get_available_batches
+		from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos_for_outward
 
 		kwargs = frappe._dict(
 			{
@@ -1221,7 +1221,7 @@ class SerialBatchCreation:
 				)
 
 	def create_batch(self):
-		from erpnext.stock.doctype.batch.batch import make_batch
+		from svasamm_erp.stock.doctype.batch.batch import make_batch
 
 		if self.is_rejected:
 			bundle = frappe.db.get_value(
@@ -1335,7 +1335,7 @@ def get_serial_nos_batch(serial_nos):
 
 
 def update_batch_qty(voucher_type, voucher_no, via_landed_cost_voucher=False):
-	from erpnext.stock.doctype.batch.batch import get_available_batches
+	from svasamm_erp.stock.doctype.batch.batch import get_available_batches
 
 	batches = get_distinct_batches(voucher_type, voucher_no)
 	if not batches:

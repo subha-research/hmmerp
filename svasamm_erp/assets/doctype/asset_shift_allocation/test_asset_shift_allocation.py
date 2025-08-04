@@ -5,8 +5,8 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import cstr
 
-from erpnext.assets.doctype.asset.test_asset import create_asset
-from erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
+from svasamm_erp.assets.doctype.asset.test_asset import create_asset
+from svasamm_erp.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
 	get_depr_schedule,
 )
 

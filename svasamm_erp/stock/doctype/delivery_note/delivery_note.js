@@ -5,13 +5,13 @@ cur_frm.add_fetch("customer", "tax_id", "tax_id");
 
 cur_frm.cscript.tax_table = "Sales Taxes and Charges";
 
-frappe.provide("erpnext.stock");
-frappe.provide("erpnext.stock.delivery_note");
-frappe.provide("erpnext.accounts.dimensions");
+frappe.provide("svasamm_erp.stock");
+frappe.provide("svasamm_erp.stock.delivery_note");
+frappe.provide("svasamm_erp.accounts.dimensions");
 
-erpnext.accounts.taxes.setup_tax_filters("Sales Taxes and Charges");
-erpnext.accounts.taxes.setup_tax_validations("Delivery Note");
-erpnext.sales_common.setup_selling_controller();
+svasamm_erp.accounts.taxes.setup_tax_filters("Sales Taxes and Charges");
+svasamm_erp.accounts.taxes.setup_tax_validations("Delivery Note");
+svasamm_erp.sales_common.setup_selling_controller();
 
 frappe.ui.form.on("Delivery Note", {
 	setup: function (frm) {
@@ -26,10 +26,10 @@ frappe.ui.form.on("Delivery Note", {
 				return doc.docstatus == 1 || doc.qty <= doc.actual_qty ? "green" : "orange";
 			});
 
-		erpnext.queries.setup_queries(frm, "Warehouse", function () {
-			return erpnext.queries.warehouse(frm.doc);
+		svasamm_erp.queries.setup_queries(frm, "Warehouse", function () {
+			return svasamm_erp.queries.warehouse(frm.doc);
 		});
-		erpnext.queries.setup_warehouse_query(frm);
+		svasamm_erp.queries.setup_warehouse_query(frm);
 
 		frm.set_query("transporter", function () {
 			return {
@@ -48,7 +48,7 @@ frappe.ui.form.on("Delivery Note", {
 		});
 
 		frm.set_query("expense_account", "items", function (doc, cdt, cdn) {
-			if (erpnext.is_perpetual_inventory_enabled(doc.company)) {
+			if (svasamm_erp.is_perpetual_inventory_enabled(doc.company)) {
 				return {
 					filters: {
 						report_type: "Profit and Loss",
@@ -60,7 +60,7 @@ frappe.ui.form.on("Delivery Note", {
 		});
 
 		frm.set_query("cost_center", "items", function (doc, cdt, cdn) {
-			if (erpnext.is_perpetual_inventory_enabled(doc.company)) {
+			if (svasamm_erp.is_perpetual_inventory_enabled(doc.company)) {
 				return {
 					filters: {
 						company: doc.company,
@@ -75,7 +75,7 @@ frappe.ui.form.on("Delivery Note", {
 	},
 
 	print_without_amount: function (frm) {
-		erpnext.stock.delivery_note.set_print_hide(frm.doc);
+		svasamm_erp.stock.delivery_note.set_print_hide(frm.doc);
 	},
 
 	refresh: function (frm) {
@@ -89,7 +89,7 @@ frappe.ui.form.on("Delivery Note", {
 				__("Credit Note"),
 				function () {
 					frappe.model.open_mapped_doc({
-						method: "erpnext.stock.doctype.delivery_note.delivery_note.make_sales_invoice",
+						method: "svasamm_erp.stock.doctype.delivery_note.delivery_note.make_sales_invoice",
 						frm: cur_frm,
 					});
 				},
@@ -114,7 +114,7 @@ frappe.ui.form.on("Delivery Note", {
 					__(button_label),
 					function () {
 						frappe.model.open_mapped_doc({
-							method: "erpnext.stock.doctype.delivery_note.delivery_note.make_inter_company_purchase_receipt",
+							method: "svasamm_erp.stock.doctype.delivery_note.delivery_note.make_inter_company_purchase_receipt",
 							frm: frm,
 						});
 					},
@@ -136,8 +136,8 @@ frappe.ui.form.on("Delivery Note Item", {
 	},
 });
 
-erpnext.stock.DeliveryNoteController = class DeliveryNoteController extends (
-	erpnext.selling.SellingController
+svasamm_erp.stock.DeliveryNoteController = class DeliveryNoteController extends (
+	svasamm_erp.selling.SellingController
 ) {
 	setup(doc) {
 		this.setup_posting_date_time_check();
@@ -165,8 +165,8 @@ erpnext.stock.DeliveryNoteController = class DeliveryNoteController extends (
 							message: __("Please Select a Customer"),
 						});
 					}
-					erpnext.utils.map_current_doc({
-						method: "erpnext.selling.doctype.sales_order.sales_order.make_delivery_note",
+					svasamm_erp.utils.map_current_doc({
+						method: "svasamm_erp.selling.doctype.sales_order.sales_order.make_delivery_note",
 						args: {
 							for_reserved_stock: 1,
 						},
@@ -204,8 +204,8 @@ erpnext.stock.DeliveryNoteController = class DeliveryNoteController extends (
 							message: __("Please Select a Customer"),
 						});
 					}
-					erpnext.utils.map_current_doc({
-						method: "erpnext.stock.doctype.pick_list.pick_list.create_dn_for_pick_lists",
+					svasamm_erp.utils.map_current_doc({
+						method: "svasamm_erp.stock.doctype.pick_list.pick_list.create_dn_for_pick_lists",
 						source_doctype: "Pick List",
 						target: me.frm,
 						setters: [
@@ -229,7 +229,7 @@ erpnext.stock.DeliveryNoteController = class DeliveryNoteController extends (
 						get_query_filters: {
 							company: me.frm.doc.company,
 						},
-						get_query_method: "erpnext.stock.doctype.pick_list.pick_list.get_pick_list_query",
+						get_query_method: "svasamm_erp.stock.doctype.pick_list.pick_list.get_pick_list_query",
 						size: "extra-large",
 					});
 				},
@@ -293,7 +293,7 @@ erpnext.stock.DeliveryNoteController = class DeliveryNoteController extends (
 					__("Packing Slip"),
 					function () {
 						frappe.model.open_mapped_doc({
-							method: "erpnext.stock.doctype.delivery_note.delivery_note.make_packing_slip",
+							method: "svasamm_erp.stock.doctype.delivery_note.delivery_note.make_packing_slip",
 							frm: me.frm,
 						});
 					},
@@ -306,12 +306,12 @@ erpnext.stock.DeliveryNoteController = class DeliveryNoteController extends (
 			}
 		}
 
-		erpnext.accounts.ledger_preview.show_accounting_ledger_preview(this.frm);
-		erpnext.accounts.ledger_preview.show_stock_ledger_preview(this.frm);
+		svasamm_erp.accounts.ledger_preview.show_accounting_ledger_preview(this.frm);
+		svasamm_erp.accounts.ledger_preview.show_stock_ledger_preview(this.frm);
 
 		if (doc.docstatus > 0) {
 			this.show_stock_ledger();
-			if (erpnext.is_perpetual_inventory_enabled(doc.company)) {
+			if (svasamm_erp.is_perpetual_inventory_enabled(doc.company)) {
 				this.show_general_ledger();
 			}
 			if (this.frm.has_perm("submit") && doc.status !== "Closed") {
@@ -358,40 +358,40 @@ erpnext.stock.DeliveryNoteController = class DeliveryNoteController extends (
 				__("Status")
 			);
 		}
-		erpnext.stock.delivery_note.set_print_hide(doc, dt, dn);
+		svasamm_erp.stock.delivery_note.set_print_hide(doc, dt, dn);
 	}
 
 	make_shipment() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.stock.doctype.delivery_note.delivery_note.make_shipment",
+			method: "svasamm_erp.stock.doctype.delivery_note.delivery_note.make_shipment",
 			frm: this.frm,
 		});
 	}
 
 	make_sales_invoice() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.stock.doctype.delivery_note.delivery_note.make_sales_invoice",
+			method: "svasamm_erp.stock.doctype.delivery_note.delivery_note.make_sales_invoice",
 			frm: this.frm,
 		});
 	}
 
 	make_installation_note() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.stock.doctype.delivery_note.delivery_note.make_installation_note",
+			method: "svasamm_erp.stock.doctype.delivery_note.delivery_note.make_installation_note",
 			frm: this.frm,
 		});
 	}
 
 	make_sales_return() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.stock.doctype.delivery_note.delivery_note.make_sales_return",
+			method: "svasamm_erp.stock.doctype.delivery_note.delivery_note.make_sales_return",
 			frm: this.frm,
 		});
 	}
 
 	make_delivery_trip() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.stock.doctype.delivery_note.delivery_note.make_delivery_trip",
+			method: "svasamm_erp.stock.doctype.delivery_note.delivery_note.make_delivery_trip",
 			frm: cur_frm,
 		});
 	}
@@ -401,11 +401,11 @@ erpnext.stock.DeliveryNoteController = class DeliveryNoteController extends (
 	}
 
 	items_on_form_rendered(doc, grid_row) {
-		erpnext.setup_serial_or_batch_no();
+		svasamm_erp.setup_serial_or_batch_no();
 	}
 
 	packed_items_on_form_rendered(doc, grid_row) {
-		erpnext.setup_serial_or_batch_no();
+		svasamm_erp.setup_serial_or_batch_no();
 	}
 
 	close_delivery_note(doc) {
@@ -420,7 +420,7 @@ erpnext.stock.DeliveryNoteController = class DeliveryNoteController extends (
 		var me = this;
 		frappe.ui.form.is_saving = true;
 		frappe.call({
-			method: "erpnext.stock.doctype.delivery_note.delivery_note.update_delivery_note_status",
+			method: "svasamm_erp.stock.doctype.delivery_note.delivery_note.update_delivery_note_status",
 			args: { docname: me.frm.doc.name, status: status },
 			callback: function (r) {
 				if (!r.exc) me.frm.reload_doc();
@@ -432,7 +432,7 @@ erpnext.stock.DeliveryNoteController = class DeliveryNoteController extends (
 	}
 };
 
-extend_cscript(cur_frm.cscript, new erpnext.stock.DeliveryNoteController({ frm: cur_frm }));
+extend_cscript(cur_frm.cscript, new svasamm_erp.stock.DeliveryNoteController({ frm: cur_frm }));
 
 frappe.ui.form.on("Delivery Note", {
 	setup: function (frm) {
@@ -443,17 +443,17 @@ frappe.ui.form.on("Delivery Note", {
 
 	company: function (frm) {
 		frm.trigger("unhide_account_head");
-		erpnext.accounts.dimensions.update_dimension(frm, frm.doctype);
+		svasamm_erp.accounts.dimensions.update_dimension(frm, frm.doctype);
 	},
 
 	unhide_account_head: function (frm) {
 		// unhide expense_account and cost_center if perpetual inventory is enabled in the company
-		var aii_enabled = erpnext.is_perpetual_inventory_enabled(frm.doc.company);
+		var aii_enabled = svasamm_erp.is_perpetual_inventory_enabled(frm.doc.company);
 		frm.fields_dict["items"].grid.set_column_disp(["expense_account", "cost_center"], aii_enabled);
 	},
 });
 
-erpnext.stock.delivery_note.set_print_hide = function (doc, cdt, cdn) {
+svasamm_erp.stock.delivery_note.set_print_hide = function (doc, cdt, cdn) {
 	var dn_fields = frappe.meta.docfield_map["Delivery Note"];
 	var dn_item_fields = frappe.meta.docfield_map["Delivery Note Item"];
 	var dn_fields_copy = dn_fields;

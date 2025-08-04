@@ -22,7 +22,7 @@ class AppointmentBookingSettings(Document):
 		)
 		from frappe.types import DF
 
-		from erpnext.crm.doctype.appointment_booking_slots.appointment_booking_slots import (
+		from svasamm_erp.crm.doctype.appointment_booking_slots.appointment_booking_slots import (
 			AppointmentBookingSlots,
 		)
 

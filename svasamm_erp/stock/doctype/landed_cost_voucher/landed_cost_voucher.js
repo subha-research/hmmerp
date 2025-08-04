@@ -1,10 +1,10 @@
 // Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 // License: GNU General Public License v3. See license.txt
 
-frappe.provide("erpnext.stock");
+frappe.provide("svasamm_erp.stock");
 
-erpnext.landed_cost_taxes_and_charges.setup_triggers("Landed Cost Voucher");
-erpnext.stock.LandedCostVoucher = class LandedCostVoucher extends erpnext.stock.StockController {
+svasamm_erp.landed_cost_taxes_and_charges.setup_triggers("Landed Cost Voucher");
+svasamm_erp.stock.LandedCostVoucher = class LandedCostVoucher extends svasamm_erp.stock.StockController {
 	setup() {
 		var me = this;
 		this.frm.fields_dict.purchase_receipts.grid.get_field("receipt_document").get_query = function (
@@ -135,7 +135,7 @@ erpnext.stock.LandedCostVoucher = class LandedCostVoucher extends erpnext.stock.
 	}
 };
 
-cur_frm.script_manager.make(erpnext.stock.LandedCostVoucher);
+cur_frm.script_manager.make(svasamm_erp.stock.LandedCostVoucher);
 
 frappe.ui.form.on("Landed Cost Taxes and Charges", {
 	expense_account: function (frm, cdt, cdn) {
@@ -168,7 +168,7 @@ frappe.ui.form.on("Landed Cost Voucher", {
 
 		frm.set_query("vendor_invoice", "vendor_invoices", (doc, cdt, cdn) => {
 			return {
-				query: "erpnext.stock.doctype.landed_cost_voucher.landed_cost_voucher.get_vendor_invoices",
+				query: "svasamm_erp.stock.doctype.landed_cost_voucher.landed_cost_voucher.get_vendor_invoices",
 				filters: {
 					company: doc.company,
 				},

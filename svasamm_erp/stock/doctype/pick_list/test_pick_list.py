@@ -5,20 +5,20 @@ import frappe
 from frappe import _dict
 from frappe.tests import IntegrationTestCase
 
-from erpnext.selling.doctype.product_bundle.test_product_bundle import make_product_bundle
-from erpnext.selling.doctype.sales_order.sales_order import create_pick_list
-from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
-from erpnext.stock.doctype.item.test_item import create_item, make_item
-from erpnext.stock.doctype.packed_item.test_packed_item import create_product_bundle
-from erpnext.stock.doctype.pick_list.pick_list import create_delivery_note, create_dn_for_pick_lists
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
-from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+from svasamm_erp.selling.doctype.product_bundle.test_product_bundle import make_product_bundle
+from svasamm_erp.selling.doctype.sales_order.sales_order import create_pick_list
+from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
+from svasamm_erp.stock.doctype.item.test_item import create_item, make_item
+from svasamm_erp.stock.doctype.packed_item.test_packed_item import create_product_bundle
+from svasamm_erp.stock.doctype.pick_list.pick_list import create_delivery_note, create_dn_for_pick_lists
+from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 	get_batch_from_bundle,
 	get_serial_nos_from_bundle,
 	make_serial_batch_bundle,
 )
-from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
-from erpnext.stock.doctype.stock_reconciliation.stock_reconciliation import (
+from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+from svasamm_erp.stock.doctype.stock_reconciliation.stock_reconciliation import (
 	EmptyStockReconciliationItemsError,
 )
 
@@ -1324,7 +1324,7 @@ class TestPickList(IntegrationTestCase):
 			self.assertEqual(loc.batch_no, batch2)
 
 	def test_multiple_pick_lists_delivery_note(self):
-		from erpnext.stock.doctype.pick_list.pick_list import create_dn_for_pick_lists
+		from svasamm_erp.stock.doctype.pick_list.pick_list import create_dn_for_pick_lists
 
 		item_code = make_item().name
 		warehouse = "_Test Warehouse - _TC"

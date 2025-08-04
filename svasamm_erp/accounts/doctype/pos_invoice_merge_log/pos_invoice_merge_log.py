@@ -13,11 +13,11 @@ from frappe.utils import cint, flt, get_time, getdate, nowdate, nowtime
 from frappe.utils.background_jobs import enqueue, is_job_enqueued
 from frappe.utils.scheduler import is_scheduler_inactive
 
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+from svasamm_erp.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_checks_for_pl_and_bs_accounts,
 )
-from erpnext.controllers.sales_and_purchase_return import get_sales_invoice_item_from_consolidated_invoice
-from erpnext.controllers.taxes_and_totals import ItemWiseTaxDetail
+from svasamm_erp.controllers.sales_and_purchase_return import get_sales_invoice_item_from_consolidated_invoice
+from svasamm_erp.controllers.taxes_and_totals import ItemWiseTaxDetail
 
 
 class POSInvoiceMergeLog(Document):
@@ -29,7 +29,7 @@ class POSInvoiceMergeLog(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.pos_invoice_reference.pos_invoice_reference import POSInvoiceReference
+		from svasamm_erp.accounts.doctype.pos_invoice_reference.pos_invoice_reference import POSInvoiceReference
 
 		amended_from: DF.Link | None
 		company: DF.Link

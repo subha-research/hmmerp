@@ -2,9 +2,9 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import today
 
-from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
-from erpnext.accounts.report.supplier_ledger_summary.supplier_ledger_summary import execute
-from erpnext.accounts.test.accounts_mixin import AccountsTestMixin
+from svasamm_erp.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
+from svasamm_erp.accounts.report.supplier_ledger_summary.supplier_ledger_summary import execute
+from svasamm_erp.accounts.test.accounts_mixin import AccountsTestMixin
 
 
 class TestSupplierLedgerSummary(AccountsTestMixin, IntegrationTestCase):

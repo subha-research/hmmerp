@@ -10,9 +10,9 @@ from frappe.model.mapper import get_mapped_doc
 from frappe.model.utils import get_fetch_values
 from frappe.utils import cint, flt
 
-from erpnext.accounts.party import get_due_date
-from erpnext.controllers.accounts_controller import get_taxes_and_charges, merge_taxes
-from erpnext.controllers.selling_controller import SellingController
+from svasamm_erp.accounts.party import get_due_date
+from svasamm_erp.controllers.accounts_controller import get_taxes_and_charges, merge_taxes
+from svasamm_erp.controllers.selling_controller import SellingController
 
 form_grid_templates = {"items": "templates/form_grid/item_grid.html"}
 
@@ -26,13 +26,13 @@ class DeliveryNote(SellingController):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.pricing_rule_detail.pricing_rule_detail import PricingRuleDetail
-		from erpnext.accounts.doctype.sales_taxes_and_charges.sales_taxes_and_charges import (
+		from svasamm_erp.accounts.doctype.pricing_rule_detail.pricing_rule_detail import PricingRuleDetail
+		from svasamm_erp.accounts.doctype.sales_taxes_and_charges.sales_taxes_and_charges import (
 			SalesTaxesandCharges,
 		)
-		from erpnext.selling.doctype.sales_team.sales_team import SalesTeam
-		from erpnext.stock.doctype.delivery_note_item.delivery_note_item import DeliveryNoteItem
-		from erpnext.stock.doctype.packed_item.packed_item import PackedItem
+		from svasamm_erp.selling.doctype.sales_team.sales_team import SalesTeam
+		from svasamm_erp.stock.doctype.delivery_note_item.delivery_note_item import DeliveryNoteItem
+		from svasamm_erp.stock.doctype.packed_item.packed_item import PackedItem
 
 		additional_discount_percentage: DF.Float
 		address_display: DF.TextEditor | None
@@ -280,7 +280,7 @@ class DeliveryNote(SellingController):
 		self.validate_with_previous_doc()
 		self.set_serial_and_batch_bundle_from_pick_list()
 
-		from erpnext.stock.doctype.packed_item.packed_item import make_packing_list
+		from svasamm_erp.stock.doctype.packed_item.packed_item import make_packing_list
 
 		make_packing_list(self)
 		self.update_current_stock()
@@ -340,7 +340,7 @@ class DeliveryNote(SellingController):
 			)
 
 	def set_serial_and_batch_bundle_from_pick_list(self):
-		from erpnext.stock.serial_batch_bundle import SerialBatchCreation
+		from svasamm_erp.stock.serial_batch_bundle import SerialBatchCreation
 
 		for item in self.items:
 			if item.use_serial_batch_fields or not item.against_pick_list:
@@ -508,7 +508,7 @@ class DeliveryNote(SellingController):
 	def validate_against_stock_reservation_entries(self):
 		"""Validates if Stock Reservation Entries are available for the Sales Order Item reference."""
 
-		from erpnext.stock.doctype.stock_reservation_entry.stock_reservation_entry import (
+		from svasamm_erp.stock.doctype.stock_reservation_entry.stock_reservation_entry import (
 			get_sre_reserved_warehouses_for_voucher,
 		)
 
@@ -548,7 +548,7 @@ class DeliveryNote(SellingController):
 					frappe.throw(msg, title=_("Stock Reservation Warehouse Mismatch"))
 
 	def check_credit_limit(self):
-		from erpnext.selling.doctype.customer.customer import check_credit_limit
+		from svasamm_erp.selling.doctype.customer.customer import check_credit_limit
 
 		if self.per_billed == 100:
 			return
@@ -598,7 +598,7 @@ class DeliveryNote(SellingController):
 					)
 
 	def update_pick_list_status(self):
-		from erpnext.stock.doctype.pick_list.pick_list import update_pick_list_status
+		from svasamm_erp.stock.doctype.pick_list.pick_list import update_pick_list_status
 
 		pick_lists = {row.against_pick_list for row in self.items if row.against_pick_list}
 		for pick_list in pick_lists:
@@ -775,7 +775,7 @@ def update_billed_amount_based_on_so(so_detail, update_modified=True):
 
 
 def get_list_context(context=None):
-	from erpnext.controllers.website_list_for_contact import get_list_context
+	from svasamm_erp.controllers.website_list_for_contact import get_list_context
 
 	list_context = get_list_context(context)
 	list_context.update(
@@ -1128,7 +1128,7 @@ def make_shipment(source_name, target_doc=None):
 
 @frappe.whitelist()
 def make_sales_return(source_name, target_doc=None):
-	from erpnext.controllers.sales_and_purchase_return import make_return_doc
+	from svasamm_erp.controllers.sales_and_purchase_return import make_return_doc
 
 	return make_return_doc("Delivery Note", source_name, target_doc)
 
@@ -1145,7 +1145,7 @@ def make_inter_company_purchase_receipt(source_name, target_doc=None):
 
 
 def make_inter_company_transaction(doctype, source_name, target_doc=None):
-	from erpnext.accounts.doctype.sales_invoice.sales_invoice import (
+	from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import (
 		get_inter_company_details,
 		set_purchase_references,
 		update_address,

@@ -21,40 +21,40 @@ from frappe.utils import (
 	nowdate,
 )
 
-import erpnext
-from erpnext.accounts.general_ledger import process_gl_map
-from erpnext.accounts.utils import get_account_currency
-from erpnext.buying.utils import check_on_hold_or_closed_status
-from erpnext.controllers.taxes_and_totals import init_landed_taxes_and_totals
-from erpnext.manufacturing.doctype.bom.bom import (
+import svasamm_erp
+from svasamm_erp.accounts.general_ledger import process_gl_map
+from svasamm_erp.accounts.utils import get_account_currency
+from svasamm_erp.buying.utils import check_on_hold_or_closed_status
+from svasamm_erp.controllers.taxes_and_totals import init_landed_taxes_and_totals
+from svasamm_erp.manufacturing.doctype.bom.bom import (
 	add_additional_cost,
 	get_bom_items_as_dict,
 	get_op_cost_from_sub_assemblies,
 	get_scrap_items_from_sub_assemblies,
 	validate_bom_no,
 )
-from erpnext.setup.doctype.brand.brand import get_brand_defaults
-from erpnext.setup.doctype.item_group.item_group import get_item_group_defaults
-from erpnext.stock.doctype.batch.batch import get_batch_qty
-from erpnext.stock.doctype.item.item import get_item_defaults
-from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos
-from erpnext.stock.doctype.stock_reconciliation.stock_reconciliation import (
+from svasamm_erp.setup.doctype.brand.brand import get_brand_defaults
+from svasamm_erp.setup.doctype.item_group.item_group import get_item_group_defaults
+from svasamm_erp.stock.doctype.batch.batch import get_batch_qty
+from svasamm_erp.stock.doctype.item.item import get_item_defaults
+from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos
+from svasamm_erp.stock.doctype.stock_reconciliation.stock_reconciliation import (
 	OpeningEntryAccountError,
 )
-from erpnext.stock.get_item_details import (
+from svasamm_erp.stock.get_item_details import (
 	ItemDetailsCtx,
 	get_barcode_data,
 	get_bin_details,
 	get_conversion_factor,
 	get_default_cost_center,
 )
-from erpnext.stock.serial_batch_bundle import (
+from svasamm_erp.stock.serial_batch_bundle import (
 	SerialBatchCreation,
 	get_empty_batches_based_work_order,
 	get_serial_or_batch_items,
 )
-from erpnext.stock.stock_ledger import NegativeStockError, get_previous_sle, get_valuation_rate
-from erpnext.stock.utils import get_bin, get_incoming_rate
+from svasamm_erp.stock.stock_ledger import NegativeStockError, get_previous_sle, get_valuation_rate
+from svasamm_erp.stock.utils import get_bin, get_incoming_rate
 
 
 class FinishedGoodError(frappe.ValidationError):
@@ -77,7 +77,7 @@ class MaxSampleAlreadyRetainedError(frappe.ValidationError):
 	pass
 
 
-from erpnext.controllers.stock_controller import StockController
+from svasamm_erp.controllers.stock_controller import StockController
 
 form_grid_templates = {"items": "templates/form_grid/stock_entry_grid.html"}
 
@@ -91,10 +91,10 @@ class StockEntry(StockController):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.stock.doctype.landed_cost_taxes_and_charges.landed_cost_taxes_and_charges import (
+		from svasamm_erp.stock.doctype.landed_cost_taxes_and_charges.landed_cost_taxes_and_charges import (
 			LandedCostTaxesandCharges,
 		)
-		from erpnext.stock.doctype.stock_entry_detail.stock_entry_detail import StockEntryDetail
+		from svasamm_erp.stock.doctype.stock_entry_detail.stock_entry_detail import StockEntryDetail
 
 		add_to_transit: DF.Check
 		additional_costs: DF.Table[LandedCostTaxesandCharges]
@@ -187,7 +187,7 @@ class StockEntry(StockController):
 			item.update(get_bin_details(item.item_code, item.s_warehouse))
 
 	def before_validate(self):
-		from erpnext.stock.doctype.putaway_rule.putaway_rule import apply_putaway_rule
+		from svasamm_erp.stock.doctype.putaway_rule.putaway_rule import apply_putaway_rule
 
 		apply_rule = self.apply_putaway_rule and (self.purpose in ["Material Transfer", "Material Receipt"])
 
@@ -540,7 +540,7 @@ class StockEntry(StockController):
 				)
 
 	def validate_difference_account(self):
-		if not cint(erpnext.is_perpetual_inventory_enabled(self.company)):
+		if not cint(svasamm_erp.is_perpetual_inventory_enabled(self.company)):
 			return
 
 		for d in self.get("items"):
@@ -746,7 +746,7 @@ class StockEntry(StockController):
 				)
 
 	def set_actual_qty(self):
-		from erpnext.stock.stock_ledger import is_negative_stock_allowed
+		from svasamm_erp.stock.stock_ledger import is_negative_stock_allowed
 
 		for d in self.get("items"):
 			allow_negative_stock = is_negative_stock_allowed(item_code=d.item_code)
@@ -882,7 +882,7 @@ class StockEntry(StockController):
 					self.doctype,
 					self.name,
 					d.allow_zero_valuation_rate,
-					currency=erpnext.get_company_currency(self.company),
+					currency=svasamm_erp.get_company_currency(self.company),
 					company=self.company,
 					raise_error_if_no_rate=raise_error_if_no_rate,
 					batch_no=d.batch_no,
@@ -2319,7 +2319,7 @@ class StockEntry(StockController):
 		self.add_to_stock_entry_detail({item.name: args}, bom_no=self.bom_no)
 
 	def get_bom_raw_materials(self, qty):
-		from erpnext.manufacturing.doctype.bom.bom import get_bom_items_as_dict
+		from svasamm_erp.manufacturing.doctype.bom.bom import get_bom_items_as_dict
 
 		# item dict = { item_code: {qty, description, stock_uom} }
 		item_dict = get_bom_items_as_dict(
@@ -2353,7 +2353,7 @@ class StockEntry(StockController):
 		return item_dict
 
 	def get_bom_scrap_material(self, qty):
-		from erpnext.manufacturing.doctype.bom.bom import get_bom_items_as_dict
+		from svasamm_erp.manufacturing.doctype.bom.bom import get_bom_items_as_dict
 
 		if (
 			frappe.db.get_single_value("Manufacturing Settings", "set_op_cost_and_scrap_from_sub_assemblies")
@@ -3019,14 +3019,14 @@ class StockEntry(StockController):
 
 	def update_subcontracting_order_status(self):
 		if self.subcontracting_order and self.purpose in ["Send to Subcontractor", "Material Transfer"]:
-			from erpnext.subcontracting.doctype.subcontracting_order.subcontracting_order import (
+			from svasamm_erp.subcontracting.doctype.subcontracting_order.subcontracting_order import (
 				update_subcontracting_order_status,
 			)
 
 			update_subcontracting_order_status(self.subcontracting_order)
 
 	def update_pick_list_status(self):
-		from erpnext.stock.doctype.pick_list.pick_list import update_pick_list_status
+		from svasamm_erp.stock.doctype.pick_list.pick_list import update_pick_list_status
 
 		update_pick_list_status(self.pick_list)
 
@@ -3039,10 +3039,10 @@ class StockEntry(StockController):
 
 @frappe.whitelist()
 def move_sample_to_retention_warehouse(company, items):
-	from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+	from svasamm_erp.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 		get_batch_from_bundle,
 	)
-	from erpnext.stock.serial_batch_bundle import SerialBatchCreation
+	from svasamm_erp.stock.serial_batch_bundle import SerialBatchCreation
 
 	if isinstance(items, str):
 		items = json.loads(items)
@@ -3258,7 +3258,7 @@ def get_uom_details(item_code, uom, qty):
 
 @frappe.whitelist()
 def get_expired_batch_items():
-	from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import get_auto_batch_nos
+	from svasamm_erp.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import get_auto_batch_nos
 
 	expired_batches = get_expired_batches()
 	if not expired_batches:
@@ -3391,7 +3391,7 @@ def get_supplied_items(
 
 @frappe.whitelist()
 def get_items_from_subcontract_order(source_name, target_doc=None):
-	from erpnext.controllers.subcontracting_controller import make_rm_stock_entry
+	from svasamm_erp.controllers.subcontracting_controller import make_rm_stock_entry
 
 	if isinstance(target_doc, str):
 		target_doc = frappe.get_doc(json.loads(target_doc))
@@ -3464,7 +3464,7 @@ def get_available_materials(work_order) -> dict:
 
 
 def get_stock_entry_data(work_order):
-	from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
+	from svasamm_erp.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
 		get_voucher_wise_serial_batch_from_bundle,
 	)
 

@@ -11,11 +11,11 @@ from frappe.model.document import Document
 from frappe.query_builder.functions import Sum
 from frappe.utils import add_days, cint, flt, formatdate, get_datetime, getdate
 
-from erpnext.accounts.utils import get_fiscal_year
-from erpnext.controllers.item_variant import ItemTemplateCannotHaveStock
-from erpnext.stock.doctype.inventory_dimension.inventory_dimension import get_inventory_dimensions
-from erpnext.stock.serial_batch_bundle import SerialBatchBundle
-from erpnext.stock.stock_ledger import get_previous_sle
+from svasamm_erp.accounts.utils import get_fiscal_year
+from svasamm_erp.controllers.item_variant import ItemTemplateCannotHaveStock
+from svasamm_erp.stock.doctype.inventory_dimension.inventory_dimension import get_inventory_dimensions
+from svasamm_erp.stock.serial_batch_bundle import SerialBatchBundle
+from svasamm_erp.stock.stock_ledger import get_previous_sle
 
 
 class StockFreezeError(frappe.ValidationError):
@@ -86,7 +86,7 @@ class StockLedgerEntry(Document):
 
 	def validate(self):
 		self.flags.ignore_submit_comment = True
-		from erpnext.stock.utils import validate_disabled_warehouse, validate_warehouse_company
+		from svasamm_erp.stock.utils import validate_disabled_warehouse, validate_warehouse_company
 
 		self.set_posting_datetime()
 		self.validate_mandatory()
@@ -100,7 +100,7 @@ class StockLedgerEntry(Document):
 		self.validate_inventory_dimension_negative_stock()
 
 	def set_posting_datetime(self):
-		from erpnext.stock.utils import get_combine_datetime
+		from svasamm_erp.stock.utils import get_combine_datetime
 
 		self.posting_datetime = get_combine_datetime(self.posting_date, self.posting_time)
 
@@ -290,14 +290,14 @@ class StockLedgerEntry(Document):
 		if not self.fiscal_year:
 			self.fiscal_year = get_fiscal_year(self.posting_date, company=self.company)[0]
 		else:
-			from erpnext.accounts.utils import validate_fiscal_year
+			from svasamm_erp.accounts.utils import validate_fiscal_year
 
 			validate_fiscal_year(
 				self.posting_date, self.fiscal_year, self.company, self.meta.get_label("posting_date"), self
 			)
 
 	def block_transactions_against_group_warehouse(self):
-		from erpnext.stock.utils import is_group_warehouse
+		from svasamm_erp.stock.utils import is_group_warehouse
 
 		is_group_warehouse(self.warehouse)
 

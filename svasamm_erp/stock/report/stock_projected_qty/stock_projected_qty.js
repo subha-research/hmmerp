@@ -30,7 +30,7 @@ frappe.query_reports["Stock Projected Qty"] = {
 			options: "Item",
 			get_query: function () {
 				return {
-					query: "erpnext.controllers.queries.item_query",
+					query: "svasamm_erp.controllers.queries.item_query",
 				};
 			},
 		},

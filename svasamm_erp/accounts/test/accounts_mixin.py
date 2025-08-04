@@ -1,7 +1,7 @@
 import frappe
 from frappe import qb
 
-from erpnext.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.item.test_item import create_item
 
 
 class AccountsTestMixin:

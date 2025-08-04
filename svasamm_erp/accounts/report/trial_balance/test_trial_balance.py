@@ -5,14 +5,14 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import today
 
-from erpnext.accounts.report.trial_balance.trial_balance import execute
+from svasamm_erp.accounts.report.trial_balance.trial_balance import execute
 
 
 class TestTrialBalance(IntegrationTestCase):
 	def setUp(self):
-		from erpnext.accounts.doctype.account.test_account import create_account
-		from erpnext.accounts.doctype.cost_center.test_cost_center import create_cost_center
-		from erpnext.accounts.utils import get_fiscal_year
+		from svasamm_erp.accounts.doctype.account.test_account import create_account
+		from svasamm_erp.accounts.doctype.cost_center.test_cost_center import create_cost_center
+		from svasamm_erp.accounts.utils import get_fiscal_year
 
 		self.company = create_company()
 		create_cost_center(
@@ -32,7 +32,7 @@ class TestTrialBalance(IntegrationTestCase):
 		"""
 		Checks if Trial Balance Report is balanced when filtered using a particular Accounting Dimension
 		"""
-		from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+		from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
 
 		frappe.db.sql("delete from `tabSales Invoice` where company='Trial Balance Company'")
 		frappe.db.sql("delete from `tabGL Entry` where company='Trial Balance Company'")

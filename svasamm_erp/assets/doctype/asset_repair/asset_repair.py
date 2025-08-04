@@ -6,15 +6,15 @@ from frappe import _
 from frappe.query_builder import DocType
 from frappe.utils import cint, flt, get_link_to_form, getdate, time_diff_in_hours
 
-import erpnext
-from erpnext.accounts.general_ledger import make_gl_entries
-from erpnext.assets.doctype.asset.asset import get_asset_account
-from erpnext.assets.doctype.asset_activity.asset_activity import add_asset_activity
-from erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
+import svasamm_erp
+from svasamm_erp.accounts.general_ledger import make_gl_entries
+from svasamm_erp.assets.doctype.asset.asset import get_asset_account
+from svasamm_erp.assets.doctype.asset_activity.asset_activity import add_asset_activity
+from svasamm_erp.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
 	get_depr_schedule,
 	reschedule_depreciation,
 )
-from erpnext.controllers.accounts_controller import AccountsController
+from svasamm_erp.controllers.accounts_controller import AccountsController
 
 
 class AssetRepair(AccountsController):
@@ -26,10 +26,10 @@ class AssetRepair(AccountsController):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.assets.doctype.asset_repair_consumed_item.asset_repair_consumed_item import (
+		from svasamm_erp.assets.doctype.asset_repair_consumed_item.asset_repair_consumed_item import (
 			AssetRepairConsumedItem,
 		)
-		from erpnext.assets.doctype.asset_repair_purchase_invoice.asset_repair_purchase_invoice import (
+		from svasamm_erp.assets.doctype.asset_repair_purchase_invoice.asset_repair_purchase_invoice import (
 			AssetRepairPurchaseInvoice,
 		)
 
@@ -325,7 +325,7 @@ class AssetRepair(AccountsController):
 		stock_entry = frappe.get_doc("Stock Entry", {"asset_repair": self.name})
 
 		default_expense_account = None
-		if not erpnext.is_perpetual_inventory_enabled(self.company):
+		if not svasamm_erp.is_perpetual_inventory_enabled(self.company):
 			default_expense_account = frappe.get_cached_value(
 				"Company", self.company, "default_expense_account"
 			)

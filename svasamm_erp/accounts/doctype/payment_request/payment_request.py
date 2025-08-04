@@ -7,17 +7,17 @@ from frappe.query_builder.functions import Sum
 from frappe.utils import flt, nowdate
 from frappe.utils.background_jobs import enqueue
 
-from erpnext import get_company_currency
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+from svasamm_erp import get_company_currency
+from svasamm_erp.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 )
-from erpnext.accounts.doctype.payment_entry.payment_entry import (
+from svasamm_erp.accounts.doctype.payment_entry.payment_entry import (
 	get_payment_entry,
 )
-from erpnext.accounts.doctype.subscription_plan.subscription_plan import get_plan_rate
-from erpnext.accounts.party import get_party_account, get_party_bank_account
-from erpnext.accounts.utils import get_account_currency, get_advance_payment_doctypes, get_currency_precision
-from erpnext.utilities import payment_app_import_guard
+from svasamm_erp.accounts.doctype.subscription_plan.subscription_plan import get_plan_rate
+from svasamm_erp.accounts.party import get_party_account, get_party_bank_account
+from svasamm_erp.accounts.utils import get_account_currency, get_advance_payment_doctypes, get_currency_precision
+from svasamm_erp.utilities import payment_app_import_guard
 
 ALLOWED_DOCTYPES_FOR_PAYMENT_REQUEST = [
 	"Sales Order",
@@ -45,7 +45,7 @@ class PaymentRequest(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.subscription_plan_detail.subscription_plan_detail import (
+		from svasamm_erp.accounts.doctype.subscription_plan_detail.subscription_plan_detail import (
 			SubscriptionPlanDetail,
 		)
 
@@ -248,7 +248,7 @@ class PaymentRequest(Document):
 		self.update_reference_advance_payment_status()
 
 	def make_invoice(self):
-		from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
+		from svasamm_erp.selling.doctype.sales_order.sales_order import make_sales_invoice
 
 		si = make_sales_invoice(self.reference_name, ignore_permissions=True)
 		si.allocate_advances_automatically = True
@@ -542,7 +542,7 @@ def make_payment_request(**args):
 		frappe.throw(_("Payment Entry is already created"))
 
 	if args.loyalty_points and ref_doc.doctype == "Sales Order":
-		from erpnext.accounts.doctype.loyalty_program.loyalty_program import validate_loyalty_points
+		from svasamm_erp.accounts.doctype.loyalty_program.loyalty_program import validate_loyalty_points
 
 		loyalty_amount = validate_loyalty_points(ref_doc, int(args.loyalty_points))  # sets fields on ref_doc
 		ref_doc.db_update()

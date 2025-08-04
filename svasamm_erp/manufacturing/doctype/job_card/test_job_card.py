@@ -9,21 +9,21 @@ from frappe.tests import IntegrationTestCase
 from frappe.utils import random_string
 from frappe.utils.data import add_to_date, now, today
 
-from erpnext.manufacturing.doctype.job_card.job_card import (
+from svasamm_erp.manufacturing.doctype.job_card.job_card import (
 	JobCardOverTransferError,
 	OperationMismatchError,
 	OverlapError,
 	make_corrective_job_card,
 	make_material_request,
 )
-from erpnext.manufacturing.doctype.job_card.job_card import (
+from svasamm_erp.manufacturing.doctype.job_card.job_card import (
 	make_stock_entry as make_stock_entry_from_jc,
 )
-from erpnext.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
-from erpnext.manufacturing.doctype.work_order.work_order import WorkOrder
-from erpnext.manufacturing.doctype.workstation.test_workstation import make_workstation
-from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
-from erpnext.tests.utils import ERPNextTestSuite
+from svasamm_erp.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
+from svasamm_erp.manufacturing.doctype.work_order.work_order import WorkOrder
+from svasamm_erp.manufacturing.doctype.workstation.test_workstation import make_workstation
+from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+from svasamm_erp.tests.utils import ERPNextTestSuite
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["UOM"]
 
@@ -479,7 +479,7 @@ class TestJobCard(ERPNextTestSuite):
 		corrective_job_card.submit()
 		wo.reload()
 
-		from erpnext.manufacturing.doctype.work_order.work_order import (
+		from svasamm_erp.manufacturing.doctype.work_order.work_order import (
 			make_stock_entry as make_stock_entry_for_wo,
 		)
 
@@ -487,7 +487,7 @@ class TestJobCard(ERPNextTestSuite):
 		self.assertEqual(stock_entry.additional_costs[1].amount, 37.5)
 		frappe.get_doc(stock_entry).submit()
 
-		from erpnext.manufacturing.doctype.work_order.work_order import make_job_card
+		from svasamm_erp.manufacturing.doctype.work_order.work_order import make_job_card
 
 		make_job_card(
 			wo.name,
@@ -550,7 +550,7 @@ class TestJobCard(ERPNextTestSuite):
 		assertStatus("Cancelled")
 
 	def test_job_card_material_request_and_bom_details(self):
-		from erpnext.stock.doctype.material_request.material_request import make_stock_entry
+		from svasamm_erp.stock.doctype.material_request.material_request import make_stock_entry
 
 		create_bom_with_multiple_operations()
 		work_order = make_wo_with_transfer_against_jc()
@@ -569,16 +569,16 @@ class TestJobCard(ERPNextTestSuite):
 		self.assertEqual(ste.bom_no, work_order.bom_no)
 
 	def test_job_card_proccess_qty_and_completed_qty(self):
-		from erpnext.manufacturing.doctype.routing.test_routing import (
+		from svasamm_erp.manufacturing.doctype.routing.test_routing import (
 			create_routing,
 			setup_bom,
 			setup_operations,
 		)
-		from erpnext.manufacturing.doctype.work_order.work_order import (
+		from svasamm_erp.manufacturing.doctype.work_order.work_order import (
 			make_stock_entry as make_stock_entry_for_wo,
 		)
-		from erpnext.stock.doctype.item.test_item import make_item
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		operations = [
 			{"operation": "Test Operation A1", "workstation": "Test Workstation A", "time_in_mins": 30},
@@ -711,7 +711,7 @@ class TestJobCard(ERPNextTestSuite):
 
 def create_bom_with_multiple_operations():
 	"Create a BOM with multiple operations and Material Transfer against Job Card"
-	from erpnext.manufacturing.doctype.operation.test_operation import make_operation
+	from svasamm_erp.manufacturing.doctype.operation.test_operation import make_operation
 
 	test_record = frappe.get_test_records("BOM")[2]
 	bom_doc = frappe.get_doc(test_record)

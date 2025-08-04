@@ -8,17 +8,17 @@ import frappe
 from frappe.tests import IntegrationTestCase, change_settings
 from frappe.utils import nowdate
 
-from erpnext.buying.doctype.request_for_quotation.request_for_quotation import (
+from svasamm_erp.buying.doctype.request_for_quotation.request_for_quotation import (
 	RequestforQuotation,
 	create_supplier_quotation,
 	get_pdf,
 	make_supplier_quotation_from_rfq,
 )
-from erpnext.controllers.accounts_controller import InvalidQtyError
-from erpnext.crm.doctype.opportunity.opportunity import make_request_for_quotation as make_rfq
-from erpnext.crm.doctype.opportunity.test_opportunity import make_opportunity
-from erpnext.stock.doctype.item.test_item import make_item
-from erpnext.templates.pages.rfq import check_supplier_has_docname_access
+from svasamm_erp.controllers.accounts_controller import InvalidQtyError
+from svasamm_erp.crm.doctype.opportunity.opportunity import make_request_for_quotation as make_rfq
+from svasamm_erp.crm.doctype.opportunity.test_opportunity import make_opportunity
+from svasamm_erp.stock.doctype.item.test_item import make_item
+from svasamm_erp.templates.pages.rfq import check_supplier_has_docname_access
 
 
 class TestRequestforQuotation(IntegrationTestCase):

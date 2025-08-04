@@ -17,26 +17,26 @@ from frappe.utils import (
 )
 from frappe.utils.data import add_to_date
 
-from erpnext.accounts.doctype.journal_entry.test_journal_entry import make_journal_entry
-from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
-from erpnext.assets.doctype.asset.asset import (
+from svasamm_erp.accounts.doctype.journal_entry.test_journal_entry import make_journal_entry
+from svasamm_erp.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
+from svasamm_erp.assets.doctype.asset.asset import (
 	make_sales_invoice,
 	split_asset,
 	update_maintenance_status,
 )
-from erpnext.assets.doctype.asset.depreciation import (
+from svasamm_erp.assets.doctype.asset.depreciation import (
 	post_depreciation_entries,
 	restore_asset,
 	scrap_asset,
 )
-from erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
+from svasamm_erp.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
 	get_asset_depr_schedule_doc,
 	get_depr_schedule,
 )
-from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
+from svasamm_erp.stock.doctype.purchase_receipt.purchase_receipt import (
 	make_purchase_invoice as make_invoice,
 )
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 
 class AssetSetup(IntegrationTestCase):
@@ -373,7 +373,7 @@ class TestAsset(AssetSetup):
 		self.assertEqual(frappe.db.get_value("Asset", asset.name, "status"), "Partially Depreciated")
 
 	def test_gle_made_by_asset_sale_for_existing_asset(self):
-		from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+		from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
 
 		asset = create_asset(
 			calculate_depreciation=1,

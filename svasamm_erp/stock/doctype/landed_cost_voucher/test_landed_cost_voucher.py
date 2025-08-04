@@ -8,19 +8,19 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, add_to_date, flt, now, nowtime, today
 
-from erpnext.accounts.doctype.account.test_account import create_account, get_inventory_account
-from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
-from erpnext.accounts.utils import update_gl_entries_after
-from erpnext.assets.doctype.asset.test_asset import create_asset_category, create_fixed_asset_item
-from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import (
+from svasamm_erp.accounts.doctype.account.test_account import create_account, get_inventory_account
+from svasamm_erp.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
+from svasamm_erp.accounts.utils import update_gl_entries_after
+from svasamm_erp.assets.doctype.asset.test_asset import create_asset_category, create_fixed_asset_item
+from svasamm_erp.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
+from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import (
 	get_gl_entries,
 	make_purchase_receipt,
 )
-from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 	get_serial_nos_from_bundle,
 )
-from erpnext.stock.serial_batch_bundle import SerialNoValuation
+from svasamm_erp.stock.serial_batch_bundle import SerialNoValuation
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["Currency Exchange"]
 
@@ -127,7 +127,7 @@ class TestLandedCostVoucher(IntegrationTestCase):
 
 	def test_landed_cost_voucher_stock_impact(self):
 		"Test impact of LCV on future stock balances."
-		from erpnext.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.item.test_item import make_item
 
 		item = make_item("LCV Stock Item", {"is_stock_item": 1})
 		warehouse = "Stores - _TC"
@@ -180,7 +180,7 @@ class TestLandedCostVoucher(IntegrationTestCase):
 
 	def test_landed_cost_voucher_for_zero_purchase_rate(self):
 		"Test impact of LCV on future stock balances."
-		from erpnext.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.item.test_item import make_item
 
 		item = make_item("LCV Stock Item", {"is_stock_item": 1})
 		warehouse = "Stores - _TC"
@@ -503,7 +503,7 @@ class TestLandedCostVoucher(IntegrationTestCase):
 		self.assertEqual(pr.items[1].landed_cost_voucher_amount, 100)
 
 	def test_multi_currency_lcv(self):
-		from erpnext.setup.doctype.currency_exchange.test_currency_exchange import save_new_records
+		from svasamm_erp.setup.doctype.currency_exchange.test_currency_exchange import save_new_records
 
 		save_new_records(self.globalTestRecords["Currency Exchange"])
 
@@ -598,7 +598,7 @@ class TestLandedCostVoucher(IntegrationTestCase):
 		pr.cancel()
 
 	def test_landed_cost_voucher_with_serial_batch_for_legacy_pr(self):
-		from erpnext.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.item.test_item import make_item
 
 		frappe.flags.ignore_serial_batch_bundle_validation = True
 		frappe.flags.use_serial_and_batch_fields = True
@@ -747,8 +747,8 @@ class TestLandedCostVoucher(IntegrationTestCase):
 			)
 
 	def test_do_not_validate_landed_cost_voucher_with_serial_batch_for_legacy_pr(self):
-		from erpnext.stock.doctype.item.test_item import make_item
-		from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import get_auto_batch_nos
+		from svasamm_erp.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import get_auto_batch_nos
 
 		frappe.flags.ignore_serial_batch_bundle_validation = True
 		frappe.flags.use_serial_and_batch_fields = True
@@ -948,8 +948,8 @@ class TestLandedCostVoucher(IntegrationTestCase):
 			)
 
 	def test_do_not_validate_against_landed_cost_voucher_for_serial_for_legacy_pr(self):
-		from erpnext.stock.doctype.item.test_item import make_item
-		from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import get_auto_batch_nos
+		from svasamm_erp.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import get_auto_batch_nos
 
 		frappe.flags.ignore_serial_batch_bundle_validation = True
 		frappe.flags.use_serial_and_batch_fields = True
@@ -1070,20 +1070,20 @@ class TestLandedCostVoucher(IntegrationTestCase):
 			)
 
 	def test_lcv_for_work_order_scr(self):
-		from erpnext.controllers.tests.test_subcontracting_controller import (
+		from svasamm_erp.controllers.tests.test_subcontracting_controller import (
 			get_rm_items,
 			get_subcontracting_order,
 			make_stock_in_entry,
 			make_stock_transfer_entry,
 		)
-		from erpnext.manufacturing.doctype.production_plan.test_production_plan import make_bom
-		from erpnext.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
-		from erpnext.manufacturing.doctype.work_order.work_order import (
+		from svasamm_erp.manufacturing.doctype.production_plan.test_production_plan import make_bom
+		from svasamm_erp.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
+		from svasamm_erp.manufacturing.doctype.work_order.work_order import (
 			make_stock_entry as make_stock_entry_for_wo,
 		)
-		from erpnext.stock.doctype.item.test_item import make_item
-		from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
-		from erpnext.subcontracting.doctype.subcontracting_order.subcontracting_order import (
+		from svasamm_erp.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+		from svasamm_erp.subcontracting.doctype.subcontracting_order.subcontracting_order import (
 			make_subcontracting_receipt,
 		)
 

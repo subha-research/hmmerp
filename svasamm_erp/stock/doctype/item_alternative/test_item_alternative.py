@@ -5,23 +5,23 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import flt
 
-from erpnext.controllers.subcontracting_controller import make_rm_stock_entry
-from erpnext.controllers.tests.test_subcontracting_controller import (
+from svasamm_erp.controllers.subcontracting_controller import make_rm_stock_entry
+from svasamm_erp.controllers.tests.test_subcontracting_controller import (
 	get_subcontracting_order,
 	make_service_item,
 	set_backflush_based_on,
 )
-from erpnext.manufacturing.doctype.production_plan.test_production_plan import make_bom
-from erpnext.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
-from erpnext.manufacturing.doctype.work_order.work_order import make_stock_entry
-from erpnext.stock.doctype.item.test_item import create_item
-from erpnext.stock.doctype.stock_reconciliation.stock_reconciliation import (
+from svasamm_erp.manufacturing.doctype.production_plan.test_production_plan import make_bom
+from svasamm_erp.manufacturing.doctype.work_order.test_work_order import make_wo_order_test_record
+from svasamm_erp.manufacturing.doctype.work_order.work_order import make_stock_entry
+from svasamm_erp.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.stock_reconciliation.stock_reconciliation import (
 	EmptyStockReconciliationItemsError,
 )
-from erpnext.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
+from svasamm_erp.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
 	create_stock_reconciliation,
 )
-from erpnext.subcontracting.doctype.subcontracting_order.subcontracting_order import (
+from svasamm_erp.subcontracting.doctype.subcontracting_order.subcontracting_order import (
 	make_subcontracting_receipt,
 )
 

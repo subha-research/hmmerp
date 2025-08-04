@@ -4,8 +4,8 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.stock.doctype.item.test_item import make_item
-from erpnext.stock.utils import _create_bin
+from svasamm_erp.stock.doctype.item.test_item import make_item
+from svasamm_erp.stock.utils import _create_bin
 
 
 class TestBin(IntegrationTestCase):

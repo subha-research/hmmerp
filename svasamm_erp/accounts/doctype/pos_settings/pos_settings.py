@@ -17,8 +17,8 @@ class POSSettings(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.pos_field.pos_field import POSField
-		from erpnext.accounts.doctype.pos_search_fields.pos_search_fields import POSSearchFields
+		from svasamm_erp.accounts.doctype.pos_field.pos_field import POSField
+		from svasamm_erp.accounts.doctype.pos_search_fields.pos_search_fields import POSSearchFields
 
 		invoice_fields: DF.Table[POSField]
 		invoice_type: DF.Literal["Sales Invoice", "POS Invoice"]

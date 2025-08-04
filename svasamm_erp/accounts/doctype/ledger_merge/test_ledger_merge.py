@@ -5,7 +5,7 @@ import unittest
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.ledger_merge.ledger_merge import start_merge
+from svasamm_erp.accounts.doctype.ledger_merge.ledger_merge import start_merge
 
 
 class TestLedgerMerge(IntegrationTestCase):

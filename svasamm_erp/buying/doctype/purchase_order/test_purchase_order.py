@@ -9,21 +9,21 @@ from frappe.tests import IntegrationTestCase, change_settings
 from frappe.utils import add_days, flt, getdate, nowdate
 from frappe.utils.data import today
 
-from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
-from erpnext.accounts.party import get_due_date_from_template
-from erpnext.buying.doctype.purchase_order.purchase_order import (
+from svasamm_erp.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+from svasamm_erp.accounts.party import get_due_date_from_template
+from svasamm_erp.buying.doctype.purchase_order.purchase_order import (
 	make_inter_company_sales_order,
 	make_purchase_receipt,
 )
-from erpnext.buying.doctype.purchase_order.purchase_order import (
+from svasamm_erp.buying.doctype.purchase_order.purchase_order import (
 	make_purchase_invoice as make_pi_from_po,
 )
-from erpnext.controllers.accounts_controller import InvalidQtyError, update_child_qty_rate
-from erpnext.manufacturing.doctype.blanket_order.test_blanket_order import make_blanket_order
-from erpnext.stock.doctype.item.test_item import make_item
-from erpnext.stock.doctype.material_request.material_request import make_purchase_order
-from erpnext.stock.doctype.material_request.test_material_request import make_material_request
-from erpnext.stock.doctype.purchase_receipt.purchase_receipt import (
+from svasamm_erp.controllers.accounts_controller import InvalidQtyError, update_child_qty_rate
+from svasamm_erp.manufacturing.doctype.blanket_order.test_blanket_order import make_blanket_order
+from svasamm_erp.stock.doctype.item.test_item import make_item
+from svasamm_erp.stock.doctype.material_request.material_request import make_purchase_order
+from svasamm_erp.stock.doctype.material_request.test_material_request import make_material_request
+from svasamm_erp.stock.doctype.purchase_receipt.purchase_receipt import (
 	make_purchase_invoice as make_pi_from_pr,
 )
 
@@ -470,10 +470,10 @@ class TestPurchaseOrder(IntegrationTestCase):
 		self.assertEqual(po.get("items")[0].received_qty, 9)
 
 		# Make return purchase receipt, purchase invoice and check quantity
-		from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import (
+		from svasamm_erp.accounts.doctype.purchase_invoice.test_purchase_invoice import (
 			make_purchase_invoice as make_purchase_invoice_return,
 		)
-		from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import (
+		from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import (
 			make_purchase_receipt as make_purchase_receipt_return,
 		)
 
@@ -493,7 +493,7 @@ class TestPurchaseOrder(IntegrationTestCase):
 		self.assertEqual(po.get("items")[0].received_qty, 5)
 
 	def test_purchase_order_invoice_receipt_workflow(self):
-		from erpnext.accounts.doctype.purchase_invoice.purchase_invoice import make_purchase_receipt
+		from svasamm_erp.accounts.doctype.purchase_invoice.purchase_invoice import make_purchase_receipt
 
 		po = create_purchase_order()
 		pi = make_pi_from_po(po.name)
@@ -541,7 +541,7 @@ class TestPurchaseOrder(IntegrationTestCase):
 		self.assertRaises(frappe.ValidationError, pi.submit)
 
 	def test_make_purchase_invoice_with_terms(self):
-		from erpnext.selling.doctype.sales_order.test_sales_order import (
+		from svasamm_erp.selling.doctype.sales_order.test_sales_order import (
 			automatically_fetch_payment_terms,
 		)
 
@@ -572,13 +572,13 @@ class TestPurchaseOrder(IntegrationTestCase):
 		automatically_fetch_payment_terms(enable=0)
 
 	def test_warehouse_company_validation(self):
-		from erpnext.stock.utils import InvalidWarehouseCompany
+		from svasamm_erp.stock.utils import InvalidWarehouseCompany
 
 		po = create_purchase_order(company="_Test Company 1", do_not_save=True)
 		self.assertRaises(InvalidWarehouseCompany, po.insert)
 
 	def test_uom_integer_validation(self):
-		from erpnext.utilities.transaction_base import UOMMustBeIntegerError
+		from svasamm_erp.utilities.transaction_base import UOMMustBeIntegerError
 
 		po = create_purchase_order(qty=3.4, do_not_save=True)
 		self.assertRaises(UOMMustBeIntegerError, po.insert)
@@ -745,7 +745,7 @@ class TestPurchaseOrder(IntegrationTestCase):
 		"Accounts Settings", {"unlink_advance_payment_on_cancelation_of_order": 1}
 	)
 	def test_advance_payment_entry_unlink_against_purchase_order(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
 
 		po_doc = create_purchase_order()
 
@@ -801,7 +801,7 @@ class TestPurchaseOrder(IntegrationTestCase):
 
 		po_doc = create_purchase_order(supplier=supplier)
 
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
 
 		pe = get_payment_entry("Purchase Order", po_doc.name)
 		pe.save().submit()
@@ -809,7 +809,7 @@ class TestPurchaseOrder(IntegrationTestCase):
 		po_doc.reload()
 		self.assertEqual(po_doc.advance_paid, 5000)
 
-		from erpnext.buying.doctype.purchase_order.purchase_order import make_purchase_invoice
+		from svasamm_erp.buying.doctype.purchase_order.purchase_order import make_purchase_invoice
 
 		company_doc.book_advance_payments_in_separate_party_account = False
 		company_doc.save()
@@ -818,7 +818,7 @@ class TestPurchaseOrder(IntegrationTestCase):
 		"Accounts Settings", {"unlink_advance_payment_on_cancelation_of_order": 1}
 	)
 	def test_advance_paid_upon_payment_entry_cancellation(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
 
 		supplier = "_Test Supplier USD"
 		company = "_Test Company"
@@ -911,11 +911,11 @@ class TestPurchaseOrder(IntegrationTestCase):
 		self.assertEqual(bo.items[0].ordered_qty, 5)
 
 	def test_payment_terms_are_fetched_when_creating_purchase_invoice(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import (
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import (
 			create_payment_terms_template,
 		)
-		from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
-		from erpnext.selling.doctype.sales_order.test_sales_order import (
+		from svasamm_erp.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
+		from svasamm_erp.selling.doctype.sales_order.test_sales_order import (
 			automatically_fetch_payment_terms,
 			compare_payment_schedules,
 		)
@@ -938,15 +938,15 @@ class TestPurchaseOrder(IntegrationTestCase):
 		automatically_fetch_payment_terms(enable=0)
 
 	def test_internal_transfer_flow(self):
-		from erpnext.accounts.doctype.cost_center.test_cost_center import create_cost_center
-		from erpnext.accounts.doctype.sales_invoice.sales_invoice import (
+		from svasamm_erp.accounts.doctype.cost_center.test_cost_center import create_cost_center
+		from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import (
 			make_inter_company_purchase_invoice,
 		)
-		from erpnext.selling.doctype.sales_order.sales_order import (
+		from svasamm_erp.selling.doctype.sales_order.sales_order import (
 			make_delivery_note,
 			make_sales_invoice,
 		)
-		from erpnext.stock.doctype.delivery_note.delivery_note import make_inter_company_purchase_receipt
+		from svasamm_erp.stock.doctype.delivery_note.delivery_note import make_inter_company_purchase_receipt
 
 		frappe.db.set_single_value("Selling Settings", "maintain_same_sales_rate", 1)
 		frappe.db.set_single_value("Buying Settings", "maintain_same_rate", 1)
@@ -1022,7 +1022,7 @@ class TestPurchaseOrder(IntegrationTestCase):
 		self.assertRaises(frappe.ValidationError, po.save)
 
 	def test_update_items_for_subcontracting_purchase_order(self):
-		from erpnext.controllers.tests.test_subcontracting_controller import (
+		from svasamm_erp.controllers.tests.test_subcontracting_controller import (
 			get_subcontracting_order,
 			make_bom_for_subcontracted_items,
 			make_raw_materials,
@@ -1087,7 +1087,7 @@ class TestPurchaseOrder(IntegrationTestCase):
 		self.assertEqual(po.items[0].fg_item_qty, 30)
 
 	def test_new_sc_flow(self):
-		from erpnext.buying.doctype.purchase_order.purchase_order import make_subcontracting_order
+		from svasamm_erp.buying.doctype.purchase_order.purchase_order import make_subcontracting_order
 
 		po = create_po_for_sc_testing()
 		sco = make_subcontracting_order(po.name)
@@ -1155,7 +1155,7 @@ class TestPurchaseOrder(IntegrationTestCase):
 
 	@IntegrationTestCase.change_settings("Buying Settings", {"auto_create_subcontracting_order": 1})
 	def test_auto_create_subcontracting_order(self):
-		from erpnext.controllers.tests.test_subcontracting_controller import (
+		from svasamm_erp.controllers.tests.test_subcontracting_controller import (
 			make_bom_for_subcontracted_items,
 			make_raw_materials,
 			make_service_items,
@@ -1186,8 +1186,8 @@ class TestPurchaseOrder(IntegrationTestCase):
 		self.assertTrue(frappe.db.get_value("Subcontracting Order", {"purchase_order": po.name}))
 
 	def test_purchase_order_advance_payment_status(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
-		from erpnext.accounts.doctype.payment_request.payment_request import make_payment_request
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.payment_request.payment_request import make_payment_request
 
 		po = create_purchase_order()
 		self.assertEqual(frappe.db.get_value(po.doctype, po.name, "advance_payment_status"), "Not Initiated")
@@ -1214,7 +1214,7 @@ class TestPurchaseOrder(IntegrationTestCase):
 		self.assertEqual(frappe.db.get_value(po.doctype, po.name, "advance_payment_status"), "Not Initiated")
 
 	def test_po_billed_amount_against_return_entry(self):
-		from erpnext.accounts.doctype.purchase_invoice.purchase_invoice import make_debit_note
+		from svasamm_erp.accounts.doctype.purchase_invoice.purchase_invoice import make_debit_note
 
 		# Create a Purchase Order and Fully Bill it
 		po = create_purchase_order()
@@ -1340,7 +1340,7 @@ class TestPurchaseOrder(IntegrationTestCase):
 
 
 def create_po_for_sc_testing():
-	from erpnext.controllers.tests.test_subcontracting_controller import (
+	from svasamm_erp.controllers.tests.test_subcontracting_controller import (
 		make_bom_for_subcontracted_items,
 		make_raw_materials,
 		make_service_items,
@@ -1387,10 +1387,10 @@ def create_po_for_sc_testing():
 
 
 def prepare_data_for_internal_transfer():
-	from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_internal_supplier
-	from erpnext.selling.doctype.customer.test_customer import create_internal_customer
-	from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
-	from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+	from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_internal_supplier
+	from svasamm_erp.selling.doctype.customer.test_customer import create_internal_customer
+	from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+	from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 	company = "_Test Company with perpetual inventory"
 

@@ -4,12 +4,12 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, add_months, nowdate
 
-from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
-from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
-from erpnext.selling.report.payment_terms_status_for_sales_order.payment_terms_status_for_sales_order import (
+from svasamm_erp.selling.doctype.sales_order.sales_order import make_sales_invoice
+from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
+from svasamm_erp.selling.report.payment_terms_status_for_sales_order.payment_terms_status_for_sales_order import (
 	execute,
 )
-from erpnext.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.item.test_item import create_item
 
 EXTRA_TEST_RECORD_DEPENDENCIES = [
 	"Sales Order",

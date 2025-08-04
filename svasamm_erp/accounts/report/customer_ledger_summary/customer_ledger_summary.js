@@ -123,4 +123,4 @@ frappe.query_reports["Customer Ledger Summary"] = {
 	],
 };
 
-erpnext.utils.add_dimensions("Customer Ledger Summary", 14);
+svasamm_erp.utils.add_dimensions("Customer Ledger Summary", 14);

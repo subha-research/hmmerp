@@ -16,7 +16,7 @@ from frappe.utils.data import (
 	nowdate,
 )
 
-from erpnext.accounts.doctype.subscription.subscription import get_prorata_factor
+from svasamm_erp.accounts.doctype.subscription.subscription import get_prorata_factor
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ("UOM", "Item Group", "Item")
 

@@ -1,6 +1,6 @@
 // Copyright (c) 2016, Frappe Technologies Pvt. Ltd. and contributors
 // For license information, please see license.txt
-frappe.provide("erpnext.accounts.dimensions");
+frappe.provide("svasamm_erp.accounts.dimensions");
 
 frappe.ui.form.on("Budget", {
 	onload: function (frm) {
@@ -22,7 +22,7 @@ frappe.ui.form.on("Budget", {
 			};
 		});
 
-		erpnext.accounts.dimensions.setup_dimension_filters(frm, frm.doctype);
+		svasamm_erp.accounts.dimensions.setup_dimension_filters(frm, frm.doctype);
 		frappe.db.get_single_value("Accounts Settings", "use_new_budget_controller").then((value) => {
 			if (!value) {
 				frm.get_field("control_action_for_cumulative_expense_section").hide();

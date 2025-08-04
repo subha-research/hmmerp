@@ -11,7 +11,7 @@ import frappe.defaults
 from frappe.model.document import Document
 from frappe.utils import flt
 
-from erpnext.stock.get_item_details import ItemDetailsCtx, get_item_details, get_price_list_rate
+from svasamm_erp.stock.get_item_details import ItemDetailsCtx, get_item_details, get_price_list_rate
 
 
 class PackedItem(Document):

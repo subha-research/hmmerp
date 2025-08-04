@@ -10,8 +10,8 @@ frappe.ui.form.on("POS Profile", {
 			return { filters: { selling: 1 } };
 		});
 
-		erpnext.queries.setup_queries(frm, "Warehouse", function () {
-			return erpnext.queries.warehouse(frm.doc);
+		svasamm_erp.queries.setup_queries(frm, "Warehouse", function () {
+			return svasamm_erp.queries.warehouse(frm.doc);
 		});
 
 		frm.set_query("print_format", function () {
@@ -123,7 +123,7 @@ frappe.ui.form.on("POS Profile", {
 			};
 		});
 
-		erpnext.accounts.dimensions.setup_dimension_filters(frm, frm.doctype);
+		svasamm_erp.accounts.dimensions.setup_dimension_filters(frm, frm.doctype);
 	},
 
 	refresh: function (frm) {
@@ -134,11 +134,11 @@ frappe.ui.form.on("POS Profile", {
 
 	company: function (frm) {
 		frm.trigger("toggle_display_account_head");
-		erpnext.accounts.dimensions.update_dimension(frm, frm.doctype);
-		erpnext.utils.set_letter_head(frm);
+		svasamm_erp.accounts.dimensions.update_dimension(frm, frm.doctype);
+		svasamm_erp.utils.set_letter_head(frm);
 	},
 
 	toggle_display_account_head: function (frm) {
-		frm.toggle_display("expense_account", erpnext.is_perpetual_inventory_enabled(frm.doc.company));
+		frm.toggle_display("expense_account", svasamm_erp.is_perpetual_inventory_enabled(frm.doc.company));
 	},
 });

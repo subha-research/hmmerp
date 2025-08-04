@@ -1,4 +1,4 @@
-erpnext.PointOfSale.ItemDetails = class {
+svasamm_erp.PointOfSale.ItemDetails = class {
 	constructor({ wrapper, events, settings }) {
 		this.wrapper = wrapper;
 		this.events = events;
@@ -303,7 +303,7 @@ erpnext.PointOfSale.ItemDetails = class {
 			this.batch_no_control.df.reqd = 1;
 			this.batch_no_control.df.get_query = () => {
 				return {
-					query: "erpnext.controllers.queries.get_batch_no",
+					query: "svasamm_erp.controllers.queries.get_batch_no",
 					filters: {
 						item_code: me.item_row.item_code,
 						warehouse: me.item_row.warehouse,
@@ -324,7 +324,7 @@ erpnext.PointOfSale.ItemDetails = class {
 			};
 			this.uom_control.df.get_query = () => {
 				return {
-					query: "erpnext.controllers.queries.get_item_uom_query",
+					query: "svasamm_erp.controllers.queries.get_item_uom_query",
 					filters: {
 						item_code: me.current_item.item_code,
 					},
@@ -428,7 +428,7 @@ erpnext.PointOfSale.ItemDetails = class {
 			let expiry_date = this.item_row.has_batch_no ? this.events.get_frm().doc.posting_date : "";
 
 			let numbers = frappe.call({
-				method: "erpnext.stock.doctype.serial_no.serial_no.auto_fetch_serial_number",
+				method: "svasamm_erp.stock.doctype.serial_no.serial_no.auto_fetch_serial_number",
 				args: {
 					qty: qty * conversion_factor,
 					item_code: this.current_item.item_code,

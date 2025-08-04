@@ -9,9 +9,9 @@ from frappe.model.meta import get_field_precision
 from frappe.query_builder.custom import ConstantColumn
 from frappe.utils import cint, flt
 
-import erpnext
-from erpnext.controllers.taxes_and_totals import init_landed_taxes_and_totals
-from erpnext.stock.doctype.serial_no.serial_no import get_serial_nos
+import svasamm_erp
+from svasamm_erp.controllers.taxes_and_totals import init_landed_taxes_and_totals
+from svasamm_erp.stock.doctype.serial_no.serial_no import get_serial_nos
 
 
 class LandedCostVoucher(Document):
@@ -23,14 +23,14 @@ class LandedCostVoucher(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.stock.doctype.landed_cost_item.landed_cost_item import LandedCostItem
-		from erpnext.stock.doctype.landed_cost_purchase_receipt.landed_cost_purchase_receipt import (
+		from svasamm_erp.stock.doctype.landed_cost_item.landed_cost_item import LandedCostItem
+		from svasamm_erp.stock.doctype.landed_cost_purchase_receipt.landed_cost_purchase_receipt import (
 			LandedCostPurchaseReceipt,
 		)
-		from erpnext.stock.doctype.landed_cost_taxes_and_charges.landed_cost_taxes_and_charges import (
+		from svasamm_erp.stock.doctype.landed_cost_taxes_and_charges.landed_cost_taxes_and_charges import (
 			LandedCostTaxesandCharges,
 		)
-		from erpnext.stock.doctype.landed_cost_vendor_invoice.landed_cost_vendor_invoice import (
+		from svasamm_erp.stock.doctype.landed_cost_vendor_invoice.landed_cost_vendor_invoice import (
 			LandedCostVendorInvoice,
 		)
 
@@ -60,7 +60,7 @@ class LandedCostVoucher(Document):
 					item.description = d.description
 					item.qty = d.qty
 					item.rate = d.get("base_rate") or d.get("rate")
-					item.cost_center = d.cost_center or erpnext.get_default_cost_center(self.company)
+					item.cost_center = d.cost_center or svasamm_erp.get_default_cost_center(self.company)
 					item.amount = d.base_amount
 					item.receipt_document_type = pr.receipt_document_type
 					item.receipt_document = pr.receipt_document

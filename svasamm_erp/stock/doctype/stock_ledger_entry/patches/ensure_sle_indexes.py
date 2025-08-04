@@ -1,4 +1,4 @@
-from erpnext.stock.doctype.stock_ledger_entry.stock_ledger_entry import (
+from svasamm_erp.stock.doctype.stock_ledger_entry.stock_ledger_entry import (
 	on_doctype_update as create_sle_indexes,
 )
 

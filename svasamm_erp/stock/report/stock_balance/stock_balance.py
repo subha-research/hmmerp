@@ -12,12 +12,12 @@ from frappe.query_builder.functions import Coalesce
 from frappe.utils import add_days, cint, date_diff, flt, getdate
 from frappe.utils.nestedset import get_descendants_of
 
-import erpnext
-from erpnext.stock.doctype.inventory_dimension.inventory_dimension import get_inventory_dimensions
-from erpnext.stock.doctype.stock_closing_entry.stock_closing_entry import StockClosing
-from erpnext.stock.doctype.warehouse.warehouse import apply_warehouse_filter
-from erpnext.stock.report.stock_ageing.stock_ageing import FIFOSlots, get_average_age
-from erpnext.stock.utils import add_additional_uom_columns
+import svasamm_erp
+from svasamm_erp.stock.doctype.inventory_dimension.inventory_dimension import get_inventory_dimensions
+from svasamm_erp.stock.doctype.stock_closing_entry.stock_closing_entry import StockClosing
+from svasamm_erp.stock.doctype.warehouse.warehouse import apply_warehouse_filter
+from svasamm_erp.stock.report.stock_ageing.stock_ageing import FIFOSlots, get_average_age
+from svasamm_erp.stock.utils import add_additional_uom_columns
 
 
 class StockBalanceFilter(TypedDict):
@@ -54,7 +54,7 @@ class StockBalanceReport:
 
 	def set_company_currency(self) -> None:
 		if self.filters.get("company"):
-			self.company_currency = erpnext.get_company_currency(self.filters.get("company"))
+			self.company_currency = svasamm_erp.get_company_currency(self.filters.get("company"))
 		else:
 			self.company_currency = frappe.db.get_single_value("Global Defaults", "default_currency")
 
@@ -266,7 +266,7 @@ class StockBalanceReport:
 			self.data.append(report_data)
 
 	def get_sre_reserved_qty_details(self) -> dict:
-		from erpnext.stock.doctype.stock_reservation_entry.stock_reservation_entry import (
+		from svasamm_erp.stock.doctype.stock_reservation_entry.stock_reservation_entry import (
 			get_sre_reserved_qty_for_items_and_warehouses as get_reserved_qty_details,
 		)
 

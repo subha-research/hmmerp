@@ -99,4 +99,4 @@ frappe.query_reports["Supplier Ledger Summary"] = {
 	],
 };
 
-erpnext.utils.add_dimensions("Supplier Ledger Summary", 11);
+svasamm_erp.utils.add_dimensions("Supplier Ledger Summary", 11);

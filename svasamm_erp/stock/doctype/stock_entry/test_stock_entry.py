@@ -6,31 +6,31 @@ from frappe.permissions import add_user_permission, remove_user_permission
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, cstr, flt, get_time, getdate, nowtime, today
 
-from erpnext.accounts.doctype.account.test_account import get_inventory_account
-from erpnext.controllers.accounts_controller import InvalidQtyError
-from erpnext.stock.doctype.item.test_item import (
+from svasamm_erp.accounts.doctype.account.test_account import get_inventory_account
+from svasamm_erp.controllers.accounts_controller import InvalidQtyError
+from svasamm_erp.stock.doctype.item.test_item import (
 	create_item,
 	make_item,
 	make_item_variant,
 	set_item_variant_settings,
 )
-from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 	get_batch_from_bundle,
 	get_serial_nos_from_bundle,
 	make_serial_batch_bundle,
 )
-from erpnext.stock.doctype.serial_no.serial_no import *
-from erpnext.stock.doctype.stock_entry.stock_entry import FinishedGoodError, make_stock_in_entry
-from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
-from erpnext.stock.doctype.stock_ledger_entry.stock_ledger_entry import StockFreezeError
-from erpnext.stock.doctype.stock_reconciliation.stock_reconciliation import (
+from svasamm_erp.stock.doctype.serial_no.serial_no import *
+from svasamm_erp.stock.doctype.stock_entry.stock_entry import FinishedGoodError, make_stock_in_entry
+from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+from svasamm_erp.stock.doctype.stock_ledger_entry.stock_ledger_entry import StockFreezeError
+from svasamm_erp.stock.doctype.stock_reconciliation.stock_reconciliation import (
 	OpeningEntryAccountError,
 )
-from erpnext.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
+from svasamm_erp.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
 	create_stock_reconciliation,
 )
-from erpnext.stock.serial_batch_bundle import SerialBatchCreation
-from erpnext.stock.stock_ledger import NegativeStockError, get_previous_sle
+from svasamm_erp.stock.serial_batch_bundle import SerialBatchCreation
+from svasamm_erp.stock.stock_ledger import NegativeStockError, get_previous_sle
 
 
 def get_sle(**args):
@@ -167,7 +167,7 @@ class TestStockEntry(IntegrationTestCase):
 			variant.reorder_levels[0].material_request_type = material_request_type
 			variant.save()
 
-		from erpnext.stock.reorder_item import reorder_item
+		from svasamm_erp.stock.reorder_item import reorder_item
 
 		mr_list = reorder_item()
 
@@ -181,7 +181,7 @@ class TestStockEntry(IntegrationTestCase):
 		self.assertTrue(item_code in items)
 
 	def test_add_to_transit_entry(self):
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		item_code = "_Test Transit Item"
 		company = "_Test Company"
@@ -718,7 +718,7 @@ class TestStockEntry(IntegrationTestCase):
 		Expected Result: 1) Batch is created with Reference in Serial No
 		2) Batch is deleted and Serial No is Inactive
 		"""
-		from erpnext.stock.doctype.batch.batch import get_batch_qty
+		from svasamm_erp.stock.doctype.batch.batch import get_batch_qty
 
 		item = frappe.db.exists("Item", {"item_name": "Batched and Serialised Item"})
 		if not item:
@@ -753,7 +753,7 @@ class TestStockEntry(IntegrationTestCase):
 			"Sales User", "Sales Manager", "Stock User", "Stock Manager"
 		)
 		with self.set_user("test2@example.com"):
-			from erpnext.stock.utils import InvalidWarehouseCompany
+			from svasamm_erp.stock.utils import InvalidWarehouseCompany
 
 			st1 = frappe.copy_doc(self.globalTestRecords["Stock Entry"][0])
 			st1.get("items")[0].t_warehouse = "_Test Warehouse 2 - _TC1"
@@ -819,7 +819,7 @@ class TestStockEntry(IntegrationTestCase):
 		frappe.db.set_single_value("Stock Settings", "stock_frozen_upto_days", 0)
 
 	def test_work_order(self):
-		from erpnext.manufacturing.doctype.work_order.work_order import (
+		from svasamm_erp.manufacturing.doctype.work_order.work_order import (
 			make_stock_entry as _make_stock_entry,
 		)
 
@@ -857,7 +857,7 @@ class TestStockEntry(IntegrationTestCase):
 
 	@IntegrationTestCase.change_settings("Manufacturing Settings", {"material_consumption": 1})
 	def test_work_order_manufacture_with_material_consumption(self):
-		from erpnext.manufacturing.doctype.work_order.work_order import (
+		from svasamm_erp.manufacturing.doctype.work_order.work_order import (
 			make_stock_entry as _make_stock_entry,
 		)
 
@@ -935,7 +935,7 @@ class TestStockEntry(IntegrationTestCase):
 		work_order.insert()
 		work_order.submit()
 
-		from erpnext.manufacturing.doctype.work_order.work_order import make_stock_entry
+		from svasamm_erp.manufacturing.doctype.work_order.work_order import make_stock_entry
 
 		stock_entry = frappe.get_doc(make_stock_entry(work_order.name, "Manufacture", 1))
 		stock_entry.insert()
@@ -978,7 +978,7 @@ class TestStockEntry(IntegrationTestCase):
 		self.assertRaises(frappe.ValidationError, ste.submit)
 
 	def test_quality_check_for_scrap_item(self):
-		from erpnext.manufacturing.doctype.work_order.work_order import (
+		from svasamm_erp.manufacturing.doctype.work_order.work_order import (
 			make_stock_entry as _make_stock_entry,
 		)
 
@@ -1323,7 +1323,7 @@ class TestStockEntry(IntegrationTestCase):
 
 	@IntegrationTestCase.change_settings("Stock Settings", {"allow_negative_stock": 0})
 	def test_future_negative_sle_batch(self):
-		from erpnext.stock.doctype.batch.test_batch import TestBatch
+		from svasamm_erp.stock.doctype.batch.test_batch import TestBatch
 
 		# Initialize item, batch, warehouse, opening qty
 		item_code = "_Test MultiBatch Item"
@@ -1368,7 +1368,7 @@ class TestStockEntry(IntegrationTestCase):
 		| issue       | A     | -1  | 10   | -30 (to assert after submit) |
 		| issue       | B     | -1  | 20   |                              |
 		"""
-		from erpnext.stock.doctype.batch.test_batch import TestBatch
+		from svasamm_erp.stock.doctype.batch.test_batch import TestBatch
 
 		item_code = "_TestMultibatchFifo"
 		TestBatch.make_batch_item(item_code)
@@ -1417,8 +1417,8 @@ class TestStockEntry(IntegrationTestCase):
 
 	def test_mapped_stock_entry(self):
 		"Check if rate and stock details are populated in mapped SE given warehouse."
-		from erpnext.stock.doctype.purchase_receipt.purchase_receipt import make_stock_entry
-		from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+		from svasamm_erp.stock.doctype.purchase_receipt.purchase_receipt import make_stock_entry
+		from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
 
 		item_code = "_TestMappedItem"
 		create_item(item_code, is_stock_item=True)
@@ -1451,8 +1451,8 @@ class TestStockEntry(IntegrationTestCase):
 
 	@IntegrationTestCase.change_settings("Stock Reposting Settings", {"item_based_reposting": 0})
 	def test_reposting_for_depedent_warehouse(self):
-		from erpnext.stock.doctype.repost_item_valuation.repost_item_valuation import repost_sl_entries
-		from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+		from svasamm_erp.stock.doctype.repost_item_valuation.repost_item_valuation import repost_sl_entries
+		from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 		# Inward at WH1 warehouse (Component)
 		# 1st Repack (Component (WH1) - Subcomponent (WH2))
@@ -1583,8 +1583,8 @@ class TestStockEntry(IntegrationTestCase):
 			self.assertEqual(obj.items[index].basic_amount, 2000)
 
 	def test_batch_expiry(self):
-		from erpnext.controllers.stock_controller import BatchExpiredError
-		from erpnext.stock.doctype.batch.test_batch import make_new_batch
+		from svasamm_erp.controllers.stock_controller import BatchExpiredError
+		from svasamm_erp.stock.doctype.batch.test_batch import make_new_batch
 
 		item_code = "Test Batch Expiry Test Item - 001"
 		item_doc = create_item(item_code=item_code, is_stock_item=1, valuation_rate=10)
@@ -1685,7 +1685,7 @@ class TestStockEntry(IntegrationTestCase):
 		self.assertRaises(frappe.ValidationError, se1.cancel)
 
 	def test_auto_reorder_level(self):
-		from erpnext.stock.reorder_item import reorder_item
+		from svasamm_erp.stock.reorder_item import reorder_item
 
 		item_doc = make_item(
 			"Test Auto Reorder Item - 001",
@@ -1727,7 +1727,7 @@ class TestStockEntry(IntegrationTestCase):
 			mr.delete()
 
 	def test_auto_reorder_level_with_lead_time_days(self):
-		from erpnext.stock.reorder_item import reorder_item
+		from svasamm_erp.stock.reorder_item import reorder_item
 
 		item_doc = make_item(
 			"Test Auto Reorder Item - 002",
@@ -2181,11 +2181,11 @@ def get_multiple_items():
 def initialize_records_for_future_negative_sle_test(
 	item_code, batch_no, warehouses, opening_qty, posting_date
 ):
-	from erpnext.stock.doctype.batch.test_batch import TestBatch, make_new_batch
-	from erpnext.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
+	from svasamm_erp.stock.doctype.batch.test_batch import TestBatch, make_new_batch
+	from svasamm_erp.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
 		create_stock_reconciliation,
 	)
-	from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+	from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 	TestBatch.make_batch_item(item_code)
 	make_new_batch(item_code=item_code, batch_id=batch_no)

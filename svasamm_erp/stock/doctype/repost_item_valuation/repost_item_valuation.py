@@ -12,10 +12,10 @@ from frappe.utils import cint, get_link_to_form, get_weekday, getdate, now, nowt
 from frappe.utils.user import get_users_with_role
 from rq.timeouts import JobTimeoutException
 
-import erpnext
-from erpnext.accounts.general_ledger import validate_accounting_period
-from erpnext.accounts.utils import get_future_stock_vouchers, repost_gle_for_stock_vouchers
-from erpnext.stock.stock_ledger import (
+import svasamm_erp
+from svasamm_erp.accounts.general_ledger import validate_accounting_period
+from svasamm_erp.accounts.utils import get_future_stock_vouchers, repost_gle_for_stock_vouchers
+from svasamm_erp.stock.stock_ledger import (
 	get_affected_transactions,
 	get_items_to_be_repost,
 	repost_future_sle,
@@ -368,7 +368,7 @@ def repost_sl_entries(doc):
 
 
 def repost_gl_entries(doc):
-	if not cint(erpnext.is_perpetual_inventory_enabled(doc.company)):
+	if not cint(svasamm_erp.is_perpetual_inventory_enabled(doc.company)):
 		return
 
 	# directly modified transactions
@@ -503,7 +503,7 @@ def execute_repost_item_valuation():
 	"""Execute repost item valuation via scheduler."""
 	if name := frappe.db.get_value(
 		"Scheduled Job Type",
-		{"method": "erpnext.stock.doctype.repost_item_valuation.repost_item_valuation.repost_entries"},
+		{"method": "svasamm_erp.stock.doctype.repost_item_valuation.repost_item_valuation.repost_entries"},
 		"name",
 	):
 		frappe.get_doc("Scheduled Job Type", name).enqueue(force=True)

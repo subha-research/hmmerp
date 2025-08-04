@@ -6,21 +6,21 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, add_months, flt, get_first_day, nowdate, nowtime, today
 
-from erpnext.assets.doctype.asset.asset import (
+from svasamm_erp.assets.doctype.asset.asset import (
 	get_asset_account,
 	get_asset_value_after_depreciation,
 	make_sales_invoice,
 )
-from erpnext.assets.doctype.asset.test_asset import (
+from svasamm_erp.assets.doctype.asset.test_asset import (
 	create_asset,
 	create_asset_data,
 	set_depreciation_settings_in_company,
 )
-from erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
+from svasamm_erp.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
 	get_asset_depr_schedule_doc,
 )
-from erpnext.stock.doctype.item.test_item import create_item
-from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+from svasamm_erp.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 	get_serial_nos_from_bundle,
 	make_serial_batch_bundle,
 )
@@ -117,7 +117,7 @@ class TestAssetRepair(IntegrationTestCase):
 		self.assertEqual(stock_entry.items[0].qty, asset_repair.stock_items[0].consumed_quantity)
 
 	def test_serialized_item_consumption(self):
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
 
 		stock_entry = make_serialized_item(self)
 		bundle_id = stock_entry.get("items")[0].serial_and_batch_bundle
@@ -330,8 +330,8 @@ def num_of_depreciations(asset):
 
 
 def create_asset_repair(**args):
-	from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
-	from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
+	from svasamm_erp.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
+	from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
 
 	args = frappe._dict(args)
 

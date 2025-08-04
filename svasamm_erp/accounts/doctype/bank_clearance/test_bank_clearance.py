@@ -6,16 +6,16 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_months, getdate
 
-from erpnext.accounts.doctype.cost_center.test_cost_center import create_cost_center
-from erpnext.accounts.doctype.mode_of_payment.test_mode_of_payment import (
+from svasamm_erp.accounts.doctype.cost_center.test_cost_center import create_cost_center
+from svasamm_erp.accounts.doctype.mode_of_payment.test_mode_of_payment import (
 	set_default_account_for_mode_of_payment,
 )
-from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
-from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.stock.doctype.item.test_item import create_item
-from erpnext.stock.doctype.warehouse.test_warehouse import create_warehouse
-from erpnext.tests.utils import if_lending_app_installed, if_lending_app_not_installed
+from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+from svasamm_erp.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.warehouse.test_warehouse import create_warehouse
+from svasamm_erp.tests.utils import if_lending_app_installed, if_lending_app_not_installed
 
 
 class TestBankClearance(IntegrationTestCase):
@@ -142,7 +142,7 @@ def add_transactions():
 
 
 def make_payment_entry():
-	from erpnext.buying.doctype.supplier.test_supplier import create_supplier
+	from svasamm_erp.buying.doctype.supplier.test_supplier import create_supplier
 
 	supplier = create_supplier(supplier_name="_Test Supplier")
 	pi = make_purchase_invoice(
@@ -161,7 +161,7 @@ def make_payment_entry():
 
 
 def make_pos_sales_invoice():
-	from erpnext.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
+	from svasamm_erp.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
 		make_customer,
 	)
 

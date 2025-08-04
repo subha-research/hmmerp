@@ -4,7 +4,7 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.controllers.queries import item_query
+from svasamm_erp.controllers.queries import item_query
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["Item", "Customer", "Supplier"]
 

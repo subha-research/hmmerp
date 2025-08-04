@@ -6,11 +6,11 @@ import random
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.manufacturing.doctype.bom_creator.bom_creator import (
+from svasamm_erp.manufacturing.doctype.bom_creator.bom_creator import (
 	add_item,
 	add_sub_assembly,
 )
-from erpnext.stock.doctype.item.test_item import make_item
+from svasamm_erp.stock.doctype.item.test_item import make_item
 
 
 class TestBOMCreator(IntegrationTestCase):
