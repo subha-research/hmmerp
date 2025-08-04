@@ -6,9 +6,9 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import random_string, today
 
-from erpnext.crm.doctype.lead.lead import make_opportunity
-from erpnext.crm.utils import get_linked_prospect
-from erpnext.tests.utils import ERPNextTestSuite
+from svasamm_erp.crm.doctype.lead.lead import make_opportunity
+from svasamm_erp.crm.utils import get_linked_prospect
+from svasamm_erp.tests.utils import ERPNextTestSuite
 
 
 class TestLead(ERPNextTestSuite):
@@ -18,7 +18,7 @@ class TestLead(ERPNextTestSuite):
 		cls.make_leads()
 
 	def test_make_customer(self):
-		from erpnext.crm.doctype.lead.lead import make_customer
+		from svasamm_erp.crm.doctype.lead.lead import make_customer
 
 		frappe.delete_doc_if_exists("Customer", "_Test Lead")
 
@@ -46,7 +46,7 @@ class TestLead(ERPNextTestSuite):
 			self.assertEqual(contact_doc.has_link(customer.doctype, customer.name), True)
 
 	def test_make_customer_from_organization(self):
-		from erpnext.crm.doctype.lead.lead import make_customer
+		from svasamm_erp.crm.doctype.lead.lead import make_customer
 
 		customer = make_customer(self.leads[1].name)
 		self.assertEqual(customer.doctype, "Customer")

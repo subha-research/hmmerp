@@ -10,50 +10,50 @@ from frappe.model.dynamic_links import get_dynamic_link_map
 from frappe.tests import IntegrationTestCase, change_settings
 from frappe.utils import add_days, flt, format_date, getdate, nowdate, today
 
-import erpnext
-from erpnext.accounts.doctype.account.test_account import create_account, get_inventory_account
-from erpnext.accounts.doctype.mode_of_payment.test_mode_of_payment import (
+import svasamm_erp
+from svasamm_erp.accounts.doctype.account.test_account import create_account, get_inventory_account
+from svasamm_erp.accounts.doctype.mode_of_payment.test_mode_of_payment import (
 	set_default_account_for_mode_of_payment,
 )
-from erpnext.accounts.doctype.pos_profile.test_pos_profile import make_pos_profile
-from erpnext.accounts.doctype.purchase_invoice.purchase_invoice import WarehouseMissingError
-from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import (
+from svasamm_erp.accounts.doctype.pos_profile.test_pos_profile import make_pos_profile
+from svasamm_erp.accounts.doctype.purchase_invoice.purchase_invoice import WarehouseMissingError
+from svasamm_erp.accounts.doctype.purchase_invoice.test_purchase_invoice import (
 	unlink_payment_on_cancel_of_invoice,
 )
-from erpnext.accounts.doctype.sales_invoice.sales_invoice import make_inter_company_transaction
-from erpnext.accounts.utils import PaymentEntryUnlinkError
-from erpnext.assets.doctype.asset.depreciation import post_depreciation_entries
-from erpnext.assets.doctype.asset.test_asset import create_asset, create_asset_data
-from erpnext.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
+from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import make_inter_company_transaction
+from svasamm_erp.accounts.utils import PaymentEntryUnlinkError
+from svasamm_erp.assets.doctype.asset.depreciation import post_depreciation_entries
+from svasamm_erp.assets.doctype.asset.test_asset import create_asset, create_asset_data
+from svasamm_erp.assets.doctype.asset_depreciation_schedule.asset_depreciation_schedule import (
 	get_depr_schedule,
 )
-from erpnext.controllers.accounts_controller import InvalidQtyError, update_invoice_status
-from erpnext.controllers.taxes_and_totals import get_itemised_tax_breakup_data
-from erpnext.exceptions import InvalidAccountCurrency, InvalidCurrency
-from erpnext.selling.doctype.customer.test_customer import get_customer_dict
-from erpnext.stock.doctype.delivery_note.delivery_note import make_sales_invoice
-from erpnext.stock.doctype.item.test_item import create_item
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
-from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+from svasamm_erp.controllers.accounts_controller import InvalidQtyError, update_invoice_status
+from svasamm_erp.controllers.taxes_and_totals import get_itemised_tax_breakup_data
+from svasamm_erp.exceptions import InvalidAccountCurrency, InvalidCurrency
+from svasamm_erp.selling.doctype.customer.test_customer import get_customer_dict
+from svasamm_erp.stock.doctype.delivery_note.delivery_note import make_sales_invoice
+from svasamm_erp.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 	get_batch_from_bundle,
 	get_serial_nos_from_bundle,
 	make_serial_batch_bundle,
 )
-from erpnext.stock.doctype.stock_entry.test_stock_entry import (
+from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import (
 	get_qty_after_transaction,
 	make_stock_entry,
 )
-from erpnext.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
+from svasamm_erp.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
 	create_stock_reconciliation,
 )
-from erpnext.stock.get_item_details import get_item_tax_map
-from erpnext.stock.utils import get_incoming_rate, get_stock_balance
-from erpnext.tests.utils import ERPNextTestSuite
+from svasamm_erp.stock.get_item_details import get_item_tax_map
+from svasamm_erp.stock.utils import get_incoming_rate, get_stock_balance
+from svasamm_erp.tests.utils import ERPNextTestSuite
 
 
 class TestSalesInvoice(ERPNextTestSuite):
 	def setUp(self):
-		from erpnext.stock.doctype.stock_ledger_entry.test_stock_ledger_entry import create_items
+		from svasamm_erp.stock.doctype.stock_ledger_entry.test_stock_ledger_entry import create_items
 
 		create_items(["_Test Internal Transfer Item"], uoms=[{"uom": "Box", "conversion_factor": 10}])
 		create_internal_parties()
@@ -72,7 +72,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 	def test_invalid_rate_without_override(self):
 		from frappe import ValidationError
 
-		from erpnext.accounts.doctype.sales_invoice.sales_invoice import make_inter_company_purchase_invoice
+		from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import make_inter_company_purchase_invoice
 
 		si = create_sales_invoice(
 			customer="_Test Internal Customer 3", company="_Test Company", is_internal_customer=1, rate=100
@@ -205,7 +205,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.assertEqual(si.grand_total, 1627.05)
 
 	def test_payment_entry_unlink_against_invoice(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
 
 		si = frappe.copy_doc(self.globalTestRecords["Sales Invoice"][0])
 		si.is_pos = 0
@@ -232,7 +232,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		"Accounts Settings", {"unlink_payment_on_cancellation_of_invoice": 1}
 	)
 	def test_payment_entry_unlink_against_standalone_credit_note(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
 
 		si1 = create_sales_invoice(rate=1000)
 		si2 = create_sales_invoice(rate=300)
@@ -890,8 +890,8 @@ class TestSalesInvoice(ERPNextTestSuite):
 
 	def test_outstanding_on_cost_center_allocation(self):
 		# setup cost centers
-		from erpnext.accounts.doctype.cost_center.test_cost_center import create_cost_center
-		from erpnext.accounts.doctype.cost_center_allocation.test_cost_center_allocation import (
+		from svasamm_erp.accounts.doctype.cost_center.test_cost_center import create_cost_center
+		from svasamm_erp.accounts.doctype.cost_center_allocation.test_cost_center_allocation import (
 			create_cost_center_allocation,
 		)
 
@@ -915,7 +915,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		si.insert()
 		si.submit()
 
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
 
 		# make payment - fully paid
 		pe = get_payment_entry("Sales Invoice", si.name, bank_account="_Test Bank - _TC")
@@ -1024,7 +1024,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.validate_pos_gl_entry(si, pos, 50)
 
 	def test_pos_returns_with_repayment(self):
-		from erpnext.accounts.doctype.sales_invoice.sales_invoice import make_sales_return
+		from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import make_sales_return
 
 		pos_profile = make_pos_profile()
 
@@ -1143,7 +1143,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.assertEqual(pos.outstanding_amount, 0.0)
 		self.assertEqual(pos.status, "Paid")
 
-		from erpnext.accounts.doctype.sales_invoice.sales_invoice import make_sales_return
+		from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import make_sales_return
 
 		pos_return = make_sales_return(pos.name)
 		pos_return.save().submit()
@@ -1282,8 +1282,8 @@ class TestSalesInvoice(ERPNextTestSuite):
 		frappe.db.sql("delete from `tabPOS Profile`")
 
 	def test_bin_details_of_packed_item(self):
-		from erpnext.selling.doctype.product_bundle.test_product_bundle import make_product_bundle
-		from erpnext.stock.doctype.item.test_item import make_item
+		from svasamm_erp.selling.doctype.product_bundle.test_product_bundle import make_product_bundle
+		from svasamm_erp.stock.doctype.item.test_item import make_item
 
 		# test Update Items with product bundle
 		if not frappe.db.exists("Item", "_Test Product Bundle Item New"):
@@ -1447,7 +1447,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		si.cancel()
 
 	def test_serialized(self):
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
 
 		se = make_serialized_item(self)
 		se.load_from_db()
@@ -1498,8 +1498,8 @@ class TestSalesInvoice(ERPNextTestSuite):
 		check if the sales invoice item serial numbers and the delivery note items
 		serial numbers are same
 		"""
-		from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
+		from svasamm_erp.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
 
 		se = make_serialized_item(self)
 		se.load_from_db()
@@ -1949,7 +1949,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 
 	def test_outstanding_amount_after_advance_payment_entry_cancellation(self):
 		"""Test impact of advance PE submission/cancellation on SI and SO."""
-		from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
+		from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
 
 		sales_order = make_sales_order(item_code="138-CMS Shoe", qty=1, price_list_rate=500)
 		pe = frappe.get_doc(
@@ -2245,7 +2245,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 			self.assertEqual(expected_account_values[1], gle.credit)
 
 	def test_rounding_adjustment_3(self):
-		from erpnext.accounts.doctype.accounting_dimension.test_accounting_dimension import create_dimension
+		from svasamm_erp.accounts.doctype.accounting_dimension.test_accounting_dimension import create_dimension
 
 		# Dimension creates custom field, which does an implicit DB commit as it is a DDL command
 		# Ensure dimension don't have any mandatory fields
@@ -2333,7 +2333,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 			self.assertEqual(round_off_gle.location, "Block 1")
 
 	def test_sales_invoice_with_shipping_rule(self):
-		from erpnext.accounts.doctype.shipping_rule.test_shipping_rule import create_shipping_rule
+		from svasamm_erp.accounts.doctype.shipping_rule.test_shipping_rule import create_shipping_rule
 
 		shipping_rule = create_shipping_rule(
 			shipping_rule_type="Selling", shipping_rule_name="Shipping Rule - Sales Invoice Test"
@@ -2365,7 +2365,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.assertRaises(frappe.ValidationError, si.insert)
 
 	def test_credit_note(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
 
 		si = create_sales_invoice(item_code="_Test Item", qty=(5 * -1), rate=500, is_return=1)
 
@@ -2390,7 +2390,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.assertEqual(si_doc.outstanding_amount, 0)
 
 	def test_sales_invoice_with_cost_center(self):
-		from erpnext.accounts.doctype.cost_center.test_cost_center import create_cost_center
+		from svasamm_erp.accounts.doctype.cost_center.test_cost_center import create_cost_center
 
 		cost_center = "_Test Cost Center for BS Account - _TC"
 		create_cost_center(cost_center_name="_Test Cost Center for BS Account", company="_Test Company")
@@ -2418,7 +2418,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 			self.assertEqual(expected_values[gle.account]["cost_center"], gle.cost_center)
 
 	def test_sales_invoice_with_project_link(self):
-		from erpnext.projects.doctype.project.test_project import make_project
+		from svasamm_erp.projects.doctype.project.test_project import make_project
 
 		project = make_project(
 			{
@@ -2682,7 +2682,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		old_negative_stock = frappe.db.get_single_value("Stock Settings", "allow_negative_stock")
 		frappe.db.set_single_value("Stock Settings", "allow_negative_stock", 1)
 
-		old_perpetual_inventory = erpnext.is_perpetual_inventory_enabled("_Test Company 1")
+		old_perpetual_inventory = svasamm_erp.is_perpetual_inventory_enabled("_Test Company 1")
 		frappe.local.enable_perpetual_inventory["_Test Company 1"] = 1
 
 		frappe.db.set_value(
@@ -2973,7 +2973,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 
 	@IntegrationTestCase.change_settings("Selling Settings", {"enable_discount_accounting": 1})
 	def test_additional_discount_for_sales_invoice_with_discount_accounting_enabled(self):
-		from erpnext.accounts.doctype.repost_accounting_ledger.test_repost_accounting_ledger import (
+		from svasamm_erp.accounts.doctype.repost_accounting_ledger.test_repost_accounting_ledger import (
 			update_repost_settings,
 		)
 
@@ -3115,11 +3115,11 @@ class TestSalesInvoice(ERPNextTestSuite):
 			self.assertTrue(schedule.journal_entry)
 
 	def test_sales_invoice_against_supplier(self):
-		from erpnext.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
+		from svasamm_erp.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
 			make_customer,
 		)
-		from erpnext.accounts.doctype.party_link.party_link import create_party_link
-		from erpnext.buying.doctype.supplier.test_supplier import create_supplier
+		from svasamm_erp.accounts.doctype.party_link.party_link import create_party_link
+		from svasamm_erp.buying.doctype.supplier.test_supplier import create_supplier
 
 		# create a customer
 		customer = make_customer(customer="_Test Common Supplier")
@@ -3160,11 +3160,11 @@ class TestSalesInvoice(ERPNextTestSuite):
 		frappe.db.set_single_value("Accounts Settings", "enable_common_party_accounting", 0)
 
 	def test_sales_invoice_against_supplier_usd_with_dimensions(self):
-		from erpnext.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
+		from svasamm_erp.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
 			make_customer,
 		)
-		from erpnext.accounts.doctype.party_link.party_link import create_party_link
-		from erpnext.buying.doctype.supplier.test_supplier import create_supplier
+		from svasamm_erp.accounts.doctype.party_link.party_link import create_party_link
+		from svasamm_erp.buying.doctype.supplier.test_supplier import create_supplier
 
 		# create a customer
 		customer = make_customer(customer="_Test Common Supplier USD")
@@ -3238,11 +3238,11 @@ class TestSalesInvoice(ERPNextTestSuite):
 		frappe.db.set_single_value("Accounts Settings", "enable_common_party_accounting", 0)
 
 	def test_sales_invoice_cancel_with_common_party_advance_jv(self):
-		from erpnext.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
+		from svasamm_erp.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
 			make_customer,
 		)
-		from erpnext.accounts.doctype.party_link.party_link import create_party_link
-		from erpnext.buying.doctype.supplier.test_supplier import create_supplier
+		from svasamm_erp.accounts.doctype.party_link.party_link import create_party_link
+		from svasamm_erp.buying.doctype.supplier.test_supplier import create_supplier
 
 		# create a customer
 		customer = make_customer(customer="_Test Common Supplier")
@@ -3282,7 +3282,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		frappe.db.set_single_value("Accounts Settings", "enable_common_party_accounting", 0)
 
 	def test_payment_statuses(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
 
 		today = nowdate()
 
@@ -3414,7 +3414,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		Test a case where duplicating the item with qty = 1 in the invoice
 		allows overbilling even if it is disabled
 		"""
-		from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
+		from svasamm_erp.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
 
 		dn = create_delivery_note()
 		dn.submit()
@@ -3558,7 +3558,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		"Accounts Settings", {"unlink_payment_on_cancellation_of_invoice": 1}
 	)
 	def test_gain_loss_with_advance_entry(self):
-		from erpnext.accounts.doctype.journal_entry.test_journal_entry import make_journal_entry
+		from svasamm_erp.accounts.doctype.journal_entry.test_journal_entry import make_journal_entry
 
 		jv = make_journal_entry("_Test Receivable USD - _TC", "_Test Bank - _TC", -7000, save=False)
 
@@ -3617,8 +3617,8 @@ class TestSalesInvoice(ERPNextTestSuite):
 		)
 
 	def test_batch_expiry_for_sales_invoice_return(self):
-		from erpnext.controllers.sales_and_purchase_return import make_return_doc
-		from erpnext.stock.doctype.item.test_item import make_item
+		from svasamm_erp.controllers.sales_and_purchase_return import make_return_doc
+		from svasamm_erp.stock.doctype.item.test_item import make_item
 
 		item = make_item(
 			"_Test Batch Item For Return Check",
@@ -3664,7 +3664,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.assertRaises(frappe.ValidationError, si.submit)
 
 	def test_advance_entries_as_liability(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
 
 		advance_account = create_account(
 			parent_account="Current Liabilities - _TC",
@@ -3746,7 +3746,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		si.save()
 
 	def test_partial_allocation_on_advance_as_liability(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
 
 		company = "_Test Company"
 		customer = "_Test Customer"
@@ -3833,12 +3833,12 @@ class TestSalesInvoice(ERPNextTestSuite):
 		set_advance_flag(company="_Test Company", flag=0, default_account="")
 
 	def test_loyalty_points_redemption_with_shopping_cart(self):
-		from erpnext.accounts.doctype.loyalty_program.test_loyalty_program import (
+		from svasamm_erp.accounts.doctype.loyalty_program.test_loyalty_program import (
 			create_records,
 			create_sales_invoice_record,
 		)
-		from erpnext.selling.doctype.sales_order.sales_order import make_sales_invoice
-		from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
+		from svasamm_erp.selling.doctype.sales_order.sales_order import make_sales_invoice
+		from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
 
 		# Set up loyalty program
 		create_records()
@@ -3892,7 +3892,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 			)
 
 	def test_pulling_advance_based_on_debit_to(self):
-		from erpnext.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
+		from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import create_payment_entry
 
 		debtors2 = create_account(
 			parent_account="Accounts Receivable - _TC",
@@ -3919,7 +3919,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.assertEqual(advances[0].reference_name, pe.name)
 
 	def test_taxes_merging_from_delivery_note(self):
-		from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
+		from svasamm_erp.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
 
 		dn1 = create_delivery_note(do_not_submit=1)
 		dn1.items[0].qty = 10
@@ -3975,7 +3975,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		from frappe.model.mapper import map_docs
 
 		map_docs(
-			method="erpnext.stock.doctype.delivery_note.delivery_note.make_sales_invoice",
+			method="svasamm_erp.stock.doctype.delivery_note.delivery_note.make_sales_invoice",
 			source_names=json.dumps([dn1.name, dn2.name]),
 			target_doc=si,
 			args=json.dumps({"customer": dn1.customer, "merge_taxes": 1, "filtered_children": []}),
@@ -4018,7 +4018,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.assertEqual(expected, actual)
 
 	def test_pos_returns_without_update_outstanding_for_self(self):
-		from erpnext.accounts.doctype.sales_invoice.sales_invoice import make_sales_return
+		from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import make_sales_return
 
 		pos_profile = make_pos_profile()
 		pos_profile.payments = []
@@ -4153,13 +4153,13 @@ class TestSalesInvoice(ERPNextTestSuite):
 
 	@IntegrationTestCase.change_settings("Accounts Settings", {"enable_common_party_accounting": True})
 	def test_common_party_with_foreign_currency_jv(self):
-		from erpnext.accounts.doctype.account.test_account import create_account
-		from erpnext.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
+		from svasamm_erp.accounts.doctype.account.test_account import create_account
+		from svasamm_erp.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
 			make_customer,
 		)
-		from erpnext.accounts.doctype.party_link.party_link import create_party_link
-		from erpnext.buying.doctype.supplier.test_supplier import create_supplier
-		from erpnext.setup.utils import get_exchange_rate
+		from svasamm_erp.accounts.doctype.party_link.party_link import create_party_link
+		from svasamm_erp.buying.doctype.supplier.test_supplier import create_supplier
+		from svasamm_erp.setup.utils import get_exchange_rate
 
 		creditors = create_account(
 			account_name="Creditors USD",
@@ -4235,13 +4235,13 @@ class TestSalesInvoice(ERPNextTestSuite):
 
 	@IntegrationTestCase.change_settings("Accounts Settings", {"enable_common_party_accounting": True})
 	def test_common_party_with_different_currency_in_debtor_and_creditor(self):
-		from erpnext.accounts.doctype.account.test_account import create_account
-		from erpnext.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
+		from svasamm_erp.accounts.doctype.account.test_account import create_account
+		from svasamm_erp.accounts.doctype.opening_invoice_creation_tool.test_opening_invoice_creation_tool import (
 			make_customer,
 		)
-		from erpnext.accounts.doctype.party_link.party_link import create_party_link
-		from erpnext.buying.doctype.supplier.test_supplier import create_supplier
-		from erpnext.setup.utils import get_exchange_rate
+		from svasamm_erp.accounts.doctype.party_link.party_link import create_party_link
+		from svasamm_erp.buying.doctype.supplier.test_supplier import create_supplier
+		from svasamm_erp.setup.utils import get_exchange_rate
 
 		creditors = create_account(
 			account_name="Creditors INR",
@@ -4383,7 +4383,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.assertEqual(project.total_billed_amount, 300)
 
 	def test_pos_returns_with_party_account_currency(self):
-		from erpnext.accounts.doctype.sales_invoice.sales_invoice import make_sales_return
+		from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import make_sales_return
 
 		pos_profile = make_pos_profile()
 		pos_profile.payments = []
@@ -4407,9 +4407,9 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.assertEqual(abs(pos_return.payments[0].amount), pos.payments[0].amount)
 
 	def test_create_return_invoice_for_self_update(self):
-		from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
-		from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-		from erpnext.controllers.sales_and_purchase_return import make_return_doc
+		from svasamm_erp.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+		from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+		from svasamm_erp.controllers.sales_and_purchase_return import make_return_doc
 
 		invoice = create_sales_invoice()
 
@@ -4436,7 +4436,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.assertEqual(invoice.outstanding_amount, 0)
 
 	def test_prevents_fully_returned_invoice_with_zero_quantity(self):
-		from erpnext.controllers.sales_and_purchase_return import StockOverReturnError, make_return_doc
+		from svasamm_erp.controllers.sales_and_purchase_return import StockOverReturnError, make_return_doc
 
 		invoice = create_sales_invoice(qty=10)
 
@@ -4471,7 +4471,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 			self.assertRaises(frappe.ValidationError, pos.insert)
 
 	def test_stand_alone_credit_note_valuation(self):
-		from erpnext.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.item.test_item import make_item
 
 		item_code = "_Test Item for Credit Note Valuation"
 		make_item_for_si(
@@ -4510,7 +4510,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 		self.assertEqual(stock_ledger_entry.stock_value_difference, 2400.0)
 
 	def test_stand_alone_credit_note_zero_valuation(self):
-		from erpnext.stock.doctype.item.test_item import make_item
+		from svasamm_erp.stock.doctype.item.test_item import make_item
 
 		item_code = "_Test Item for Credit Note Zero Valuation"
 		make_item_for_si(
@@ -4551,7 +4551,7 @@ class TestSalesInvoice(ERPNextTestSuite):
 
 
 def make_item_for_si(item_code, properties=None):
-	from erpnext.stock.doctype.item.test_item import make_item
+	from svasamm_erp.stock.doctype.item.test_item import make_item
 
 	item = make_item(item_code, properties=properties)
 	item.is_stock_item = 1
@@ -4783,7 +4783,7 @@ def get_taxes_and_charges():
 
 
 def create_internal_parties():
-	from erpnext.selling.doctype.customer.test_customer import create_internal_customer
+	from svasamm_erp.selling.doctype.customer.test_customer import create_internal_customer
 
 	create_internal_customer(
 		customer_name="_Test Internal Customer",

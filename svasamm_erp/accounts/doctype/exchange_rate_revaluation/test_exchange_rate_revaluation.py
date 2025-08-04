@@ -6,9 +6,9 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, flt, today
 
-from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.accounts.test.accounts_mixin import AccountsTestMixin
+from svasamm_erp.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.accounts.test.accounts_mixin import AccountsTestMixin
 
 
 class TestExchangeRateRevaluation(AccountsTestMixin, IntegrationTestCase):
@@ -268,7 +268,7 @@ class TestExchangeRateRevaluation(AccountsTestMixin, IntegrationTestCase):
 		si.conversion_rate = 80
 		si.save().submit()
 
-		from erpnext.accounts.doctype.exchange_rate_revaluation.exchange_rate_revaluation import (
+		from svasamm_erp.accounts.doctype.exchange_rate_revaluation.exchange_rate_revaluation import (
 			get_account_details,
 		)
 

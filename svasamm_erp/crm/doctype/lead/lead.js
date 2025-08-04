@@ -1,10 +1,10 @@
 // Copyright (c) 2019, Frappe Technologies Pvt. Ltd. and Contributors
 // License: GNU General Public License v3. See license.txt
 
-frappe.provide("erpnext");
+frappe.provide("svasamm_erp");
 cur_frm.email_field = "email_id";
 
-erpnext.LeadController = class LeadController extends frappe.ui.form.Controller {
+svasamm_erp.LeadController = class LeadController extends frappe.ui.form.Controller {
 	setup() {
 		this.frm.make_methods = {
 			Customer: this.make_customer.bind(this),
@@ -25,14 +25,30 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 	refresh() {
 		var me = this;
 		let doc = this.frm.doc;
-		erpnext.toggle_naming_series();
+		svasamm_erp.toggle_naming_series();
 
 		if (!this.frm.is_new() && doc.__onload && !doc.__onload.is_customer) {
-			this.frm.add_custom_button(__("Customer"), this.make_customer.bind(this), __("Create"));
-			this.frm.add_custom_button(__("Opportunity"), this.make_opportunity.bind(this), __("Create"));
-			this.frm.add_custom_button(__("Quotation"), this.make_quotation.bind(this), __("Create"));
+			this.frm.add_custom_button(
+				__("Customer"),
+				this.make_customer.bind(this),
+				__("Create")
+			);
+			this.frm.add_custom_button(
+				__("Opportunity"),
+				this.make_opportunity.bind(this),
+				__("Create")
+			);
+			this.frm.add_custom_button(
+				__("Quotation"),
+				this.make_quotation.bind(this),
+				__("Create")
+			);
 			if (!doc.__onload.linked_prospects.length) {
-				this.frm.add_custom_button(__("Prospect"), this.make_prospect.bind(this), __("Create"));
+				this.frm.add_custom_button(
+					__("Prospect"),
+					this.make_prospect.bind(this),
+					__("Create")
+				);
 				this.frm.add_custom_button(
 					__("Add to Prospect"),
 					() => {
@@ -66,7 +82,7 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 			],
 			function (data) {
 				frappe.call({
-					method: "erpnext.crm.doctype.lead.lead.add_lead_to_prospect",
+					method: "svasamm_erp.crm.doctype.lead.lead.add_lead_to_prospect",
 					args: {
 						lead: frm.doc.name,
 						prospect: data.prospect,
@@ -87,14 +103,14 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 
 	make_customer() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.crm.doctype.lead.lead.make_customer",
+			method: "svasamm_erp.crm.doctype.lead.lead.make_customer",
 			frm: this.frm,
 		});
 	}
 
 	make_quotation() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.crm.doctype.lead.lead.make_quotation",
+			method: "svasamm_erp.crm.doctype.lead.lead.make_quotation",
 			frm: this.frm,
 		});
 	}
@@ -170,7 +186,7 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 						callback: function (r) {
 							if (!r.exc) {
 								frappe.model.open_mapped_doc({
-									method: "erpnext.crm.doctype.lead.lead.make_opportunity",
+									method: "svasamm_erp.crm.doctype.lead.lead.make_opportunity",
 									frm: frm,
 								});
 							}
@@ -183,7 +199,7 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 			d.show();
 		} else {
 			frappe.model.open_mapped_doc({
-				method: "erpnext.crm.doctype.lead.lead.make_opportunity",
+				method: "svasamm_erp.crm.doctype.lead.lead.make_opportunity",
 				frm: frm,
 			});
 		}
@@ -219,7 +235,7 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 	show_notes() {
 		if (this.frm.doc.docstatus == 1) return;
 
-		const crm_notes = new erpnext.utils.CRMNotes({
+		const crm_notes = new svasamm_erp.utils.CRMNotes({
 			frm: this.frm,
 			notes_wrapper: $(this.frm.fields_dict.notes_html.wrapper),
 		});
@@ -229,7 +245,7 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 	show_activities() {
 		if (this.frm.doc.docstatus == 1) return;
 
-		const crm_activities = new erpnext.utils.CRMActivities({
+		const crm_activities = new svasamm_erp.utils.CRMActivities({
 			frm: this.frm,
 			open_activities_wrapper: $(this.frm.fields_dict.open_activities_html.wrapper),
 			all_activities_wrapper: $(this.frm.fields_dict.all_activities_html.wrapper),
@@ -239,4 +255,4 @@ erpnext.LeadController = class LeadController extends frappe.ui.form.Controller 
 	}
 };
 
-extend_cscript(cur_frm.cscript, new erpnext.LeadController({ frm: cur_frm }));
+extend_cscript(cur_frm.cscript, new svasamm_erp.LeadController({ frm: cur_frm }));

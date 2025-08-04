@@ -6,7 +6,7 @@ import frappe
 from frappe import _
 from frappe.utils import cint, get_link_to_form
 
-from erpnext.controllers.status_updater import StatusUpdater
+from svasamm_erp.controllers.status_updater import StatusUpdater
 
 
 class POSOpeningEntry(StatusUpdater):
@@ -18,7 +18,7 @@ class POSOpeningEntry(StatusUpdater):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.pos_opening_entry_detail.pos_opening_entry_detail import (
+		from svasamm_erp.accounts.doctype.pos_opening_entry_detail.pos_opening_entry_detail import (
 			POSOpeningEntryDetail,
 		)
 
@@ -101,7 +101,7 @@ class POSOpeningEntry(StatusUpdater):
 		)
 
 	def check_poe_is_cancellable(self):
-		from erpnext.accounts.doctype.pos_closing_entry.pos_closing_entry import get_invoices
+		from svasamm_erp.accounts.doctype.pos_closing_entry.pos_closing_entry import get_invoices
 
 		invoices = get_invoices(
 			self.period_start_date, frappe.utils.get_datetime(), self.pos_profile, self.user

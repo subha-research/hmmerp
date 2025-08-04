@@ -5,12 +5,12 @@ import unittest
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.account.test_account import create_account
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import (
+from svasamm_erp.accounts.doctype.account.test_account import create_account
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import (
 	check_gl_entries,
 	create_sales_invoice,
 )
-from erpnext.stock.doctype.item.test_item import create_item
+from svasamm_erp.stock.doctype.item.test_item import create_item
 
 
 class TestProcessDeferredAccounting(IntegrationTestCase):

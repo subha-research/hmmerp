@@ -6,10 +6,10 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, flt, nowdate
 
-from erpnext.accounts.doctype.account.test_account import create_account
-from erpnext.accounts.doctype.journal_entry.journal_entry import get_payment_entry_against_invoice
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import get_gl_entries
+from svasamm_erp.accounts.doctype.account.test_account import create_account
+from svasamm_erp.accounts.doctype.journal_entry.journal_entry import get_payment_entry_against_invoice
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import get_gl_entries
 
 
 class TestInvoiceDiscounting(IntegrationTestCase):

@@ -10,7 +10,7 @@ from frappe.utils import getdate, nowdate
 from frappe.utils.nestedset import get_descendants_of
 from pypika.terms import LiteralValue
 
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+from svasamm_erp.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 	get_dimension_with_children,
 )

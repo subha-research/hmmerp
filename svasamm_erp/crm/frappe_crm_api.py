@@ -38,7 +38,7 @@ def create_prospect_against_crm_deal():
 			"company_name": doc.organization or doc.lead_name,
 			"no_of_employees": doc.no_of_employees,
 			"prospect_owner": doc.deal_owner,
-			"company": doc.erpnext_company,
+			"company": doc.svasamm_erp_company,
 			"crm_deal": doc.crm_deal,
 			"territory": doc.territory,
 			"industry": doc.industry,

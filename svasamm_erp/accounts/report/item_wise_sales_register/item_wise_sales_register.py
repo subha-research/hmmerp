@@ -11,10 +11,10 @@ from frappe.utils.nestedset import get_descendants_of
 from frappe.utils.xlsxutils import handle_html
 from pypika import Order
 
-from erpnext.accounts.report.sales_register.sales_register import get_mode_of_payments
-from erpnext.accounts.report.utils import get_values_for_columns
-from erpnext.controllers.taxes_and_totals import ItemWiseTaxDetail
-from erpnext.selling.report.item_wise_sales_history.item_wise_sales_history import (
+from svasamm_erp.accounts.report.sales_register.sales_register import get_mode_of_payments
+from svasamm_erp.accounts.report.utils import get_values_for_columns
+from svasamm_erp.controllers.taxes_and_totals import ItemWiseTaxDetail
+from svasamm_erp.selling.report.item_wise_sales_history.item_wise_sales_history import (
 	get_customer_details,
 )
 

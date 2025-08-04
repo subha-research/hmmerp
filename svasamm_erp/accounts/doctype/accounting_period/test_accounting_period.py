@@ -6,11 +6,11 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_months, nowdate
 
-from erpnext.accounts.doctype.accounting_period.accounting_period import (
+from svasamm_erp.accounts.doctype.accounting_period.accounting_period import (
 	ClosedAccountingPeriod,
 	OverlapError,
 )
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["Item"]
 

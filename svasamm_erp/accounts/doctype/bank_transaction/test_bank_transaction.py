@@ -8,18 +8,18 @@ from frappe import utils
 from frappe.model.docstatus import DocStatus
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.bank_reconciliation_tool.bank_reconciliation_tool import (
+from svasamm_erp.accounts.doctype.bank_reconciliation_tool.bank_reconciliation_tool import (
 	get_linked_payments,
 	reconcile_vouchers,
 )
-from erpnext.accounts.doctype.mode_of_payment.test_mode_of_payment import (
+from svasamm_erp.accounts.doctype.mode_of_payment.test_mode_of_payment import (
 	set_default_account_for_mode_of_payment,
 )
-from erpnext.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
-from erpnext.accounts.doctype.pos_profile.test_pos_profile import make_pos_profile
-from erpnext.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.tests.utils import if_lending_app_installed
+from svasamm_erp.accounts.doctype.payment_entry.test_payment_entry import get_payment_entry
+from svasamm_erp.accounts.doctype.pos_profile.test_pos_profile import make_pos_profile
+from svasamm_erp.accounts.doctype.purchase_invoice.test_purchase_invoice import make_purchase_invoice
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.tests.utils import if_lending_app_installed
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["Item", "Cost Center"]
 
@@ -447,7 +447,7 @@ def create_loan_and_repayment():
 		process_loan_interest_accrual_for_term_loans,
 	)
 
-	from erpnext.setup.doctype.employee.test_employee import make_employee
+	from svasamm_erp.setup.doctype.employee.test_employee import make_employee
 
 	create_loan_product(
 		"Personal Loan",

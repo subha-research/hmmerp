@@ -8,7 +8,7 @@ from frappe import _, qb
 from frappe.model.document import Document
 from frappe.utils.data import comma_and
 
-from erpnext.stock import get_warehouse_account_map
+from svasamm_erp.stock import get_warehouse_account_map
 
 
 class RepostAccountingLedger(Document):
@@ -20,7 +20,7 @@ class RepostAccountingLedger(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.repost_accounting_ledger_items.repost_accounting_ledger_items import (
+		from svasamm_erp.accounts.doctype.repost_accounting_ledger_items.repost_accounting_ledger_items import (
 			RepostAccountingLedgerItems,
 		)
 
@@ -112,7 +112,7 @@ class RepostAccountingLedger(Document):
 
 	@frappe.whitelist()
 	def generate_preview(self):
-		from erpnext.accounts.report.general_ledger.general_ledger import get_columns as get_gl_columns
+		from svasamm_erp.accounts.report.general_ledger.general_ledger import get_columns as get_gl_columns
 
 		gl_columns = []
 		gl_data = []
@@ -127,7 +127,7 @@ class RepostAccountingLedger(Document):
 
 			gl_data = self.gl_entries
 		rendered_page = frappe.render_template(
-			"erpnext/accounts/doctype/repost_accounting_ledger/repost_accounting_ledger.html",
+		"svasamm_erp/accounts/doctype/repost_accounting_ledger/repost_accounting_ledger.html",
 			{"gl_columns": gl_columns, "gl_data": gl_data},
 		)
 
@@ -137,7 +137,7 @@ class RepostAccountingLedger(Document):
 		if len(self.vouchers) > 5:
 			job_name = "repost_accounting_ledger_" + self.name
 			frappe.enqueue(
-				method="erpnext.accounts.doctype.repost_accounting_ledger.repost_accounting_ledger.start_repost",
+				method="svasamm_erp.accounts.doctype.repost_accounting_ledger.repost_accounting_ledger.start_repost",
 				account_repost_doc=self.name,
 				is_async=True,
 				job_name=job_name,
@@ -149,7 +149,7 @@ class RepostAccountingLedger(Document):
 
 @frappe.whitelist()
 def start_repost(account_repost_doc=str) -> None:
-	from erpnext.accounts.general_ledger import make_reverse_gl_entries
+	from svasamm_erp.accounts.general_ledger import make_reverse_gl_entries
 
 	frappe.flags.through_repost_accounting_ledger = True
 	if account_repost_doc:

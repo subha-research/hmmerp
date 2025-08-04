@@ -6,9 +6,9 @@ import frappe
 from frappe.core.doctype.user_permission.test_user_permission import create_user
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.pos_invoice.test_pos_invoice import create_pos_invoice
-from erpnext.accounts.doctype.pos_profile.test_pos_profile import make_pos_profile
-from erpnext.stock.doctype.stock_entry.test_stock_entry import make_stock_entry
+from svasamm_erp.accounts.doctype.pos_invoice.test_pos_invoice import create_pos_invoice
+from svasamm_erp.accounts.doctype.pos_profile.test_pos_profile import make_pos_profile
+from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_stock_entry
 
 
 class TestPOSOpeningEntry(IntegrationTestCase):
@@ -25,7 +25,7 @@ class TestPOSOpeningEntry(IntegrationTestCase):
 		# Make stock available for POS Sales
 		frappe.db.sql("delete from `tabPOS Opening Entry`")
 		make_stock_entry(target="_Test Warehouse - _TC", qty=2, basic_rate=100)
-		from erpnext.accounts.doctype.pos_closing_entry.test_pos_closing_entry import init_user_and_profile
+		from svasamm_erp.accounts.doctype.pos_closing_entry.test_pos_closing_entry import init_user_and_profile
 
 		self.init_user_and_profile = init_user_and_profile
 

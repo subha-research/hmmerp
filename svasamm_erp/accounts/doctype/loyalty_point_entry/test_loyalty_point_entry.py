@@ -6,8 +6,8 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import today
 
-from erpnext.accounts.doctype.loyalty_program.test_loyalty_program import create_records
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.accounts.doctype.loyalty_program.test_loyalty_program import create_records
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
 
 
 class TestLoyaltyPointEntry(IntegrationTestCase):

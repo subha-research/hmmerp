@@ -7,21 +7,21 @@ import frappe
 from frappe import _
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.mode_of_payment.test_mode_of_payment import (
+from svasamm_erp.accounts.doctype.mode_of_payment.test_mode_of_payment import (
 	set_default_account_for_mode_of_payment,
 )
-from erpnext.accounts.doctype.pos_invoice.pos_invoice import make_sales_return
-from erpnext.accounts.doctype.pos_profile.test_pos_profile import make_pos_profile
-from erpnext.accounts.doctype.sales_invoice.sales_invoice import PartialPaymentValidationError
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.stock.doctype.item.test_item import make_item
-from erpnext.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
-from erpnext.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
+from svasamm_erp.accounts.doctype.pos_invoice.pos_invoice import make_sales_return
+from svasamm_erp.accounts.doctype.pos_profile.test_pos_profile import make_pos_profile
+from svasamm_erp.accounts.doctype.sales_invoice.sales_invoice import PartialPaymentValidationError
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.stock.doctype.item.test_item import make_item
+from svasamm_erp.stock.doctype.purchase_receipt.test_purchase_receipt import make_purchase_receipt
+from svasamm_erp.stock.doctype.serial_and_batch_bundle.test_serial_and_batch_bundle import (
 	get_batch_from_bundle,
 	get_serial_nos_from_bundle,
 	make_serial_batch_bundle,
 )
-from erpnext.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
+from svasamm_erp.stock.doctype.stock_entry.stock_entry_utils import make_stock_entry
 
 
 class TestPOSInvoice(IntegrationTestCase):
@@ -33,8 +33,8 @@ class TestPOSInvoice(IntegrationTestCase):
 		make_stock_entry(target="_Test Warehouse - _TC", item_code="_Test Item", qty=800, basic_rate=100)
 		frappe.db.sql("delete from `tabTax Rule`")
 
-		from erpnext.accounts.doctype.pos_closing_entry.test_pos_closing_entry import init_user_and_profile
-		from erpnext.accounts.doctype.pos_opening_entry.test_pos_opening_entry import create_opening_entry
+		from svasamm_erp.accounts.doctype.pos_closing_entry.test_pos_closing_entry import init_user_and_profile
+		from svasamm_erp.accounts.doctype.pos_opening_entry.test_pos_opening_entry import create_opening_entry
 
 		cls.test_user, cls.pos_profile = init_user_and_profile()
 		cls.opening_entry = create_opening_entry(cls.pos_profile, cls.test_user.name)
@@ -262,7 +262,7 @@ class TestPOSInvoice(IntegrationTestCase):
 		self.assertEqual(pos_return.get("payments")[1].amount, -500)
 
 	def test_pos_return_for_serialized_item(self):
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
 
 		se = make_serialized_item(
 			self,
@@ -302,7 +302,7 @@ class TestPOSInvoice(IntegrationTestCase):
 		)
 
 	def test_partial_pos_returns(self):
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
 
 		se = make_serialized_item(
 			self,
@@ -446,7 +446,7 @@ class TestPOSInvoice(IntegrationTestCase):
 		set_allow_partial_payment(self.pos_profile, 0)
 
 	def test_serialized_item_transaction(self):
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
 
 		se = make_serialized_item(
 			self,
@@ -497,7 +497,7 @@ class TestPOSInvoice(IntegrationTestCase):
 		self.assertRaises(frappe.ValidationError, pos2.submit)
 
 	def test_delivered_serialized_item_transaction(self):
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
 
 		se = make_serialized_item(
 			self,
@@ -547,7 +547,7 @@ class TestPOSInvoice(IntegrationTestCase):
 		self.assertRaises(frappe.ValidationError, pos2.submit)
 
 	def test_invalid_serial_no_validation(self):
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
 
 		se = make_serialized_item(
 			self,
@@ -578,7 +578,7 @@ class TestPOSInvoice(IntegrationTestCase):
 		self.assertRaises(frappe.ValidationError, pos.insert)
 
 	def test_value_error_on_serial_no_validation(self):
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
 
 		se = make_serialized_item(
 			self,
@@ -638,10 +638,10 @@ class TestPOSInvoice(IntegrationTestCase):
 		pos2.save()
 
 	def test_loyalty_points(self):
-		from erpnext.accounts.doctype.loyalty_program.loyalty_program import (
+		from svasamm_erp.accounts.doctype.loyalty_program.loyalty_program import (
 			get_loyalty_program_details_with_points,
 		)
-		from erpnext.accounts.doctype.loyalty_program.test_loyalty_program import create_records
+		from svasamm_erp.accounts.doctype.loyalty_program.test_loyalty_program import create_records
 
 		create_records()
 		frappe.db.set_value("Customer", "Test Loyalty Customer", "loyalty_program", "Test Single Loyalty")
@@ -676,7 +676,7 @@ class TestPOSInvoice(IntegrationTestCase):
 		self.assertEqual(after_cancel_lp_details.loyalty_points, before_lp_details.loyalty_points)
 
 	def test_loyalty_points_redeemption(self):
-		from erpnext.accounts.doctype.loyalty_program.loyalty_program import (
+		from svasamm_erp.accounts.doctype.loyalty_program.loyalty_program import (
 			get_loyalty_program_details_with_points,
 		)
 
@@ -710,10 +710,10 @@ class TestPOSInvoice(IntegrationTestCase):
 		self.assertEqual(after_redeem_lp_details.loyalty_points, 9)
 
 	def test_merging_into_sales_invoice_with_discount(self):
-		from erpnext.accounts.doctype.pos_closing_entry.test_pos_closing_entry import (
+		from svasamm_erp.accounts.doctype.pos_closing_entry.test_pos_closing_entry import (
 			init_user_and_profile,
 		)
-		from erpnext.accounts.doctype.pos_invoice_merge_log.pos_invoice_merge_log import (
+		from svasamm_erp.accounts.doctype.pos_invoice_merge_log.pos_invoice_merge_log import (
 			consolidate_pos_invoices,
 		)
 
@@ -736,10 +736,10 @@ class TestPOSInvoice(IntegrationTestCase):
 		self.assertEqual(rounded_total, 3470)
 
 	def test_merging_into_sales_invoice_with_discount_and_inclusive_tax(self):
-		from erpnext.accounts.doctype.pos_closing_entry.test_pos_closing_entry import (
+		from svasamm_erp.accounts.doctype.pos_closing_entry.test_pos_closing_entry import (
 			init_user_and_profile,
 		)
-		from erpnext.accounts.doctype.pos_invoice_merge_log.pos_invoice_merge_log import (
+		from svasamm_erp.accounts.doctype.pos_invoice_merge_log.pos_invoice_merge_log import (
 			consolidate_pos_invoices,
 		)
 
@@ -785,10 +785,10 @@ class TestPOSInvoice(IntegrationTestCase):
 		self.assertEqual(rounded_total, 840)
 
 	def test_merging_with_validate_selling_price(self):
-		from erpnext.accounts.doctype.pos_closing_entry.test_pos_closing_entry import (
+		from svasamm_erp.accounts.doctype.pos_closing_entry.test_pos_closing_entry import (
 			init_user_and_profile,
 		)
-		from erpnext.accounts.doctype.pos_invoice_merge_log.pos_invoice_merge_log import (
+		from svasamm_erp.accounts.doctype.pos_invoice_merge_log.pos_invoice_merge_log import (
 			consolidate_pos_invoices,
 		)
 
@@ -838,10 +838,10 @@ class TestPOSInvoice(IntegrationTestCase):
 		self.assertEqual(rounded_total, 400)
 
 	def test_pos_batch_reservation(self):
-		from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
+		from svasamm_erp.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
 			get_auto_batch_nos,
 		)
-		from erpnext.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
+		from svasamm_erp.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
 			create_batch_item_with_batch,
 		)
 
@@ -898,13 +898,13 @@ class TestPOSInvoice(IntegrationTestCase):
 				self.assertEqual(batch.qty, 5)
 
 	def test_pos_batch_item_qty_validation(self):
-		from erpnext.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
+		from svasamm_erp.stock.doctype.serial_and_batch_bundle.serial_and_batch_bundle import (
 			BatchNegativeStockError,
 		)
-		from erpnext.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
+		from svasamm_erp.stock.doctype.stock_reconciliation.test_stock_reconciliation import (
 			create_batch_item_with_batch,
 		)
-		from erpnext.stock.serial_batch_bundle import SerialBatchCreation
+		from svasamm_erp.stock.serial_batch_bundle import SerialBatchCreation
 
 		create_batch_item_with_batch("_BATCH ITEM", "TestBatch 01")
 		item = frappe.get_doc("Item", "_BATCH ITEM")
@@ -954,7 +954,7 @@ class TestPOSInvoice(IntegrationTestCase):
 		se.cancel()
 
 	def test_ignore_pricing_rule(self):
-		from erpnext.accounts.doctype.pricing_rule.test_pricing_rule import make_pricing_rule
+		from svasamm_erp.accounts.doctype.pricing_rule.test_pricing_rule import make_pricing_rule
 
 		item_price = frappe.get_doc(
 			{
@@ -992,11 +992,11 @@ class TestPOSInvoice(IntegrationTestCase):
 			pr.delete()
 
 	def test_delivered_serial_no_case(self):
-		from erpnext.accounts.doctype.pos_invoice_merge_log.test_pos_invoice_merge_log import (
+		from svasamm_erp.accounts.doctype.pos_invoice_merge_log.test_pos_invoice_merge_log import (
 			init_user_and_profile,
 		)
-		from erpnext.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
-		from erpnext.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
+		from svasamm_erp.stock.doctype.delivery_note.test_delivery_note import create_delivery_note
+		from svasamm_erp.stock.doctype.stock_entry.test_stock_entry import make_serialized_item
 
 		frappe.db.savepoint("before_test_delivered_serial_no_case")
 		try:

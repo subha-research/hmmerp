@@ -3,7 +3,7 @@ import unittest
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.crm.report.sales_pipeline_analytics.sales_pipeline_analytics import execute
+from svasamm_erp.crm.report.sales_pipeline_analytics.sales_pipeline_analytics import execute
 
 
 class TestSalesPipelineAnalytics(IntegrationTestCase):

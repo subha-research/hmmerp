@@ -7,8 +7,8 @@ from frappe import _
 from frappe.query_builder.functions import Sum
 from frappe.utils import cint, flt
 
-from erpnext.accounts.report.general_ledger.general_ledger import get_accounts_with_children
-from erpnext.accounts.report.trial_balance.trial_balance import validate_filters
+from svasamm_erp.accounts.report.general_ledger.general_ledger import get_accounts_with_children
+from svasamm_erp.accounts.report.trial_balance.trial_balance import validate_filters
 
 
 def execute(filters=None):

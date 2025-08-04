@@ -5,15 +5,15 @@ import unittest
 import frappe
 from frappe.utils import now_datetime, nowdate
 
-from erpnext.accounts.doctype.budget.budget import (
+from svasamm_erp.accounts.doctype.budget.budget import (
 	BudgetError,
 	get_accumulated_monthly_budget,
 	get_actual_expense,
 )
-from erpnext.accounts.doctype.journal_entry.test_journal_entry import make_journal_entry
-from erpnext.accounts.utils import get_fiscal_year
-from erpnext.buying.doctype.purchase_order.test_purchase_order import create_purchase_order
-from erpnext.tests.utils import ERPNextTestSuite
+from svasamm_erp.accounts.doctype.journal_entry.test_journal_entry import make_journal_entry
+from svasamm_erp.accounts.utils import get_fiscal_year
+from svasamm_erp.buying.doctype.purchase_order.test_purchase_order import create_purchase_order
+from svasamm_erp.tests.utils import ERPNextTestSuite
 
 
 class TestBudget(ERPNextTestSuite):
@@ -352,8 +352,8 @@ class TestBudget(ERPNextTestSuite):
 		jv.cancel()
 
 	def test_monthly_budget_against_main_cost_center(self):
-		from erpnext.accounts.doctype.cost_center.test_cost_center import create_cost_center
-		from erpnext.accounts.doctype.cost_center_allocation.test_cost_center_allocation import (
+		from svasamm_erp.accounts.doctype.cost_center.test_cost_center import create_cost_center
+		from svasamm_erp.accounts.doctype.cost_center_allocation.test_cost_center_allocation import (
 			create_cost_center_allocation,
 		)
 

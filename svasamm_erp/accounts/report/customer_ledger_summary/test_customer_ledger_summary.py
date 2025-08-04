@@ -3,11 +3,11 @@ from frappe import qb
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_days, flt, getdate, today
 
-from erpnext.accounts.doctype.payment_entry.payment_entry import get_payment_entry
-from erpnext.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
-from erpnext.accounts.report.customer_ledger_summary.customer_ledger_summary import execute
-from erpnext.accounts.test.accounts_mixin import AccountsTestMixin
-from erpnext.controllers.sales_and_purchase_return import make_return_doc
+from svasamm_erp.accounts.doctype.payment_entry.payment_entry import get_payment_entry
+from svasamm_erp.accounts.doctype.sales_invoice.test_sales_invoice import create_sales_invoice
+from svasamm_erp.accounts.report.customer_ledger_summary.customer_ledger_summary import execute
+from svasamm_erp.accounts.test.accounts_mixin import AccountsTestMixin
+from svasamm_erp.controllers.sales_and_purchase_return import make_return_doc
 
 
 class TestCustomerLedgerSummary(AccountsTestMixin, IntegrationTestCase):

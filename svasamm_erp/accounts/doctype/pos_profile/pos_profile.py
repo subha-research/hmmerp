@@ -8,7 +8,7 @@ from frappe.core.doctype.user_permission.user_permission import get_permitted_do
 from frappe.model.document import Document
 from frappe.utils import get_link_to_form, now
 
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+from svasamm_erp.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_checks_for_pl_and_bs_accounts,
 )
 
@@ -22,10 +22,10 @@ class POSProfile(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.pos_customer_group.pos_customer_group import POSCustomerGroup
-		from erpnext.accounts.doctype.pos_item_group.pos_item_group import POSItemGroup
-		from erpnext.accounts.doctype.pos_payment_method.pos_payment_method import POSPaymentMethod
-		from erpnext.accounts.doctype.pos_profile_user.pos_profile_user import POSProfileUser
+		from svasamm_erp.accounts.doctype.pos_customer_group.pos_customer_group import POSCustomerGroup
+		from svasamm_erp.accounts.doctype.pos_item_group.pos_item_group import POSItemGroup
+		from svasamm_erp.accounts.doctype.pos_payment_method.pos_payment_method import POSPaymentMethod
+		from svasamm_erp.accounts.doctype.pos_profile_user.pos_profile_user import POSProfileUser
 
 		account_for_change_amount: DF.Link | None
 		action_on_new_invoice: DF.Literal[

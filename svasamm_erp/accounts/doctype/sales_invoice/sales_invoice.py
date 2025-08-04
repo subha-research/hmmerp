@@ -11,43 +11,43 @@ from frappe.model.utils import get_fetch_values
 from frappe.utils import add_days, cint, cstr, flt, formatdate, get_link_to_form, getdate, nowdate
 from frappe.utils.data import comma_and
 
-import erpnext
-from erpnext.accounts.deferred_revenue import validate_service_stop_date
-from erpnext.accounts.doctype.loyalty_program.loyalty_program import (
+import svasamm_erp
+from svasamm_erp.accounts.deferred_revenue import validate_service_stop_date
+from svasamm_erp.accounts.doctype.loyalty_program.loyalty_program import (
 	get_loyalty_program_details_with_points,
 	validate_loyalty_points,
 )
-from erpnext.accounts.doctype.pricing_rule.utils import (
+from svasamm_erp.accounts.doctype.pricing_rule.utils import (
 	update_coupon_code_count,
 	validate_coupon_code,
 )
-from erpnext.accounts.doctype.repost_accounting_ledger.repost_accounting_ledger import (
+from svasamm_erp.accounts.doctype.repost_accounting_ledger.repost_accounting_ledger import (
 	validate_docs_for_deferred_accounting,
 	validate_docs_for_voucher_types,
 )
-from erpnext.accounts.doctype.tax_withholding_category.tax_withholding_category import (
+from svasamm_erp.accounts.doctype.tax_withholding_category.tax_withholding_category import (
 	get_party_tax_withholding_details,
 )
-from erpnext.accounts.general_ledger import get_round_off_account_and_cost_center
-from erpnext.accounts.party import get_due_date, get_party_account, get_party_details
-from erpnext.accounts.utils import (
+from svasamm_erp.accounts.general_ledger import get_round_off_account_and_cost_center
+from svasamm_erp.accounts.party import get_due_date, get_party_account, get_party_details
+from svasamm_erp.accounts.utils import (
 	cancel_exchange_gain_loss_journal,
 	get_account_currency,
 	update_voucher_outstanding,
 )
-from erpnext.assets.doctype.asset.depreciation import (
+from svasamm_erp.assets.doctype.asset.depreciation import (
 	depreciate_asset,
 	get_gl_entries_on_asset_disposal,
 	get_gl_entries_on_asset_regain,
 	reset_depreciation_schedule,
 	reverse_depreciation_entry_made_on_disposal,
 )
-from erpnext.assets.doctype.asset_activity.asset_activity import add_asset_activity
-from erpnext.controllers.accounts_controller import validate_account_head
-from erpnext.controllers.selling_controller import SellingController
-from erpnext.projects.doctype.timesheet.timesheet import get_projectwise_timesheet_data
-from erpnext.setup.doctype.company.company import update_company_current_month_sales
-from erpnext.stock.doctype.delivery_note.delivery_note import update_billed_amount_based_on_so
+from svasamm_erp.assets.doctype.asset_activity.asset_activity import add_asset_activity
+from svasamm_erp.controllers.accounts_controller import validate_account_head
+from svasamm_erp.controllers.selling_controller import SellingController
+from svasamm_erp.projects.doctype.timesheet.timesheet import get_projectwise_timesheet_data
+from svasamm_erp.setup.doctype.company.company import update_company_current_month_sales
+from svasamm_erp.stock.doctype.delivery_note.delivery_note import update_billed_amount_based_on_so
 
 form_grid_templates = {"items": "templates/form_grid/item_grid.html"}
 
@@ -65,19 +65,19 @@ class SalesInvoice(SellingController):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.payment_schedule.payment_schedule import PaymentSchedule
-		from erpnext.accounts.doctype.pricing_rule_detail.pricing_rule_detail import PricingRuleDetail
-		from erpnext.accounts.doctype.sales_invoice_advance.sales_invoice_advance import SalesInvoiceAdvance
-		from erpnext.accounts.doctype.sales_invoice_item.sales_invoice_item import SalesInvoiceItem
-		from erpnext.accounts.doctype.sales_invoice_payment.sales_invoice_payment import SalesInvoicePayment
-		from erpnext.accounts.doctype.sales_invoice_timesheet.sales_invoice_timesheet import (
+		from svasamm_erp.accounts.doctype.payment_schedule.payment_schedule import PaymentSchedule
+		from svasamm_erp.accounts.doctype.pricing_rule_detail.pricing_rule_detail import PricingRuleDetail
+		from svasamm_erp.accounts.doctype.sales_invoice_advance.sales_invoice_advance import SalesInvoiceAdvance
+		from svasamm_erp.accounts.doctype.sales_invoice_item.sales_invoice_item import SalesInvoiceItem
+		from svasamm_erp.accounts.doctype.sales_invoice_payment.sales_invoice_payment import SalesInvoicePayment
+		from svasamm_erp.accounts.doctype.sales_invoice_timesheet.sales_invoice_timesheet import (
 			SalesInvoiceTimesheet,
 		)
-		from erpnext.accounts.doctype.sales_taxes_and_charges.sales_taxes_and_charges import (
+		from svasamm_erp.accounts.doctype.sales_taxes_and_charges.sales_taxes_and_charges import (
 			SalesTaxesandCharges,
 		)
-		from erpnext.selling.doctype.sales_team.sales_team import SalesTeam
-		from erpnext.stock.doctype.packed_item.packed_item import PackedItem
+		from svasamm_erp.selling.doctype.sales_team.sales_team import SalesTeam
+		from svasamm_erp.stock.doctype.packed_item.packed_item import PackedItem
 
 		account_for_change_amount: DF.Link | None
 		additional_discount_account: DF.Link | None
@@ -696,7 +696,7 @@ class SalesInvoice(SellingController):
 		)
 
 	def check_credit_limit(self):
-		from erpnext.selling.doctype.customer.customer import check_credit_limit
+		from svasamm_erp.selling.doctype.customer.customer import check_credit_limit
 
 		validate_against_credit_limit = False
 		bypass_credit_limit_check_at_sales_order = frappe.db.get_value(
@@ -845,7 +845,7 @@ class SalesInvoice(SellingController):
 				"Company", self.company, "default_cash_account"
 			)
 
-		from erpnext.stock.get_item_details import (
+		from svasamm_erp.stock.get_item_details import (
 			ItemDetailsCtx,
 			get_pos_profile,
 			get_pos_profile_item_details_,
@@ -1208,7 +1208,7 @@ class SalesInvoice(SellingController):
 
 	def update_packing_list(self):
 		if cint(self.update_stock) == 1:
-			from erpnext.stock.doctype.packed_item.packed_item import make_packing_list
+			from svasamm_erp.stock.doctype.packed_item.packed_item import make_packing_list
 
 			make_packing_list(self)
 		else:
@@ -1385,9 +1385,9 @@ class SalesInvoice(SellingController):
 		return disposal_date
 
 	def make_gl_entries(self, gl_entries=None, from_repost=False):
-		from erpnext.accounts.general_ledger import make_gl_entries, make_reverse_gl_entries
+		from svasamm_erp.accounts.general_ledger import make_gl_entries, make_reverse_gl_entries
 
-		auto_accounting_for_stock = erpnext.is_perpetual_inventory_enabled(self.company)
+		auto_accounting_for_stock = svasamm_erp.is_perpetual_inventory_enabled(self.company)
 		if not gl_entries:
 			gl_entries = self.get_gl_entries()
 
@@ -1427,7 +1427,7 @@ class SalesInvoice(SellingController):
 			make_reverse_gl_entries(voucher_type=self.doctype, voucher_no=self.name)
 
 	def get_gl_entries(self, warehouse_account=None):
-		from erpnext.accounts.general_ledger import merge_similar_entries
+		from svasamm_erp.accounts.general_ledger import merge_similar_entries
 
 		gl_entries = []
 
@@ -1590,7 +1590,7 @@ class SalesInvoice(SellingController):
 					)
 
 		# expense account gl entries
-		if cint(self.update_stock) and erpnext.is_perpetual_inventory_enabled(self.company):
+		if cint(self.update_stock) and svasamm_erp.is_perpetual_inventory_enabled(self.company):
 			gl_entries += super().get_gl_entries()
 
 	def get_gl_entries_for_fixed_asset(self, item, gl_entries):
@@ -2009,7 +2009,7 @@ class SalesInvoice(SellingController):
 
 	# redeem the loyalty points.
 	def apply_loyalty_points(self):
-		from erpnext.accounts.doctype.loyalty_point_entry.loyalty_point_entry import (
+		from svasamm_erp.accounts.doctype.loyalty_point_entry.loyalty_point_entry import (
 			get_loyalty_point_entries,
 			get_redemption_details,
 		)
@@ -2223,7 +2223,7 @@ def unlink_inter_company_doc(doctype, name, inter_company_reference):
 
 
 def get_list_context(context=None):
-	from erpnext.controllers.website_list_for_contact import get_list_context
+	from svasamm_erp.controllers.website_list_for_contact import get_list_context
 
 	list_context = get_list_context(context)
 	list_context.update(
@@ -2317,7 +2317,7 @@ def make_delivery_note(source_name, target_doc=None):
 
 @frappe.whitelist()
 def make_sales_return(source_name, target_doc=None):
-	from erpnext.controllers.sales_and_purchase_return import make_return_doc
+	from svasamm_erp.controllers.sales_and_purchase_return import make_return_doc
 
 	return make_return_doc("Sales Invoice", source_name, target_doc)
 
@@ -2414,7 +2414,7 @@ def make_inter_company_purchase_invoice(source_name, target_doc=None):
 	return make_inter_company_transaction("Sales Invoice", source_name, target_doc)
 
 
-@erpnext.allow_regional
+@svasamm_erp.allow_regional
 def make_regional_gl_entries(gl_entries, doc):
 	return gl_entries
 
@@ -2787,7 +2787,7 @@ def update_address(doc, address_field, address_display_field, address_name):
 @frappe.whitelist()
 def get_loyalty_programs(customer):
 	"""sets applicable loyalty program to the customer or returns a list of applicable programs"""
-	from erpnext.selling.doctype.customer.customer import get_loyalty_programs
+	from svasamm_erp.selling.doctype.customer.customer import get_loyalty_programs
 
 	customer = frappe.get_doc("Customer", customer)
 	if customer.loyalty_program:
@@ -2899,7 +2899,7 @@ def create_dunning(source_name, target_doc=None, ignore_permissions=False):
 	from frappe.model.mapper import get_mapped_doc
 
 	def postprocess_dunning(source, target):
-		from erpnext.accounts.doctype.dunning.dunning import get_dunning_letter_text
+		from svasamm_erp.accounts.doctype.dunning.dunning import get_dunning_letter_text
 
 		dunning_type = frappe.db.exists("Dunning Type", {"is_default": 1, "company": source.company})
 		if dunning_type:

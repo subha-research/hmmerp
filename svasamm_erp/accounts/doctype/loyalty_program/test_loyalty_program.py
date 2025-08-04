@@ -6,11 +6,11 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import cint, flt, getdate, today
 
-from erpnext.accounts.doctype.loyalty_program.loyalty_program import (
+from svasamm_erp.accounts.doctype.loyalty_program.loyalty_program import (
 	get_loyalty_details,
 	get_loyalty_program_details_with_points,
 )
-from erpnext.accounts.party import get_dashboard_info
+from svasamm_erp.accounts.party import get_dashboard_info
 
 
 class TestLoyaltyProgram(IntegrationTestCase):
@@ -201,7 +201,7 @@ class TestLoyaltyProgram(IntegrationTestCase):
 		for d in company_wise_info:
 			self.assertTrue(d.get("loyalty_points"))
 
-	@unittest.mock.patch("erpnext.accounts.doctype.loyalty_program.loyalty_program.get_loyalty_details")
+	@unittest.mock.patch("svasamm_erp.accounts.doctype.loyalty_program.loyalty_program.get_loyalty_details")
 	def test_tier_selection(self, mock_get_loyalty_details):
 		# Create a new loyalty program with multiple tiers
 		loyalty_program = frappe.get_doc(

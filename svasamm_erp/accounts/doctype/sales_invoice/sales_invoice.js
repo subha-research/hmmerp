@@ -1,17 +1,17 @@
 // Copyright (c) 2015, Frappe Technologies Pvt. Ltd. and Contributors
 // License: GNU General Public License v3. See license.txt
 
-frappe.provide("erpnext.accounts");
+frappe.provide("svasamm_erp.accounts");
 
 cur_frm.cscript.tax_table = "Sales Taxes and Charges";
 
-erpnext.accounts.taxes.setup_tax_validations("Sales Invoice");
-erpnext.accounts.payment_triggers.setup("Sales Invoice");
-erpnext.accounts.pos.setup("Sales Invoice");
-erpnext.accounts.taxes.setup_tax_filters("Sales Taxes and Charges");
-erpnext.sales_common.setup_selling_controller();
-erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
-	erpnext.selling.SellingController
+svasamm_erp.accounts.taxes.setup_tax_validations("Sales Invoice");
+svasamm_erp.accounts.payment_triggers.setup("Sales Invoice");
+svasamm_erp.accounts.pos.setup("Sales Invoice");
+svasamm_erp.accounts.taxes.setup_tax_filters("Sales Taxes and Charges");
+svasamm_erp.sales_common.setup_selling_controller();
+svasamm_erp.accounts.SalesInvoiceController = class SalesInvoiceController extends (
+	svasamm_erp.selling.SellingController
 ) {
 	setup(doc) {
 		this.setup_posting_date_time_check();
@@ -23,7 +23,7 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 	}
 	company() {
 		super.company();
-		erpnext.accounts.dimensions.update_dimension(this.frm, this.frm.doctype);
+		svasamm_erp.accounts.dimensions.update_dimension(this.frm, this.frm.doctype);
 	}
 	onload() {
 		var me = this;
@@ -49,8 +49,8 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 			this.frm.set_df_property("debit_to", "print_hide", 0);
 		}
 
-		erpnext.queries.setup_queries(this.frm, "Warehouse", function () {
-			return erpnext.queries.warehouse(me.frm.doc);
+		svasamm_erp.queries.setup_queries(this.frm, "Warehouse", function () {
+			return svasamm_erp.queries.warehouse(me.frm.doc);
 		});
 
 		if (this.frm.doc.__islocal && this.frm.doc.is_pos) {
@@ -59,7 +59,7 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 			me.frm.script_manager.trigger("is_pos");
 			me.frm.refresh_fields();
 		}
-		erpnext.queries.setup_warehouse_query(this.frm);
+		svasamm_erp.queries.setup_warehouse_query(this.frm);
 	}
 
 	refresh(doc, dt, dn) {
@@ -77,11 +77,11 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 		}
 
 		this.show_general_ledger();
-		erpnext.accounts.ledger_preview.show_accounting_ledger_preview(this.frm);
+		svasamm_erp.accounts.ledger_preview.show_accounting_ledger_preview(this.frm);
 
 		if (doc.update_stock) {
 			this.show_stock_ledger();
-			erpnext.accounts.ledger_preview.show_stock_ledger_preview(this.frm);
+			svasamm_erp.accounts.ledger_preview.show_stock_ledger_preview(this.frm);
 		}
 
 		if (doc.docstatus == 1 && doc.outstanding_amount != 0) {
@@ -179,30 +179,30 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 			}
 		}
 
-		erpnext.accounts.unreconcile_payment.add_unreconcile_btn(me.frm);
+		svasamm_erp.accounts.unreconcile_payment.add_unreconcile_btn(me.frm);
 
 		if (this.frm.doc.is_created_using_pos && !this.frm.doc.is_return) {
-			erpnext.accounts.dimensions.update_dimension(this.frm, this.frm.doctype);
+			svasamm_erp.accounts.dimensions.update_dimension(this.frm, this.frm.doctype);
 		}
 	}
 
 	make_invoice_discounting() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.accounts.doctype.sales_invoice.sales_invoice.create_invoice_discounting",
+			method: "svasamm_erp.accounts.doctype.sales_invoice.sales_invoice.create_invoice_discounting",
 			frm: this.frm,
 		});
 	}
 
 	make_dunning() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.accounts.doctype.sales_invoice.sales_invoice.create_dunning",
+			method: "svasamm_erp.accounts.doctype.sales_invoice.sales_invoice.create_dunning",
 			frm: this.frm,
 		});
 	}
 
 	make_maintenance_schedule() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.accounts.doctype.sales_invoice.sales_invoice.make_maintenance_schedule",
+			method: "svasamm_erp.accounts.doctype.sales_invoice.sales_invoice.make_maintenance_schedule",
 			frm: this.frm,
 		});
 	}
@@ -252,8 +252,8 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 		this.$sales_order_btn = this.frm.add_custom_button(
 			__("Sales Order"),
 			function () {
-				erpnext.utils.map_current_doc({
-					method: "erpnext.selling.doctype.sales_order.sales_order.make_sales_invoice",
+				svasamm_erp.utils.map_current_doc({
+					method: "svasamm_erp.selling.doctype.sales_order.sales_order.make_sales_invoice",
 					source_doctype: "Sales Order",
 					target: me.frm,
 					setters: {
@@ -276,8 +276,8 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 		this.$quotation_btn = this.frm.add_custom_button(
 			__("Quotation"),
 			function () {
-				erpnext.utils.map_current_doc({
-					method: "erpnext.selling.doctype.quotation.quotation.make_sales_invoice",
+				svasamm_erp.utils.map_current_doc({
+					method: "svasamm_erp.selling.doctype.quotation.quotation.make_sales_invoice",
 					source_doctype: "Quotation",
 					target: me.frm,
 					setters: [
@@ -305,8 +305,8 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 		this.$delivery_note_btn = this.frm.add_custom_button(
 			__("Delivery Note"),
 			function () {
-				erpnext.utils.map_current_doc({
-					method: "erpnext.stock.doctype.delivery_note.delivery_note.make_sales_invoice",
+				svasamm_erp.utils.map_current_doc({
+					method: "svasamm_erp.stock.doctype.delivery_note.delivery_note.make_sales_invoice",
 					source_doctype: "Delivery Note",
 					target: me.frm,
 					date_field: "posting_date",
@@ -321,7 +321,7 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 						};
 						if (me.frm.doc.customer) filters["customer"] = me.frm.doc.customer;
 						return {
-							query: "erpnext.controllers.queries.get_delivery_notes_to_be_billed",
+							query: "svasamm_erp.controllers.queries.get_delivery_notes_to_be_billed",
 							filters: filters,
 						};
 					},
@@ -343,9 +343,9 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 
 		if (this.frm.doc.__onload && this.frm.doc.__onload.load_after_mapping) return;
 
-		erpnext.utils.get_party_details(
+		svasamm_erp.utils.get_party_details(
 			this.frm,
-			"erpnext.accounts.party.get_party_details",
+			"svasamm_erp.accounts.party.get_party_details",
 			{
 				posting_date: this.frm.doc.posting_date,
 				party: this.frm.doc.customer,
@@ -364,7 +364,7 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 
 		if (this.frm.doc.customer) {
 			frappe.call({
-				method: "erpnext.accounts.doctype.sales_invoice.sales_invoice.get_loyalty_programs",
+				method: "svasamm_erp.accounts.doctype.sales_invoice.sales_invoice.get_loyalty_programs",
 				args: {
 					customer: this.frm.doc.customer,
 				},
@@ -380,7 +380,7 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 	make_inter_company_invoice() {
 		let me = this;
 		frappe.model.open_mapped_doc({
-			method: "erpnext.accounts.doctype.sales_invoice.sales_invoice.make_inter_company_purchase_invoice",
+			method: "svasamm_erp.accounts.doctype.sales_invoice.sales_invoice.make_inter_company_purchase_invoice",
 			frm: me.frm,
 		});
 	}
@@ -447,16 +447,16 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 	}
 
 	items_on_form_rendered() {
-		erpnext.setup_serial_or_batch_no();
+		svasamm_erp.setup_serial_or_batch_no();
 	}
 
 	packed_items_on_form_rendered(doc, grid_row) {
-		erpnext.setup_serial_or_batch_no();
+		svasamm_erp.setup_serial_or_batch_no();
 	}
 
 	make_sales_return() {
 		frappe.model.open_mapped_doc({
-			method: "erpnext.accounts.doctype.sales_invoice.sales_invoice.make_sales_return",
+			method: "svasamm_erp.accounts.doctype.sales_invoice.sales_invoice.make_sales_return",
 			frm: this.frm,
 		});
 	}
@@ -465,7 +465,7 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 		var row = locals[cdt][cdn];
 		if (row.asset) {
 			frappe.call({
-				method: erpnext.assets.doctype.asset.depreciation.get_disposal_account_and_cost_center,
+				method: svasamm_erp.assets.doctype.asset.depreciation.get_disposal_account_and_cost_center,
 				args: {
 					company: frm.doc.company,
 				},
@@ -576,25 +576,25 @@ erpnext.accounts.SalesInvoiceController = class SalesInvoiceController extends (
 };
 
 // for backward compatibility: combine new and previous states
-extend_cscript(cur_frm.cscript, new erpnext.accounts.SalesInvoiceController({ frm: cur_frm }));
+extend_cscript(cur_frm.cscript, new svasamm_erp.accounts.SalesInvoiceController({ frm: cur_frm }));
 
 cur_frm.cscript["Make Delivery Note"] = function () {
 	frappe.model.open_mapped_doc({
-		method: "erpnext.accounts.doctype.sales_invoice.sales_invoice.make_delivery_note",
+		method: "svasamm_erp.accounts.doctype.sales_invoice.sales_invoice.make_delivery_note",
 		frm: cur_frm,
 	});
 };
 
 cur_frm.cscript.income_account = function (doc, cdt, cdn) {
-	erpnext.utils.copy_value_in_all_rows(doc, cdt, cdn, "items", "income_account");
+	svasamm_erp.utils.copy_value_in_all_rows(doc, cdt, cdn, "items", "income_account");
 };
 
 cur_frm.cscript.expense_account = function (doc, cdt, cdn) {
-	erpnext.utils.copy_value_in_all_rows(doc, cdt, cdn, "items", "expense_account");
+	svasamm_erp.utils.copy_value_in_all_rows(doc, cdt, cdn, "items", "expense_account");
 };
 
 cur_frm.cscript.cost_center = function (doc, cdt, cdn) {
-	erpnext.utils.copy_value_in_all_rows(doc, cdt, cdn, "items", "cost_center");
+	svasamm_erp.utils.copy_value_in_all_rows(doc, cdt, cdn, "items", "cost_center");
 };
 
 frappe.ui.form.on("Sales Invoice", {
@@ -709,7 +709,7 @@ frappe.ui.form.on("Sales Invoice", {
 
 		frm.set_query("income_account", "items", function (doc) {
 			return {
-				query: "erpnext.controllers.queries.get_income_account",
+				query: "svasamm_erp.controllers.queries.get_income_account",
 				filters: {
 					company: doc.company,
 					disabled: 0,
@@ -726,7 +726,7 @@ frappe.ui.form.on("Sales Invoice", {
 
 		frm.set_query("time_sheet", "timesheets", function (doc, cdt, cdn) {
 			return {
-				query: "erpnext.projects.doctype.timesheet.timesheet.get_timesheet",
+				query: "svasamm_erp.projects.doctype.timesheet.timesheet.get_timesheet",
 				filters: { project: doc.project },
 			};
 		});
@@ -757,7 +757,7 @@ frappe.ui.form.on("Sales Invoice", {
 			}
 
 			return {
-				query: "erpnext.accounts.doctype.pos_profile.pos_profile.pos_profile_query",
+				query: "svasamm_erp.accounts.doctype.pos_profile.pos_profile.pos_profile_query",
 				filters: {
 					company: doc.company,
 				},
@@ -800,7 +800,7 @@ frappe.ui.form.on("Sales Invoice", {
 			frm.events.set_loyalty_points(frm);
 		} else {
 			frappe.call({
-				method: "erpnext.accounts.doctype.loyalty_program.loyalty_program.get_redeemption_factor",
+				method: "svasamm_erp.accounts.doctype.loyalty_program.loyalty_program.get_redeemption_factor",
 				args: {
 					loyalty_program: frm.doc.loyalty_program,
 				},
@@ -845,7 +845,7 @@ frappe.ui.form.on("Sales Invoice", {
 	get_loyalty_details: function (frm) {
 		if (frm.doc.customer && frm.doc.redeem_loyalty_points) {
 			frappe.call({
-				method: "erpnext.accounts.doctype.loyalty_program.loyalty_program.get_loyalty_program_details",
+				method: "svasamm_erp.accounts.doctype.loyalty_program.loyalty_program.get_loyalty_program_details",
 				args: {
 					customer: frm.doc.customer,
 					loyalty_program: frm.doc.loyalty_program,
@@ -928,7 +928,7 @@ frappe.ui.form.on("Sales Invoice", {
 	async get_timesheet_data(frm, kwargs) {
 		return frappe
 			.call({
-				method: "erpnext.projects.doctype.timesheet.timesheet.get_projectwise_timesheet_data",
+				method: "svasamm_erp.projects.doctype.timesheet.timesheet.get_projectwise_timesheet_data",
 				args: kwargs,
 			})
 			.then((r) => {
@@ -968,7 +968,7 @@ frappe.ui.form.on("Sales Invoice", {
 		}
 
 		return frappe.call({
-			method: "erpnext.setup.utils.get_exchange_rate",
+			method: "svasamm_erp.setup.utils.get_exchange_rate",
 			args: {
 				from_currency,
 				to_currency,
@@ -1029,7 +1029,7 @@ frappe.ui.form.on("Sales Invoice", {
 								options: "Item",
 								get_query: () => {
 									return {
-										query: "erpnext.controllers.queries.item_query",
+										query: "svasamm_erp.controllers.queries.item_query",
 										filters: {
 											is_sales_item: 1,
 											customer: frm.doc.customer,
@@ -1100,7 +1100,7 @@ frappe.ui.form.on("Sales Invoice Payment", {
 
 var set_timesheet_detail_rate = function (cdt, cdn, currency, timelog) {
 	frappe.call({
-		method: "erpnext.projects.doctype.timesheet.timesheet.get_timesheet_detail_rate",
+		method: "svasamm_erp.projects.doctype.timesheet.timesheet.get_timesheet_detail_rate",
 		args: {
 			timelog: timelog,
 			currency: currency,

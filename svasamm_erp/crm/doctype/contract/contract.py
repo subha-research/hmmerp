@@ -17,7 +17,7 @@ class Contract(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.crm.doctype.contract_fulfilment_checklist.contract_fulfilment_checklist import (
+		from svasamm_erp.crm.doctype.contract_fulfilment_checklist.contract_fulfilment_checklist import (
 			ContractFulfilmentChecklist,
 		)
 

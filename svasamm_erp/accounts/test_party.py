@@ -1,7 +1,7 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.party import get_default_price_list
+from svasamm_erp.accounts.party import get_default_price_list
 
 
 class PartyTestCase(IntegrationTestCase):

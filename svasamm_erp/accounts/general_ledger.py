@@ -11,18 +11,18 @@ from frappe.utils import cint, flt, formatdate, get_link_to_form, getdate, now
 from frappe.utils.caching import request_cache
 from frappe.utils.dashboard import cache_source
 
-import erpnext
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+import svasamm_erp
+from svasamm_erp.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 )
-from erpnext.accounts.doctype.accounting_dimension_filter.accounting_dimension_filter import (
+from svasamm_erp.accounts.doctype.accounting_dimension_filter.accounting_dimension_filter import (
 	get_dimension_filter_map,
 )
-from erpnext.accounts.doctype.accounting_period.accounting_period import ClosedAccountingPeriod
-from erpnext.accounts.doctype.budget.budget import validate_expense_against_budget
-from erpnext.accounts.utils import create_payment_ledger_entry
-from erpnext.controllers.budget_controller import BudgetValidation
-from erpnext.exceptions import InvalidAccountDimensionError, MandatoryAccountDimensionError
+from svasamm_erp.accounts.doctype.accounting_period.accounting_period import ClosedAccountingPeriod
+from svasamm_erp.accounts.doctype.budget.budget import validate_expense_against_budget
+from svasamm_erp.accounts.utils import create_payment_ledger_entry
+from svasamm_erp.controllers.budget_controller import BudgetValidation
+from svasamm_erp.exceptions import InvalidAccountDimensionError, MandatoryAccountDimensionError
 
 
 def make_gl_entries(
@@ -282,8 +282,8 @@ def merge_similar_entries(gl_map, precision=None):
 		else:
 			merged_gl_map.append(entry)
 
-	company = gl_map[0].company if gl_map else erpnext.get_default_company()
-	company_currency = erpnext.get_company_currency(company)
+	company = gl_map[0].company if gl_map else svasamm_erp.get_default_company()
+	company_currency = svasamm_erp.get_company_currency(company)
 
 	if not precision:
 		precision = get_field_precision(frappe.get_meta("GL Entry").get_field("debit"), company_currency)

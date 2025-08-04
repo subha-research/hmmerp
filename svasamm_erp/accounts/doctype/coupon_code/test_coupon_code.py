@@ -5,7 +5,7 @@ import unittest
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.selling.doctype.sales_order.test_sales_order import make_sales_order
+from svasamm_erp.selling.doctype.sales_order.test_sales_order import make_sales_order
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["Item"]
 
@@ -144,7 +144,7 @@ class TestCouponCode(IntegrationTestCase):
 		self.assertEqual(frappe.db.get_value("Coupon Code", "SAVE30", "used"), 1)
 
 	def test_coupon_without_max_use(self):
-		from erpnext.accounts.doctype.pricing_rule.utils import (
+		from svasamm_erp.accounts.doctype.pricing_rule.utils import (
 			update_coupon_code_count,
 			validate_coupon_code,
 		)

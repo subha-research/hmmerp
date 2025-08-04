@@ -4,10 +4,10 @@
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.report.bank_reconciliation_statement.bank_reconciliation_statement import (
+from svasamm_erp.accounts.report.bank_reconciliation_statement.bank_reconciliation_statement import (
 	execute,
 )
-from erpnext.tests.utils import if_lending_app_installed
+from svasamm_erp.tests.utils import if_lending_app_installed
 
 
 class TestBankReconciliationStatement(IntegrationTestCase):
@@ -15,7 +15,7 @@ class TestBankReconciliationStatement(IntegrationTestCase):
 	def test_loan_entries_in_bank_reco_statement(self):
 		from lending.loan_management.doctype.loan.test_loan import create_loan_accounts
 
-		from erpnext.accounts.doctype.bank_transaction.test_bank_transaction import (
+		from svasamm_erp.accounts.doctype.bank_transaction.test_bank_transaction import (
 			create_loan_and_repayment,
 		)
 

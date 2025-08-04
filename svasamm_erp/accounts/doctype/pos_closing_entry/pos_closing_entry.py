@@ -9,11 +9,11 @@ from frappe.query_builder import functions as fn
 from frappe.query_builder.custom import ConstantColumn
 from frappe.utils import flt
 
-from erpnext.accounts.doctype.pos_invoice_merge_log.pos_invoice_merge_log import (
+from svasamm_erp.accounts.doctype.pos_invoice_merge_log.pos_invoice_merge_log import (
 	consolidate_pos_invoices,
 	unconsolidate_pos_invoices,
 )
-from erpnext.controllers.status_updater import StatusUpdater
+from svasamm_erp.controllers.status_updater import StatusUpdater
 
 
 class POSClosingEntry(StatusUpdater):
@@ -25,14 +25,14 @@ class POSClosingEntry(StatusUpdater):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.pos_closing_entry_detail.pos_closing_entry_detail import (
+		from svasamm_erp.accounts.doctype.pos_closing_entry_detail.pos_closing_entry_detail import (
 			POSClosingEntryDetail,
 		)
-		from erpnext.accounts.doctype.pos_closing_entry_taxes.pos_closing_entry_taxes import (
+		from svasamm_erp.accounts.doctype.pos_closing_entry_taxes.pos_closing_entry_taxes import (
 			POSClosingEntryTaxes,
 		)
-		from erpnext.accounts.doctype.pos_invoice_reference.pos_invoice_reference import POSInvoiceReference
-		from erpnext.accounts.doctype.sales_invoice_reference.sales_invoice_reference import (
+		from svasamm_erp.accounts.doctype.pos_invoice_reference.pos_invoice_reference import POSInvoiceReference
+		from svasamm_erp.accounts.doctype.sales_invoice_reference.sales_invoice_reference import (
 			SalesInvoiceReference,
 		)
 

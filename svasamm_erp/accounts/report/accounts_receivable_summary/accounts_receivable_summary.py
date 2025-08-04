@@ -6,9 +6,9 @@ import frappe
 from frappe import _, scrub
 from frappe.utils import cint, flt
 
-from erpnext.accounts.party import get_partywise_advanced_payment_amount
-from erpnext.accounts.report.accounts_receivable.accounts_receivable import ReceivablePayableReport
-from erpnext.accounts.utils import get_currency_precision, get_party_types_from_account_type
+from svasamm_erp.accounts.party import get_partywise_advanced_payment_amount
+from svasamm_erp.accounts.report.accounts_receivable.accounts_receivable import ReceivablePayableReport
+from svasamm_erp.accounts.utils import get_currency_precision, get_party_types_from_account_type
 
 
 def execute(filters=None):

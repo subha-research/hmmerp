@@ -5,10 +5,10 @@ import unittest
 import frappe
 from frappe.tests import IntegrationTestCase
 
-from erpnext.accounts.doctype.pos_profile.pos_profile import (
+from svasamm_erp.accounts.doctype.pos_profile.pos_profile import (
 	get_child_nodes,
 )
-from erpnext.stock.get_item_details import get_pos_profile
+from svasamm_erp.stock.get_item_details import get_pos_profile
 
 EXTRA_TEST_RECORD_DEPENDENCIES = ["Item"]
 

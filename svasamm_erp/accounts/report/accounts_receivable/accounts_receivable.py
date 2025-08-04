@@ -11,11 +11,11 @@ from frappe.query_builder import Criterion
 from frappe.query_builder.functions import Date, Substring, Sum
 from frappe.utils import cint, cstr, flt, getdate, nowdate
 
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+from svasamm_erp.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_accounting_dimensions,
 	get_dimension_with_children,
 )
-from erpnext.accounts.utils import (
+from svasamm_erp.accounts.utils import (
 	build_qb_match_conditions,
 	get_advance_payment_doctypes,
 	get_currency_precision,

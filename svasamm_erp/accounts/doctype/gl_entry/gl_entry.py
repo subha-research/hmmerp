@@ -9,17 +9,17 @@ from frappe.model.meta import get_field_precision
 from frappe.model.naming import set_name_from_naming_options
 from frappe.utils import create_batch, flt, fmt_money, now
 
-import erpnext
-from erpnext.accounts.doctype.accounting_dimension.accounting_dimension import (
+import svasamm_erp
+from svasamm_erp.accounts.doctype.accounting_dimension.accounting_dimension import (
 	get_checks_for_pl_and_bs_accounts,
 )
-from erpnext.accounts.party import (
+from svasamm_erp.accounts.party import (
 	validate_account_party_type,
 	validate_party_frozen_disabled,
 	validate_party_gle_currency,
 )
-from erpnext.accounts.utils import OUTSTANDING_DOCTYPES, get_account_currency, get_fiscal_year
-from erpnext.exceptions import InvalidAccountCurrency
+from svasamm_erp.accounts.utils import OUTSTANDING_DOCTYPES, get_account_currency, get_fiscal_year
+from svasamm_erp.exceptions import InvalidAccountCurrency
 
 exclude_from_linked_with = True
 
@@ -275,7 +275,7 @@ class GLEntry(Document):
 		if self.is_cancelled:
 			return
 
-		company_currency = erpnext.get_company_currency(self.company)
+		company_currency = svasamm_erp.get_company_currency(self.company)
 		account_currency = get_account_currency(self.account)
 
 		if not self.account_currency:
@@ -414,7 +414,7 @@ def update_against_account(voucher_type, voucher_no):
 
 	if not entries:
 		return
-	company_currency = erpnext.get_company_currency(entries[0].company)
+	company_currency = svasamm_erp.get_company_currency(entries[0].company)
 	precision = get_field_precision(frappe.get_meta("GL Entry").get_field("debit"), company_currency)
 
 	accounts_debited, accounts_credited = [], []

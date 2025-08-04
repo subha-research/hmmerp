@@ -14,7 +14,7 @@ class PeggedCurrencies(Document):
 	if TYPE_CHECKING:
 		from frappe.types import DF
 
-		from erpnext.accounts.doctype.pegged_currencies.pegged_currencies import PeggedCurrencies
+		from svasamm_erp.accounts.doctype.pegged_currencies.pegged_currencies import PeggedCurrencies
 
 		pegged_currency_item: DF.Table[PeggedCurrencies]
 	# end: auto-generated types

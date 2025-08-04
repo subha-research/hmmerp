@@ -7,7 +7,7 @@ from frappe import _, throw
 from frappe.utils import add_to_date, cint, cstr, pretty_date
 from frappe.utils.nestedset import NestedSet, get_ancestors_of, get_descendants_of
 
-import erpnext
+import svasamm_erp
 
 
 class RootNotEditable(frappe.ValidationError):
@@ -97,7 +97,7 @@ class Account(NestedSet):
 			self.set_onload("can_freeze_account", True)
 
 	def autoname(self):
-		from erpnext.accounts.utils import get_autoname_with_number
+		from svasamm_erp.accounts.utils import get_autoname_with_number
 
 		self.name = get_autoname_with_number(self.account_number, self.account_name, self.company)
 
@@ -277,7 +277,7 @@ class Account(NestedSet):
 			throw(_("You are not authorized to set Frozen value"))
 
 	def validate_balance_must_be_debit_or_credit(self):
-		from erpnext.accounts.utils import get_balance_on
+		from svasamm_erp.accounts.utils import get_balance_on
 
 		if not self.get("__islocal") and self.balance_must_be:
 			account_balance = get_balance_on(self.name)
@@ -365,7 +365,7 @@ class Account(NestedSet):
 						# if currency explicitly specified by user, child will inherit. else, default currency will be used.
 						"account_currency": self.account_currency
 						if self.currency_explicitly_specified
-						else erpnext.get_company_currency(company),
+						else svasamm_erp.get_company_currency(company),
 						"parent_account": parent_acc_name_map[company],
 					}
 				)
