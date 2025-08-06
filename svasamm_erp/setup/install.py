@@ -12,7 +12,7 @@ from svasamm_erp.setup.doctype.incoterm.incoterm import create_incoterms
 from .default_success_action import get_default_success_action
 
 default_mail_footer = """<div style="padding: 7px; text-align: right; color: #888"><small>Sent via
-	<a style="color: #888" href="http://frappe.io/erpnext">ERPNext</a></div>"""
+	<a style="color: #888" href="http://frappe.io/svasamm_erp">ERPNext</a></div>"""
 
 
 def after_install():
@@ -152,11 +152,11 @@ def add_standard_navbar_items():
 	__ = _("User Forum")
 	__ = _("Report an Issue")
 
-	erpnext_navbar_items = [
+	svasamm_erp_navbar_items = [
 		{
 			"item_label": "Documentation",
 			"item_type": "Route",
-			"route": "https://docs.erpnext.com/",
+			"route": "https://docs.svasamm_erp.com/",
 			"is_standard": 1,
 		},
 		{
@@ -174,7 +174,7 @@ def add_standard_navbar_items():
 		{
 			"item_label": "Report an Issue",
 			"item_type": "Route",
-			"route": "https://github.com/frappe/erpnext/issues",
+			"route": "https://github.com/frappe/svasamm_erp/issues",
 			"is_standard": 1,
 		},
 	]
@@ -182,7 +182,7 @@ def add_standard_navbar_items():
 	current_navbar_items = navbar_settings.help_dropdown
 	navbar_settings.set("help_dropdown", [])
 
-	for item in erpnext_navbar_items:
+	for item in svasamm_erp_navbar_items:
 		current_labels = [item.get("item_label") for item in current_navbar_items]
 		if item.get("item_label") not in current_labels:
 			navbar_settings.append("help_dropdown", item)

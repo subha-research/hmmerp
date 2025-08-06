@@ -1086,7 +1086,7 @@ scheduler_events = {
 		"svasamm_erp.utilities.bulk_transaction.retry",
 		"svasamm_erp.projects.doctype.project.project.collect_project_status",
 		"svasamm_erp.projects.doctype.project.project.project_status_update_reminder",
-		"svasamm_erp.svasamm_erp_integrations.doctype.plaid_settings.plaid_settings.automatic_synchronization",
+		"svasamm_erp.svasamm_integrations.doctype.plaid_settings.plaid_settings.automatic_synchronization",
 		"svasamm_erp.utilities.doctype.video.video.update_youtube_data",
 	],
 	"daily": [],
