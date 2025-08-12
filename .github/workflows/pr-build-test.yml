@@ -1,0 +1,30 @@
+# .github/workflows/pr-build-test.yml
+name: PR Build and Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  # pull_request:
+  #   branches: [ main, develop ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image (without pushing)
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./docker/Containerfile
+          platforms: linux/amd64
+          build-args: |
+            FRAPPE_PATH=https://github.com/frappe/frappe
+            FRAPPE_BRANCH=version-15
+            APPS_JSON_BASE64=${{ secrets.APPS_JSON_BASE64_CONTENT }}
+          tags: ldc-branch:${{ github.sha }}
+          # tags: ldc-pr:${{ github.event.pull_request.head.sha }} # If you want to tag the image with the PR head SHA
+          push: false
+          load: true
