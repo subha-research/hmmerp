@@ -18,7 +18,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          file: ./docker/Containerfile
+          file: ./deploy/Containerfile
           platforms: linux/amd64
           build-args: |
             FRAPPE_PATH=https://github.com/frappe/frappe
