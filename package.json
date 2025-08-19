@@ -1,9 +1,9 @@
 {
-  "name": "svasamm_erp",
+  "name": "hmmerp",
   "description": "Open Source ERP System powered by the Frappe Framework",
   "repository": {
     "type": "git",
-    "url": "git@github.com:subha-research/svasamm_erp.git"
+    "url": "git@github.com:subha-research/hmmerp.git"
   },
   "author": "Svasamm Research Pvt Ltd",
   "license": "GPL-3.0",
