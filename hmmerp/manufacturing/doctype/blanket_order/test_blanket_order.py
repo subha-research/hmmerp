@@ -4,7 +4,7 @@ import frappe
 from frappe.tests import IntegrationTestCase
 from frappe.utils import add_months, today
 
-from hmmerp.accounts.utils import get_company_currency
+from hmmerp import get_company_currency
 from hmmerp.stock.doctype.item.test_item import make_item
 
 from .blanket_order import make_order
